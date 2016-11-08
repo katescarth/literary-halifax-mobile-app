@@ -31,7 +31,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     url: '/stories',
     views: {
       'menuContent': {
-        templateUrl: 'templates/stories.html'
+        templateUrl: 'templates/stories.html',
+        controller: 'storiesCtrl'
       }
     }
   })

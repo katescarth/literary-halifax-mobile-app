@@ -19,18 +19,28 @@ angular.module('literaryHalifax')
       href:'#/app/about'
     }
   ]
-})
+}).controller('storiesCtrl', function($scope){
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+  $scope.mapInfo = {
+    center:"44.6474,-63.5806",
+    zoom: 15
+  }
+  //simple dummy data
+  $scope.places = [
+    {
+      name:"Halifax Central Library",
+      location:"44.6431,-63.5752",
+      id: "place-id-1"
+    },
+    {
+      name:"Public Gardens",
+      location:"44.6428,-63.5821",
+      id: "place-id-2"
+    },
+    {
+      name:"The Dingle",
+      location:"44.6304,-63.6028",
+      id: "place-id-3"
+    }
+  ]
 });
