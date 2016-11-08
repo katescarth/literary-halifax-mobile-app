@@ -1,7 +1,24 @@
 angular.module('literaryHalifax')
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-  console.log('meep')
+  $scope.menuItems =[
+    {
+      displayName:'Stories',
+      href:'#/app/stories'
+    },
+    {
+      displayName:'Tours',
+      href:'#/app/tours'
+    },
+    {
+      displayName:'Browse by Topic',
+      href:'#/app/browseByTopic'
+    },
+    {
+      displayName:'About',
+      href:'#/app/about'
+    }
+  ]
 })
 
 .controller('PlaylistsCtrl', function($scope) {
