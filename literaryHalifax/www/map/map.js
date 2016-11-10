@@ -78,13 +78,16 @@ angular.module('literaryHalifax')
   var geoUpdatePeriodMillis = 10000
 
   //periodically check the user's loaction and update it
-  $interval(function(){
-    NgMap.getGeoLocation('current-location', { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }).
-      then(function (latlng) {
+  $interval(
+    function(){
+      NgMap.getGeoLocation('current-location', { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true })
+      .then(function (latlng) {
         console.log(latlng)
         $scope.currentPosition=latlng
       })
-    },geoUpdatePeriodMillis);
+    },
+    geoUpdatePeriodMillis
+  );
 
 
   //display an info window.

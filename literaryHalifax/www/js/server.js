@@ -22,7 +22,7 @@ angular.module('literaryHalifax')
             id: "place-id-3"
           }
         ]
-      },LARGE_DELAY)
+      },SMALL_DELAY)
 
     }
   }
