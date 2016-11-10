@@ -19,28 +19,18 @@ angular.module('literaryHalifax')
       href:'#/app/about'
     }
   ]
-}).controller('storiesCtrl', function($scope){
+}).controller('storiesCtrl', function($scope, server){
 
   $scope.mapInfo = {
     center:"44.6474,-63.5806",
     zoom: 15
   }
-  //simple dummy data
-  $scope.places = [
-    {
-      name:"Halifax Central Library",
-      location:"44.6431,-63.5752",
-      id: "place-id-1"
-    },
-    {
-      name:"Public Gardens",
-      location:"44.6428,-63.5821",
-      id: "place-id-2"
-    },
-    {
-      name:"The Dingle",
-      location:"44.6304,-63.6028",
-      id: "place-id-3"
+  $scope.places = []
+  server.getPlaces().then(
+    function(result){
+      $scope.places = result
     }
-  ]
+  ).catch(function(error){
+    console.log(error)
+  })
 });
