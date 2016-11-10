@@ -1,7 +1,27 @@
-<ion-view view-title="Stories">
-  <marker-map places="places" place="place"
-          center="mapInfo.center" zoom="mapInfo.zoom"
-            window-directive="simple-info-window"
-            center-on-click="true">
-  </marker-map>
+<ion-view view-title="Stories" >
+
+
+    <ion-nav-view name="stories" class="has-header has-footer"></ion-nav-view>
+
+
+  <ion-footer-bar align-title="left" class="bar-stable">
+
+    <table style="width:100%">
+      <tr>
+        <td>
+          <a href="#/app/stories/map" class="button button-outline button-balanced"
+                  width="100%">
+            Map
+          </a>
+        </td>
+        <td>
+          <a href="#/app/stories/list" class="button button-outline button-balanced"
+                  width="100%">
+            List
+          </a>
+        </td>
+      </tr>
+    </table>
+
+  </ion-footer-bar>
 </ion-view>

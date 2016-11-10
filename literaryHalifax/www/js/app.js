@@ -17,20 +17,38 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('bottom')
   $stateProvider
 
     .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'menuCtrl'
   })
 
   .state('app.stories', {
     url: '/stories',
     views: {
       'mainContent': {
+        templateUrl: 'templates/stories.html',
+        controller: 'storiesCtrl'
+      }
+    }
+  })
+  .state('app.stories.map', {
+    url: '/map',
+    views: {
+      'stories': {
+        templateUrl: 'templates/stories_map.html',
+        controller: 'storiesCtrl'
+      }
+    }
+  }).state('app.stories.list', {
+    url: '/list',
+    views: {
+      'stories': {
         templateUrl: 'templates/stories.html',
         controller: 'storiesCtrl'
       }

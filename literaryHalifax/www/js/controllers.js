@@ -1,6 +1,6 @@
 angular.module('literaryHalifax')
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate) {
   $scope.menuItems =[
     {
       displayName:'Stories',
@@ -19,6 +19,10 @@ angular.module('literaryHalifax')
       href:'#/app/about'
     }
   ]
+
+  $scope.toggleMenu = function(){
+    $ionicSideMenuDelegate.toggleLeft();
+  }
 }).controller('storiesCtrl', function($scope, server){
 
   $scope.mapInfo = {
