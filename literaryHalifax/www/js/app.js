@@ -30,7 +30,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   .state('app.stories', {
     url: '/stories',
     views: {
-      'menuContent': {
+      'mainContent': {
         templateUrl: 'templates/stories.html',
         controller: 'storiesCtrl'
       }
@@ -39,7 +39,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   .state('app.tours', {
     url: '/tours',
     views: {
-      'menuContent': {
+      'mainContent': {
+        templateUrl: 'templates/tours.html'
 
       }
     }
@@ -47,7 +48,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   .state('app.browseByTopic', {
     url: '/browseByTopic',
     views: {
-      'menuContent': {
+      'mainContent': {
+        templateUrl: 'templates/browseByTopic.html'
 
       }
     }
@@ -55,7 +57,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   .state('app.about', {
     url: '/about',
     views: {
-      'menuContent': {
+      'mainContent': {
+        templateUrl: 'templates/about.html'
 
       }
     }
