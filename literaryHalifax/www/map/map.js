@@ -82,7 +82,6 @@ angular.module('literaryHalifax')
     function(){
       NgMap.getGeoLocation('current-location', { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true })
       .then(function (latlng) {
-        console.log(latlng)
         $scope.currentPosition=latlng
       })
     },

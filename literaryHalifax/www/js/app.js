@@ -18,7 +18,14 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-  $ionicConfigProvider.tabs.position('bottom')
+
+  /*
+   * Note that some states have a 'title' attribute. This is the text displayed
+   * in the header bar. If a state has a tite, the menu button will appear in
+   * the header bar. Otherwise, the back button will.
+   */
+
+
   $stateProvider
 
     .state('app', {
@@ -30,6 +37,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 
   .state('app.stories', {
     url: '/stories',
+    abstract: true,
     views: {
       'mainContent': {
         templateUrl: 'templates/stories.html',
@@ -39,6 +47,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   })
   .state('app.stories.map', {
     url: '/map',
+    title:'Stories',
     views: {
       'stories': {
         templateUrl: 'templates/stories_map.html',
@@ -47,6 +56,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     }
   }).state('app.stories.list', {
     url: '/list',
+    // title:'Stories', // Should this view  be titled?
     views: {
       'stories': {
         templateUrl: 'templates/stories.html',
@@ -56,6 +66,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   })
   .state('app.tours', {
     url: '/tours',
+    title:'Tours',
     views: {
       'mainContent': {
         templateUrl: 'templates/tours.html'
@@ -65,6 +76,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   })
   .state('app.browseByTopic', {
     url: '/browseByTopic',
+    title: 'Browse by Topic',
     views: {
       'mainContent': {
         templateUrl: 'templates/browseByTopic.html'
@@ -74,6 +86,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
   })
   .state('app.about', {
     url: '/about',
+    title:'About',
     views: {
       'mainContent': {
         templateUrl: 'templates/about.html'
@@ -82,5 +95,5 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/stories');
+  $urlRouterProvider.otherwise('/app/stories/map');
 });
