@@ -1,6 +1,6 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate) {
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $window) {
   $scope.menuItems =[
     {
       displayName:'Stories',
@@ -20,10 +20,43 @@ angular.module('literaryHalifax')
     }
   ]
 
-  $scope.toggleMenu = function(){
-    $ionicSideMenuDelegate.toggleLeft();
+  toggleMenu = function(){
+    $ionicSideMenuDelegate.toggleLeft()
   }
-}).controller('storiesCtrl', function($scope, server){
+
+  goBack = function(){
+    $window.history.back()
+  }
+
+  buttonClassPrefix = "button button-icon button-clear "
+
+  $scope.navBarTitle = "Stories" //default state, there's no statechange to
+                                 //the first state. Hacky
+  setMenuMode = function(){
+    $scope.buttonClass = buttonClassPrefix+'ion-navicon'
+    $scope.buttonClick = toggleMenu
+  }
+
+  setBackMode = function(){
+    $scope.buttonClass = buttonClassPrefix+'ion-chevron-left'
+    $scope.buttonClick = goBack
+  }
+
+  $scope.$root.$on('$stateChangeSuccess',
+  function(event, toState, toParams, fromState, fromParams){
+    if(toState.title){
+      $scope.navBarTitle = toState.title
+      setMenuMode()
+    } else {
+      setBackMode()
+    }
+    console.log(toState)
+    console.log($ionicHistory.backView())
+  })
+
+
+  setMenuMode()
+}).controller('storiesCtrl', function($scope, $state, server){
 
   $scope.mapInfo = {
     center:"44.6474,-63.5806",
@@ -37,4 +70,17 @@ angular.module('literaryHalifax')
   ).catch(function(error){
     console.log(error)
   })
+
+  $scope.toMapTab = function(){
+    $state.go('app.stories.map')
+  }
+
+  $scope.toListTab = function(){
+    $state.go('app.stories.list')
+  }
+
+
+
+
+
 });
