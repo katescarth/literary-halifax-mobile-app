@@ -1,6 +1,6 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $window) {
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $window, $ionicHistory) {
   $scope.menuItems =[
     {
       displayName:'Stories',
@@ -36,7 +36,7 @@ angular.module('literaryHalifax')
   }
 
   setBackMode = function(){
-    // TODO Use the correct icon forthe platform (ios or android)
+    // TODO Use the correct icon for the platform (ios or android)
     // or possibly animate for that #momentofcharm
     $scope.buttonClass = buttonClassPrefix+'ion-chevron-left'
     $scope.buttonClick = goBack
@@ -45,6 +45,8 @@ angular.module('literaryHalifax')
   $scope.$root.$on('$stateChangeSuccess',
   function(event, toState, toParams, fromState, fromParams){
     if(toState.title){
+      $ionicHistory.clearHistory() // prevent physical back  buttons from going
+                                   // back
       $scope.navBarTitle = toState.title
       setMenuMode()
     } else {
