@@ -56,7 +56,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     }
   }).state('app.stories.list', {
     url: '/list',
-    // title:'Stories', // Should this view  be titled?
+    title:'Stories',
     views: {
       'stories': {
         templateUrl: 'templates/stories.html',
