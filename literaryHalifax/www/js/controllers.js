@@ -30,14 +30,14 @@ angular.module('literaryHalifax')
 
   buttonClassPrefix = "button button-icon button-clear "
 
-  $scope.navBarTitle = "Stories" //default state, there's no statechange to
-                                 //the first state. Hacky
   setMenuMode = function(){
     $scope.buttonClass = buttonClassPrefix+'ion-navicon'
     $scope.buttonClick = toggleMenu
   }
 
   setBackMode = function(){
+    // TODO Use the correct icon forthe platform (ios or android)
+    // or possibly animate for that #momentofcharm
     $scope.buttonClass = buttonClassPrefix+'ion-chevron-left'
     $scope.buttonClick = goBack
   }
@@ -50,12 +50,12 @@ angular.module('literaryHalifax')
     } else {
       setBackMode()
     }
-    console.log(toState)
-    console.log($ionicHistory.backView())
   })
-
-
+  $scope.navBarTitle = "Stories" //default state, there's no statechange to
+                                 //the first state. Hacky
+  // The start state is always a base-level one
   setMenuMode()
+
 }).controller('storiesCtrl', function($scope, $state, server){
 
   $scope.mapInfo = {
