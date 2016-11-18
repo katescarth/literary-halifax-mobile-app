@@ -27,23 +27,6 @@ angular.module('literaryHalifax')
   var LARGE_DELAY = 2000
 
 
-  loadImage = function(index, imageFile){
-    xhr = new XMLHttpRequest();
-    xhr.open("GET", imageFile, true);
-    xhr.responseType = "blob";
-    xhr.onload = function (e){
-            var reader = new FileReader();
-            reader.onload = function(event) {
-               var res = event.target.result;
-               places[index].images.push(res)
-            }
-            var file = this.response;
-            reader.readAsDataURL(file)
-    };
-    xhr.send()
-  }
-
-
   var places = [
     {
       name:"Halifax Central Library",
@@ -67,12 +50,14 @@ angular.module('literaryHalifax')
       name:"Old Burying Ground",
       location:"44.6437,-63.5728",
       id: "place-id-4",
-      images: []
+      images: [
+        "/img/OBG1.png",
+        "/img/OBG2.png"
+      ]
     }
   ]
 
-  loadImage(3,"/img/OBG2.png")
-  loadImage(3,"/img/OBG1.png")
+
 
   server = {
     getPlaces:function(){
