@@ -73,7 +73,9 @@ angular.module('literaryHalifax')
     zoom: 15
   }
   $scope.places = []
-  server.getPlaces().then(
+
+  //TODO should not run this at app start
+  server.getPlaces(['name','location','id','images']).then(
     function(result){
       $scope.places = result
     }

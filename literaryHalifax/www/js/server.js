@@ -32,19 +32,19 @@ angular.module('literaryHalifax')
       name:"Halifax Central Library",
       location:"44.6431,-63.5752",
       id: "place-id-1",
-      images:[]
+      images:["/img/HCL1.jpg"]
     },
     {
       name:"Public Gardens",
       location:"44.6428,-63.5821",
       id: "place-id-2",
-      images:[]
+      images:["/img/PBG1.jpg"]
     },
     {
       name:"The Dingle",
       location:"44.6304,-63.6028",
       id: "place-id-3",
-      images:[]
+      images:["/img/DNG1.jpg"]
     },
     {
       name:"Old Burying Ground",
@@ -60,20 +60,21 @@ angular.module('literaryHalifax')
 
 
   server = {
-    getPlaces:function(){
+    getPlaces:function(attrs){
 
       result = []
 
       for(i=0;i<places.length;i++){
         place = places[i]
-        result.push({
-          name:place.name,
-          location:place.location,
-          id:place.id
-        })
+        clone = {}
+        for(j=0;j<attrs.length;j++){
+          clone[attrs[j]] =place[attrs[j]]
+        }
+        result.push(clone)
       }
 
       return $timeout(function(){
+        console.log(result)
         return result
       }, SMALL_DELAY)
 
