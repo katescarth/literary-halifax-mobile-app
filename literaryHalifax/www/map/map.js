@@ -91,6 +91,7 @@ angular.module('literaryHalifax')
 
   //display an info window.
   handlePlaceClicked = function(place){
+    console.log($scope.places)
     // make the currently selected place available to the info window
     $scope.place = place
     $scope.map.showInfoWindow('infoWindow',place.id)

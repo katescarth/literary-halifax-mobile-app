@@ -6,16 +6,8 @@ angular.module('literaryHalifax')
       place:'='
     },
     templateUrl:'infoWindows/simple.html',
-    controller: ['$scope',function($scope){
-      $scope.boop=function(){
-        console.log('boop')
-      }
+    controller: ['$scope',function($scope, server){
+      
     }]
-  }
-})
-
-.controller('infoWindowCtrl',function($scope){
-  $scope.boop=function(){
-    console.log('boop')
   }
 })
