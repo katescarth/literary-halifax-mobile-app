@@ -1,6 +1,6 @@
 <ion-content>
   <ion-list>
-    <ion-item ng-repeat="place in places" href="{{'#/app/story/storyID:'+place.id}}">
+    <ion-item ng-repeat="place in places" href="{{'#/app/story/'+place.id}}">
         <!-- TODO create a component that fits an image within a box -->
 
       <img ng-src="{{place.images[0]}}" width="100px"

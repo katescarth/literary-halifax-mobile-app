@@ -54,10 +54,10 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
         controller: 'storiesCtrl'
       }
     }
-  }).state('app.stories.list', {
+  })
+  .state('app.stories.list', {
     url: '/list',
     title:'Stories',
-    reload:true,
     views: {
       'stories': {
         templateUrl: 'templates/stories_list.html',
@@ -99,8 +99,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     url: '/story/:storyID',
     views: {
       'mainContent': {
-        templateUrl: 'templates/story.html'
-
+        templateUrl: 'templates/story.html',
+        controller: 'storyCtrl'
       }
     }
   });

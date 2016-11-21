@@ -97,12 +97,37 @@ angular.module('literaryHalifax')
       if (toState.name==MAP_STATE) {
         $scope.mapButton = FILLED_BUTTON
         $scope.listButton=CLEAR_BUTTON
-      } else if (toState.name=LIST_STATE) {
+      } else if (toState.name==LIST_STATE) {
         $scope.mapButton = CLEAR_BUTTON
         $scope.listButton=FILLED_BUTTON
       }
     }
   )
+
+
+
+}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout){
+
+    $scope.story = undefined
+    server.placeInfo($stateParams.storyID,['name','location','images','audio']).then(
+      function(placeAttrs){
+        newStory = {
+          id:$stateParams.storyID
+        }
+        for(attr in placeAttrs){
+            newStory[attr] = placeAttrs[attr]
+        }
+        $scope.story = newStory
+        console.log($scope.story)
+      }, function(error){
+        console.log(error)
+      }
+    ).then(function(){
+      $timeout(function () {
+        $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
+      }, 0);
+    })
+
 
 
 
