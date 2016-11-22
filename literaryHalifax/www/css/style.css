@@ -10,11 +10,16 @@ overscroll-pane{
 
 .bumpdown{
   margin-top: 45%;
+}
+
+.display-card{
+  border-radius: 10px;
   margin-left:20px;
   margin-right:20px;
-  border-radius: 10px;
+  margin-bottom:20px;
   padding-left: 10px;
   padding-right:10px;
   padding-top:10px;
+  padding-bottom:5px;
   background-color: #EEEEEE;
 }
