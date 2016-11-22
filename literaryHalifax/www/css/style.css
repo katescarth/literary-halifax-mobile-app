@@ -1,8 +1,20 @@
 /* Empty. Add your own CSS if you like */
+overscroll-pane{
+  background-color: transparent !important;
+}
+
+
 .transparent{
   background-color: transparent !important;
 }
 
 .bumpdown{
   margin-top: 45%;
+  margin-left:20px;
+  margin-right:20px;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right:10px;
+  padding-top:10px;
+  background-color: #EEEEEE;
 }

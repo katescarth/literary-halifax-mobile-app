@@ -5,7 +5,7 @@ angular.module('literaryHalifax')
     scope: {
       place:'='
     },
-    templateUrl:'infoWindows/image.html',
+    templateUrl:'components/infoWindows/image.html',
     controller: ['$scope',function($scope){
 
       $scope.imageSrc = undefined

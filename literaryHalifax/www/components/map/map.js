@@ -19,7 +19,7 @@ angular.module('literaryHalifax')
       //set to true to make the map center on a marker when it is clicked
       centerOnClick:'='
     },
-    templateUrl: 'map/map.html'
+    templateUrl: 'components/map/map.html'
   };
 })
 

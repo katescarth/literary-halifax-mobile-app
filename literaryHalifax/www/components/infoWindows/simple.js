@@ -5,9 +5,9 @@ angular.module('literaryHalifax')
     scope: {
       place:'='
     },
-    templateUrl:'infoWindows/simple.html',
+    templateUrl:'components/infoWindows/simple.html',
     controller: ['$scope',function($scope, server){
-      
+
     }]
   }
 })

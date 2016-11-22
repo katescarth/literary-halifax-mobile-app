@@ -16,10 +16,7 @@
     </ion-tab>
 
     <ion-tab title="Images" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ng-if="story.images">
-      <ion-pane class="transparent">
-        <ion-content>
-          <div class="bumpdown">
-
+      <overscroll-pane>
           <p>
             This app is still in development.<br />
             Once it's done, this page will tell you about the team that put the
@@ -61,9 +58,7 @@
             porttitor ullamcorper. Aenean sed neque id ex efficitur semper aliquam a
             ipsum.<br />
           </p>
-        </div>
-          </ion-content>
-      </ion-pane>
+        </overscroll-pane>
     </ion-tab>
 
     <ion-tab title="Audio" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ng-if="story.audio">
