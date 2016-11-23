@@ -75,7 +75,7 @@ angular.module('literaryHalifax')
   $scope.places = []
 
   //TODO should not run this at app start
-  server.getPlaces(['name','location','id','images']).then(
+  server.getStories(['name','location','id','images']).then(
     function(result){
       $scope.places = result
     }
@@ -109,7 +109,7 @@ angular.module('literaryHalifax')
 }).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout){
 
     $scope.story = undefined
-    server.placeInfo($stateParams.storyID,['name','location','images','audio']).then(
+    server.storyInfo($stateParams.storyID,['name','description','location','images','audio']).then(
       function(placeAttrs){
         newStory = {
           id:$stateParams.storyID

@@ -1,6 +1,7 @@
 /* Empty. Add your own CSS if you like */
 overscroll-pane{
   background-color: transparent !important;
+  height: 100%;
 }
 
 
@@ -9,11 +10,12 @@ overscroll-pane{
 }
 
 .bumpdown{
-  margin-top: 45%;
+  padding-top: 45%;
+  margin-bottom: 0%;
 }
 
 .display-card{
-  border-radius: 10px;
+  border-radius: 2px;
   margin-left:20px;
   margin-right:20px;
   margin-bottom:20px;
@@ -22,5 +24,9 @@ overscroll-pane{
   padding-top:10px;
   padding-bottom:5px;
   background-color: #EEEEEE;
-  box-shadow: 2px 2px 25px #111111;
+  box-shadow: 0px 2px 10px #111111;
+}
+
+scroll{
+  height:100%;
 }

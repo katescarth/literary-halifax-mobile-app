@@ -15,7 +15,7 @@ angular.module('literaryHalifax')
       $scope.$watch('place', function(newVal,oldVal){
         if(newVal && !newVal.images){
           $scope.loading = true
-          server.placeInfo(newVal.id,['images']).then(
+          server.storyInfo(newVal.id,['images']).then(
             function(result){
               $scope.place.images = result.images
               console.log($scope.place)

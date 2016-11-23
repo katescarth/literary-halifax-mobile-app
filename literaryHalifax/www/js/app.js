@@ -18,6 +18,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('top')
 
   /*
    * Note that some states have a 'title' attribute. This is the text displayed

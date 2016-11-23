@@ -5,21 +5,22 @@ angular.module('literaryHalifax')
  * the rest of the app from the server (this is the only part of the code that
  * knows there's not actually a server)
 
- * Spec for place:
+ * Spec for story:
  *  id: a unique identifier (str)
- *  name: The name of the place (str)
- *  location: the lat,lng of the place (str) TODO update to numerical data
- *  description: text description of the place (str)
- *  images: a list of images associated with the place. The first image is the
+ *  name: The name of the story (str)
+ *  location: the lat,lng of the story (str) TODO update to numerical data
+ *  description: text description of the story (array[str]. Each element is a
+                 paragraph)
+ *  images: a list of images associated with the story. The first image is the
             thumbnail/main image (array[image])
- *  audio:  a list of audio tracks associated with the place. array[audio]
+ *  audio:  a list of audio tracks associated with the story. array[audio]
 
- * getPlaces(): resolves to a list of places. The places have ids, locations,
-                and names - enough  info to display in a list without later
+ * getStories(): resolves to a list of stories. The stories have ids, locations,
+                and names - enough  info to display in a list without further
                 requests.
- * placeInfo(id, attributes): resolves to an object identical to attributes
+ * storyInfo(id, attributes): resolves to an object identical to attributes
                               but with properties identical to those of the
-                              place with the given id.
+                              story with the given id.
  *
  */
 .factory('server', function($timeout){
@@ -27,29 +28,116 @@ angular.module('literaryHalifax')
   var LARGE_DELAY = 2000
 
 
-  var places = [
+  var stories = [
     {
       name:"Halifax Central Library",
       location:"44.6431,-63.5752",
-      id: "place-id-1",
+      description:["The Halifax Central Library is a public library in \
+                    Halifax, Nova Scotia on the corner of Spring Garden Road \
+                    and Queen Street. It serves as the flagship library of the \
+                    Halifax Public Libraries, replacing the Spring Garden Road \
+                    Memorial Library.",
+
+                   "A new central library was discussed by library \
+                   administrators for several decades and approved by the \
+                   regional council in 2008. The architects, a joint venture \
+                   between local firm Fowler Bauld and Mitchell and Schmidt \
+                   Hammer Lassen of Denmark, were chosen in 2010 through an \
+                   international design competition. Construction began later \
+                   that year on a prominent downtown site that had been a \
+                   parking lot for half a century.",
+
+                   "The new library opened in December 2014 and has become a \
+                   highly popular gathering place. In addition to a book \
+                   collection significantly larger than that of the former \
+                   library, the new building houses a wide range of amenities \
+                   including cafés, an auditorium, and community rooms. The \
+                   striking architecture is characterised by the fifth floor's \
+                   cantilever over the entrance plaza, a central atrium \
+                   criss-crossed by staircases, and the building's \
+                   transparency and relationship to the urban context. The \
+                   library won a Lieutenant Governor’s Design Award in \
+                   Architecture for 2014."],
+      id: "story-id-1",
       images:["/img/HCL1.jpg"]
     },
     {
       name:"Public Gardens",
       location:"44.6428,-63.5821",
-      id: "place-id-2",
+      description:["The Halifax Public Gardens are Victorian era public \
+                    gardens formally established in 1867, the year of Canadian \
+                    Confederation. The gardens are located in the Halifax \
+                    Regional Municipality, Nova Scotia on the Halifax \
+                    Peninsula near the popular shopping district of Spring \
+                    Garden Road and opposite Victoria Park. The gardens were \
+                    designated a National Historic Site of Canada in 1984."],
+      id: "story-id-2",
       images:["/img/PBG1.jpg"]
     },
     {
       name:"The Dingle",
       location:"44.6304,-63.6028",
-      id: "place-id-3",
+      description:["Sandford Fleming Park is a 95-acre (38 ha) Canadian urban \
+                    park located in the community of Jollimore in Halifax \
+                    Regional Municipality. It is also known as Dingle Park \
+                    which means wooded valley. The park was donated to the \
+                    people of Halifax by Sir Sandford Fleming. The centrepiece \
+                    of the park is an impressive tower that commemorates Nova \
+                    Scotia's achievement of representative government in 1758. \
+                    Completed between 1908 and 1912, the Memorial Tower was \
+                    erected during the same period of building other \
+                    commemorative towers in the British Commonwealth, notably \
+                    Cabot Tower in Bristol, England (1898) and Cabot Tower \
+                    in St. John's (1900)"],
+      id: "story-id-3",
       images:["/img/DNG1.jpg"]
     },
     {
       name:"Old Burying Ground",
       location:"44.6437,-63.5728",
-      id: "place-id-4",
+      description:["The Old Burying Ground was founded in 1749, the same year \
+                    as the settlement, as the town's first burial ground. It \
+                    was originally non-denominational and for several decades \
+                    was the only burial place for all Haligonians. (The burial \
+                      ground was also used by St. Matthew's United Church \
+                      (Halifax).) In 1793 it was turned over to the Anglican \
+                      St. Paul's Church. The cemetery was closed in 1844 and \
+                      the Camp Hill Cemetery established for subsequent \
+                      burials. The site steadily declined until the 1980s when \
+                      it was restored and refurbished by the Old Burying \
+                      Ground Foundation, which now maintains the site and \
+                      employ tour guides to interpret the site in the summer. \
+                      Ongoing restoration of the rare 18th century grave \
+                      markers continues.",
+
+                      "Over the decades some 12,000 people were interred in \
+                      the Old Burial Ground. Today there are only some 1,200 \
+                      headstones, some having been lost and many others being \
+                      buried with no headstone. Many notable residents are \
+                      buried in the cemetery, including British Major General \
+                      Robert Ross, who led the successful Washington Raid of \
+                      1814 and burned the White House before being killed in \
+                      battle at Baltimore a few days later.",
+
+                      "The most prominent structure is the Welsford-Parker \
+                      Monument, a Triumphal arch standing at the entrance to \
+                      the cemetery commemorating British victory in the \
+                      Crimean War. This is the second oldest war monument in \
+                      Canada and the only monument to the Crimean War in North \
+                      America. The arch was built in 1860, 16 years after the \
+                      cemetery had officially closed. The arch was built by \
+                      George Lang and is named after two Haligonians, Major \
+                      Augustus Frederick Welsford and Captain William Buck \
+                      Carthew Augustus Parker. Both Nova Scotians died in the \
+                      Battle of the Great Redan during the Siege of Sevastopol \
+                      (1854–1855). This monument was the last grave marker in \
+                      the cemetery.",
+
+                      "The Old Burying Ground was designated a National \
+                      Historic Site of Canada in 1991. It had earlier been \
+                      designated a Provincially Registered Property in 1988 \
+                      under Nova Scotia's Heritage Property Act."],
+      id: "story-id-4",
       images: [
         "/img/OBG1.png",
         "/img/OBG2.png"
@@ -60,15 +148,15 @@ angular.module('literaryHalifax')
 
 
   server = {
-    getPlaces:function(attrs){
+    getStories:function(attrs){
 
       result = []
 
-      for(i=0;i<places.length;i++){
-        place = places[i]
+      for(i=0;i<stories.length;i++){
+        story = stories[i]
         clone = {}
         for(j=0;j<attrs.length;j++){
-          clone[attrs[j]] =place[attrs[j]]
+          clone[attrs[j]] =story[attrs[j]]
         }
         result.push(clone)
       }
@@ -79,13 +167,13 @@ angular.module('literaryHalifax')
       }, SMALL_DELAY)
 
     },
-    placeInfo:function(id, attributes){
+    storyInfo:function(id, attributes){
       result = {}
-      for(i=0;i<places.length;i++){
+      for(i=0;i<stories.length;i++){
 
-        if(places[i].id==id){
+        if(stories[i].id==id){
             for(j=0;j<attributes.length;j++){
-              result[attributes[j]] =places[i][attributes[j]]
+              result[attributes[j]] =stories[i][attributes[j]]
             }
 
             return $timeout(function(){
@@ -94,12 +182,12 @@ angular.module('literaryHalifax')
         }
       }
     },
-    updatePlace:function(place,attributes){
-      return this.placeInfo(place.id, attributes)
+    updateStory:function(story,attributes){
+      return this.storyInfo(story.id, attributes)
       .then(
         function(newAttrs){
           for(attr in newAttrs){
-            place[attr]=newAttrs[attr]
+            story[attr]=newAttrs[attr]
           }
         }
       )
