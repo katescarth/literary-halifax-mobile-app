@@ -106,7 +106,7 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout){
+}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal){
 
     $scope.story = undefined
     server.storyInfo($stateParams.storyID,['name','description','location','images','audio']).then(
@@ -127,6 +127,26 @@ angular.module('literaryHalifax')
         $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
       }, 0);
     })
+
+
+    $ionicModal.fromTemplateUrl('components/imageView/imageView.html', {
+      scope: $scope,
+      animation: 'fade-in'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+
+    openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.display = function(img){
+      $scope.imageSrc = img
+      openModal()
+    }
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
 
 
 

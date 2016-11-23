@@ -26,10 +26,12 @@
         <div class="display-card">
           <div class="row" ng-repeat="image in story.images" ng-if="$index % 2 === 0">
             <div class="col col-50" ng-if="$index < story.images.length">
-                <img ng-src="{{story.images[$index]}}" width="100%" />
+                <img ng-src="{{story.images[$index]}}" width="100%"
+                ng-click="display(story.images[$index])"/>
             </div>
             <div class="col col-50" ng-if="$index + 1 < story.images.length">
-                <img ng-src="{{story.images[$index + 1]}}" width="100%" />
+                <img ng-src="{{story.images[$index + 1]}}" width="100%"
+                ng-click="display(story.images[$index +1])"/>
             </div>
           </div>
         </overscroll-pane>

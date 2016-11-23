@@ -1,0 +1,17 @@
+<div class="modal image-modal frost-appear" ng-click="closeModal()">
+
+                  <ion-content class="transparent">
+                    <ion-scroll
+                      class="zoom-scroll"
+                      zooming="true"
+              		    direction="xy"
+              		    delegate-handle="zoom-pane"
+              		    min-zoom="1"
+                      scrollbar-x="false"
+              	      scrollbar-y="false"
+              		    overflow-scroll="false">
+
+                      <img ng-src="{{imageSrc}}" class="fullscreen-image fade-appear"/>
+                    </ion-scroll>
+                  </ion-content>
+              </div>
