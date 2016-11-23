@@ -22,10 +22,17 @@
     </ion-tab>
 
     <ion-tab title="Images" icon="ion-images" ng-if="story.images">
-      <ion-pane class="transparent">
-        <ion-content>
-        </ion-content>
-      </ion-pane>
+      <overscroll-pane>
+        <div class="display-card">
+          <div class="row" ng-repeat="image in story.images" ng-if="$index % 2 === 0">
+            <div class="col col-50" ng-if="$index < story.images.length">
+                <img ng-src="{{story.images[$index]}}" width="100%" />
+            </div>
+            <div class="col col-50" ng-if="$index + 1 < story.images.length">
+                <img ng-src="{{story.images[$index + 1]}}" width="100%" />
+            </div>
+          </div>
+        </overscroll-pane>
     </ion-tab>
 
     <ion-tab title="Audio" icon="ion-headphones" ng-if="story.audio">
