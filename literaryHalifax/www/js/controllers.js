@@ -144,12 +144,17 @@ angular.module('literaryHalifax')
       $scope.imageSrc = img
       $scope.imageAnimation="fade-appear"
       $scope.backgroundAnimation="frost-appear"
-      openModal()
+      $timeout().then(
+        openModal
+      )
     }
     $scope.closeModal = function() {
       $scope.imageAnimation="fade-disappear"
       $scope.backgroundAnimation="frost-disappear"
-      $scope.modal.hide();
+      $timeout(1000).then( function(){
+        $scope.modal.hide()
+      }
+      )
     };
 
 
