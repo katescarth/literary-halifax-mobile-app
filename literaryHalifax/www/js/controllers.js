@@ -142,9 +142,13 @@ angular.module('literaryHalifax')
     };
     $scope.display = function(img){
       $scope.imageSrc = img
+      $scope.imageAnimation="fade-appear"
+      $scope.backgroundAnimation="frost-appear"
       openModal()
     }
     $scope.closeModal = function() {
+      $scope.imageAnimation="fade-disappear"
+      $scope.backgroundAnimation="frost-disappear"
       $scope.modal.hide();
     };
 
