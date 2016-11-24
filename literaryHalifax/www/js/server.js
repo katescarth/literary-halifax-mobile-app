@@ -59,7 +59,7 @@ angular.module('literaryHalifax')
                    library won a Lieutenant Governor’s Design Award in \
                    Architecture for 2014."],
       id: "story-id-1",
-      images:["/img/HCL1.jpg"]
+      images:["img/HCL1.jpg"]
     },
     {
       name:"Public Gardens",
@@ -72,7 +72,7 @@ angular.module('literaryHalifax')
                     Garden Road and opposite Victoria Park. The gardens were \
                     designated a National Historic Site of Canada in 1984."],
       id: "story-id-2",
-      images:["/img/PBG1.jpg"]
+      images:["img/PBG1.jpg"]
     },
     {
       name:"The Dingle",
@@ -90,7 +90,7 @@ angular.module('literaryHalifax')
                     Cabot Tower in Bristol, England (1898) and Cabot Tower \
                     in St. John's (1900)"],
       id: "story-id-3",
-      images:["/img/DNG1.jpg"]
+      images:["img/DNG1.jpg"]
     },
     {
       name:"Old Burying Ground",
@@ -139,8 +139,8 @@ angular.module('literaryHalifax')
                       under Nova Scotia's Heritage Property Act."],
       id: "story-id-4",
       images: [
-        "/img/OBG1.png",
-        "/img/OBG2.png"
+        "img/OBG1.png",
+        "img/OBG2.png"
       ]
     }
   ]

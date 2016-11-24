@@ -118,6 +118,7 @@ angular.module('literaryHalifax')
             newStory[attr] = placeAttrs[attr]
         }
         $scope.story = newStory
+        $scope.places=[newStory]
         console.log($scope.story)
       }, function(error){
         console.log(error)
@@ -129,9 +130,11 @@ angular.module('literaryHalifax')
     })
 
 
+    //Images tab
+    
     $ionicModal.fromTemplateUrl('components/imageView/imageView.html', {
       scope: $scope,
-      animation: 'fade-in'
+      animation: 'none'
     }).then(function(modal) {
       $scope.modal = modal;
     });
@@ -156,8 +159,10 @@ angular.module('literaryHalifax')
       }
       )
     };
+    
+    //Map tab
 
-
+    
 
 
 });

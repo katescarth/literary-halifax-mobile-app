@@ -6,7 +6,8 @@
 
     <marker id='{{place.id}}' position="{{place.location}}"
       ng-repeat="place in places"
-      on-click="markerClicked(place)">
+      on-click="markerClicked(place)"
+      clickable="{{infoWindows}}">
     </marker>
 
     <marker id='user_location_marker' position="{{currentPosition}}"
@@ -15,7 +16,7 @@
     </marker>
 
 
-    <info-window id="infoWindow" >
+    <info-window id="infoWindow" ng-if="infoWindows" >
         <info-window-selector place="place" window-type="{{windowDirective}}">
         </info-window-selector>
     </info-window>

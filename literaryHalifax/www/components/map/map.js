@@ -8,6 +8,8 @@ angular.module('literaryHalifax')
       // id: a unique id
       // location: a location (lat/lng, address...)
       places: '=',
+      // true to display info windows, false otherwise
+      infoWindows: '=',
       // the name of the directive to display in the infoWindow. The directive
       // will receive the selected place in the 'place' attribute.
       windowDirective : '@',

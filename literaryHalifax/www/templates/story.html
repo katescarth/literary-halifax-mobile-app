@@ -34,6 +34,7 @@
                 ng-click="display(story.images[$index +1])"/>
             </div>
           </div>
+          </div>
         </overscroll-pane>
     </ion-tab>
 
@@ -46,14 +47,19 @@
     </ion-tab>
 
     <ion-tab title="Map" icon="ion-location" ng-if="story.location">
-      <ion-pane class="transparent">
-        <ion-content>
-
-        </ion-content>
-      </ion-pane>
+      <overscroll-pane>
+        <div class="display-card">
+              <marker-map places="places"
+                          center="story.location" 
+                          zoom="mapInfo.zoom"
+                          info-windows="false"
+                          center-on-click="true">
+              </marker-map>
+          </div>
+        </overscroll-pane>
     </ion-tab>
 
   </ion-tabs>
-</div>
+
 </ion-pane>
 </ion-view>
