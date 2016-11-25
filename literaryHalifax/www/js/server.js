@@ -14,14 +14,17 @@ angular.module('literaryHalifax')
  *  images: a list of images associated with the story. The first image is the
             thumbnail/main image (array[image])
  *  audio:  a list of audio tracks associated with the story. array[audio]
+ *
+ 
+ *Spec for server: 
 
  * getStories(): resolves to a list of stories. The stories have ids, locations,
                 and names - enough  info to display in a list without further
                 requests.
- * storyInfo(id, attributes): resolves to an object identical to attributes
-                              but with properties identical to those of the
-                              story with the given id.
- *
+ * storyInfo(id, attributes): resolves to an object with all of the properties
+                              listed in attributes (a string array). The values
+                              for these properties are copied from the story
+                              matching id
  */
 .factory('server', function($timeout){
     var SMALL_DELAY = 200
@@ -189,15 +192,6 @@ angular.module('literaryHalifax')
                     }, LARGE_DELAY)
                 }
             }
-        },
-        
-        updateStory:function(story,attributes){
-            return this.storyInfo(story.id, attributes)
-            .then(function(newAttrs){
-                for(attr in newAttrs){
-                    story[attr]=newAttrs[attr]
-                }
-            })
         }
     }
 
