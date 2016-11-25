@@ -1,20 +1,7 @@
 <div class="modal image-modal" ng-class="backgroundAnimation">
-
-    <ion-scroll
-      zooming="true"
-        direction="xy"
-        delegate-handle="zoom-pane"
-        min-zoom="1"
-      scrollbar-x="false"
-      scrollbar-y="false"
-      class="zoom-scroll"> 
+    <ion-scroll zooming="true" direction="xy" delegate-handle="zoom-pane" min-zoom="1" scrollbar-x="false" scrollbar-y="false" class="zoom-scroll">
         <div class="horizontal-center">
-           <div class="vertical-center">
-                <img ng-src="{{imageSrc}}" class="fullscreen-image" 
-                     ng-class="imageAnimation"
-                     ng-dblclick="closeModal()"/>
-            </div>
+            <div class="vertical-center"> <img ng-src="{{imageSrc}}" class="fullscreen-image" ng-class="imageAnimation" ng-dblclick="closeModal()" /> </div>
         </div>
-        
     </ion-scroll>
 </div>
