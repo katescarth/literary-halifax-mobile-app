@@ -1,50 +1,5 @@
 /* Empty. Add your own CSS if you like */
 
-@keyframes fade-in-frost {
-    from {background: transparent;}
-    to {background: rgba(0,0,0,0.9);}
-}
-
-.frost-appear{
-  animation-name: fade-in-frost;
-  animation-duration: 1s;
-  background: rgba(0,0,0,0.9)
-}
-
-@keyframes fade-out-frost {
-    from {background: rgba(0,0,0,0.9);}
-    to {background: transparent;}
-}
-
-.frost-disappear{
-  animation-name: fade-out-frost;
-  animation-duration: 1s;
-  background: rgba(0,0,0,0)
-}
-
-@keyframes fade-in-complete{
-  from{opacity: 0;}
-  to{opacity:1;}
-}
-
-.fade-appear{
-    animation-name: fade-in-complete;
-    animation-duration: 1s;
-    opacity:1;
-}
-
-@keyframes fade-out-complete{
-  from{opacity: 1;}
-  to{opacity:0;}
-}
-
-.fade-disappear{
-    animation-name: fade-out-complete;
-    animation-duration: 1s;
-    opacity:0;
-}
-
-
 
 overscroll-pane {
   background-color: transparent !important;
