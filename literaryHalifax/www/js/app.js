@@ -1,4 +1,3 @@
-// Ionic Starter App
 angular.module('literaryHalifax', ['ionic','ngMap'])
 
 .run(function($ionicPlatform) {
@@ -18,93 +17,95 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-  $ionicConfigProvider.tabs.position('top')
+    //push all tab bars to the top (not platform specific)
+    $ionicConfigProvider.tabs.position('top')
 
-  /*
-   * Note that some states have a 'title' attribute. This is the text displayed
-   * in the header bar. If a state has a tite, the menu button will appear in
-   * the header bar. Otherwise, the back button will.
-   */
+    /*
+    * Note that some states have a 'title' attribute. This is the text displayed
+    * in the header bar. If a state has a tite, the menu button will appear in
+    * the header bar. Otherwise, the back button will.
+    */
 
 
-  $stateProvider
+    $stateProvider
 
     .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'menuCtrl'
-  })
+        url: '/app',
+        abstract: true,
+        templateUrl: 'templates/menu.html',
+        controller: 'menuCtrl'
+    })
 
-  .state('app.stories', {
-    url: '/stories',
-    abstract: true,
-    views: {
-      'mainContent': {
-        templateUrl: 'templates/stories.html',
-        controller: 'storiesCtrl'
-      }
-    }
-  })
-  .state('app.stories.map', {
-    url: '/map',
-    title:'Stories',
-    views: {
-      'stories': {
-        templateUrl: 'templates/stories_map.html',
-        controller: 'storiesCtrl'
-      }
-    }
-  })
-  .state('app.stories.list', {
-    url: '/list',
-    title:'Stories',
-    views: {
-      'stories': {
-        templateUrl: 'templates/stories_list.html',
-        controller: 'storiesCtrl'
-      }
-    }
-  })
-  .state('app.tours', {
-    url: '/tours',
-    title:'Tours',
-    views: {
-      'mainContent': {
-        templateUrl: 'templates/tours.html'
+    .state('app.stories', {
+        url: '/stories',
+        abstract: true,
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/stories.html',
+                controller: 'storiesCtrl'
+            }
+        }
+    })
+    .state('app.stories.map', {
+        url: '/map',
+        title:'Stories',
+        views: {
+            'stories': {
+                templateUrl: 'templates/stories_map.html',
+                controller: 'storiesCtrl'
+            }
+        }
+    })
+    .state('app.stories.list', {
+        url: '/list',
+        title:'Stories',
+        views: {
+            'stories': {
+                templateUrl: 'templates/stories_list.html',
+                controller: 'storiesCtrl'
+            }
+        }
+    })
+    .state('app.tours', {
+        url: '/tours',
+        title:'Tours',
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/tours.html'
 
-      }
-    }
-  })
-  .state('app.browseByTopic', {
-    url: '/browseByTopic',
-    title: 'Browse by Topic',
-    views: {
-      'mainContent': {
-        templateUrl: 'templates/browseByTopic.html'
+            }
+        }
+    })
+    .state('app.browseByTopic', {
+        url: '/browseByTopic',
+        title: 'Browse by Topic',
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/browseByTopic.html'
 
-      }
-    }
-  })
-  .state('app.about', {
-    url: '/about',
-    title:'About',
-    views: {
-      'mainContent': {
-        templateUrl: 'templates/about.html'
+            }
+        }
+    })
+    .state('app.about', {
+        url: '/about',
+        title:'About',
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/about.html'
 
-      }
-    }
-  })
-  .state('app.storyView', {
-    url: '/story/:storyID',
-    views: {
-      'mainContent': {
-        templateUrl: 'templates/story.html',
-        controller: 'storyCtrl'
-      }
-    }
-  });
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/stories/map');
+            }
+        }
+    })
+    .state('app.storyView', {
+        url: '/story/:storyID',
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/story.html',
+                controller: 'storyCtrl'
+                
+            }
+        }
+    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/stories/map');
 });

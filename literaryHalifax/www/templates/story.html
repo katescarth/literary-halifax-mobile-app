@@ -1,65 +1,69 @@
 <ion-view view-title="Story">
   <ion-pane>
+      
+<!--      Image displayed behind the tab contents-->
     <ion-content class="has-header has-tabs-top">
       <img ng-src="{{story.images[0]}}" width="100%"/>
     </ion-content>
 
-  <ion-tabs class="tabs-balanced tabs-icon-top" delegate-handle="story-tabs-delegate">
+      <ion-tabs class="tabs-balanced tabs-icon-top" delegate-handle="story-tabs-delegate">
 
-    <ion-spinner ng-if="!story"></ion-spinner>
+        <ion-spinner ng-if="!story"></ion-spinner>
 
 
-    <ion-tab title="Description" icon="ion-ios-paper" ng-if="story.description">
-      <overscroll-pane>
-        <div class="display-card">
+        <ion-tab title="Description" icon="ion-ios-paper" ng-if="story.description">
+          <overscroll-pane>
+            <div class="display-card">
 
-          <h3 class="title">{{story.name}}</h1>
-          <p ng-repeat="paragraph in story.description">
-            {{paragraph}}<br />
-          </p>
-        </div>
-      </overscroll-pane>
-    </ion-tab>
-
-    <ion-tab title="Images" icon="ion-images" ng-if="story.images">
-      <overscroll-pane>
-        <div class="display-card">
-          <div class="row" ng-repeat="image in story.images" ng-if="$index % 2 === 0">
-            <div class="col col-50" ng-if="$index < story.images.length">
-                <img ng-src="{{story.images[$index]}}" width="100%"
-                ng-click="display(story.images[$index])"/>
+              <h3 class="title">{{story.name}}</h3>
+              <p ng-repeat="paragraph in story.description">
+                {{paragraph}}<br />
+              </p>
             </div>
-            <div class="col col-50" ng-if="$index + 1 < story.images.length">
-                <img ng-src="{{story.images[$index + 1]}}" width="100%"
-                ng-click="display(story.images[$index +1])"/>
+          </overscroll-pane>
+        </ion-tab>
+
+        <ion-tab title="Images" icon="ion-images" ng-if="story.images">
+          <overscroll-pane>
+            <div class="display-card">
+
+              <div class="row" ng-repeat="image in story.images" ng-if="$index % 2 === 0">
+                <div class="col col-50" ng-if="$index < story.images.length">
+                    <img ng-src="{{story.images[$index]}}" width="100%"
+                    ng-click="display(story.images[$index])"/>
+                </div>
+                <div class="col col-50" ng-if="$index + 1 < story.images.length">
+                    <img ng-src="{{story.images[$index + 1]}}" width="100%"
+                    ng-click="display(story.images[$index +1])"/>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-        </overscroll-pane>
-    </ion-tab>
+          </overscroll-pane>
+        </ion-tab>
 
-    <ion-tab title="Audio" icon="ion-headphones" ng-if="story.audio">
-      <ion-pane class="transparent">
-        <ion-content>
+        <ion-tab title="Audio" icon="ion-headphones" ng-if="story.audio">
+          <overscroll-pane>
+            <div class="display-card">
 
-        </ion-content>
-      </ion-pane>
-    </ion-tab>
+            </div>
+          </overscroll-pane>
+        </ion-tab>
 
-    <ion-tab title="Map" icon="ion-location" ng-if="story.location">
-      <overscroll-pane>
-        <div class="display-card">
-              <marker-map places="places"
-                          center="story.location" 
-                          zoom="mapInfo.zoom"
-                          info-windows="false"
-                          center-on-click="true">
-              </marker-map>
-          </div>
-        </overscroll-pane>
-    </ion-tab>
+        <ion-tab title="Map" icon="ion-location" ng-if="story.location">
+          <overscroll-pane>
+            <div class="display-card">
 
-  </ion-tabs>
+                  <marker-map places="places"
+                              center="story.location" 
+                              zoom="mapInfo.zoom"
+                              info-windows="false"
+                              center-on-click="true">
+                  </marker-map>
+              </div>
+            </overscroll-pane>
+        </ion-tab>
 
-</ion-pane>
+      </ion-tabs>
+
+    </ion-pane>
 </ion-view>
