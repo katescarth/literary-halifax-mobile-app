@@ -11,7 +11,7 @@
         <ion-spinner ng-if="!story"></ion-spinner>
 
 
-        <ion-tab title="Description" icon="ion-ios-paper" ng-if="story.description">
+        <ion-tab title="Description" icon="ion-android-list" ng-if="story.description">
           <overscroll-pane>
             <div class="display-card">
 
@@ -23,7 +23,7 @@
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Images" icon="ion-images" ng-if="story.images">
+        <ion-tab title="Images" icon="ion-android-image" ng-if="story.images">
           <overscroll-pane>
             <div class="display-card">
 
@@ -41,15 +41,34 @@
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Audio" icon="ion-headphones" ng-if="story.audio">
+        <ion-tab title="Audio" icon="ion-android-volume-up" ng-if="story.audio">
           <overscroll-pane>
             <div class="display-card">
+<!--
+                    <button class="button button-assertive" ng-click="playTrack(0)">Play Land of Confusion - Genesis</button>
+                    <button class="button button-assertive" ng-click="playTrack(1)">Play Tonight, Tonight - Genesis</button>
+                    <ion-audio-track track="dynamicTrack" toggle-playback="togglePlayback">
+                        <div class="card">
+                            <div class="item">
+                                <h2>{{dynamicTrack.title}}</h2>
 
+                                <p>{{dynamicTrack.artist}}</p>
+                                <ion-audio-controls>
+                                    <a class="button button-icon icon" ion-audio-play></a>
+                                    <ion-spinner icon="ios" style="position: relative; top: 8px; left: 4px"></ion-spinner>
+                                </ion-audio-controls>
+                            </div>
+                            <div class="item item-divider">
+                                <ion-audio-progress-bar track="dynamicTrack" display-time></ion-audio-progress-bar>
+                            </div>
+                        </div>
+                    </ion-audio-track>
+-->
             </div>
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Map" icon="ion-location" ng-if="story.location">
+        <ion-tab title="Map" icon="ion-android-pin" ng-if="story.location">
           <overscroll-pane>
             <div class="display-card">
 

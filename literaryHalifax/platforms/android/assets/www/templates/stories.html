@@ -1,0 +1,27 @@
+<ion-view view-title="Stories" >
+
+
+    <ion-nav-view name="stories" class="has-header has-footer"></ion-nav-view>
+
+
+  <ion-footer-bar align-title="left" class="bar-stable" padding="0px">
+
+    <table style="width:100%">
+      <tr>
+        <td>
+          <a ng-click="toMapTab()" class="{{mapButton}}"
+                  width="100%" display="block">
+            Map
+          </a>
+        </td>
+        <td>
+          <a ng-click="toListTab()" class="{{listButton}}"
+                  width="100%" display="block" margin-top="0px">
+            List
+          </a>
+        </td>
+      </tr>
+    </table>
+
+  </ion-footer-bar>
+</ion-view>
