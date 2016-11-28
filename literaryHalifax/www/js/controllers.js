@@ -25,7 +25,7 @@ angular.module('literaryHalifax')
     }
 
     goBack = function(){
-        $window.history.back()
+        $ionicHistory.goBack()
     }
 
     buttonClassPrefix = "button button-icon button-clear "

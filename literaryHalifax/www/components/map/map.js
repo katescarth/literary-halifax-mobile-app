@@ -41,11 +41,16 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         };
     }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
         $scope.id = "marker-map-id"
-        NgMap.getMap($scope.id).then(function (map) {
-            $scope.map = map;
-        }, function (error) {
-            console.log(error)
+        
+        $scope.$on('$ionicView.enter', function() {
+            NgMap.getMap($scope.id).then(function (map) {
+                console.log("got a map")
+                $scope.map = map;
+            }, function (error) {
+                console.log(error)
+            });
         });
+        
         //prevent scrolling when touching the map
         $scope.fingerDown = function () {
             $ionicScrollDelegate.freezeAllScrolls(true)
