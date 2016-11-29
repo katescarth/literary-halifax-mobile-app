@@ -13,7 +13,7 @@ angular.module('literaryHalifax')
                  paragraph)
  *  images: a list of images associated with the story. The first image is the
             thumbnail/main image (array[image])
- *  audio:  a list of audio tracks associated with the story. array[audio]
+ *  audio:  an audio reading of the stroy's description
  *
  
  *Spec for server: 
@@ -65,7 +65,7 @@ angular.module('literaryHalifax')
             ],
             id: "story-id-1",
             images:["img/HCL1.jpg"],
-            audio:["audio/library.ogg"]
+            audio:"audio/library.ogg"
         },
         {
             name:"Public Gardens",

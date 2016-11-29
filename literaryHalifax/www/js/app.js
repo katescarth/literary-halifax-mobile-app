@@ -1,4 +1,4 @@
-angular.module('literaryHalifax', ['ionic','ngMap','ionic-audio'])
+angular.module('literaryHalifax', ['ionic','ngMap'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
