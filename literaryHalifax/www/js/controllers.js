@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $window, $ionicHistory,
-                                 $state, $ionicPopup, $ionicPlatform) {
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory,
+                                 $state, $ionicPopup, $ionicPlatform, mediaPlayer) {
     $scope.menuItems =[
         {
             displayName:'Stories',
@@ -44,20 +44,18 @@ angular.module('literaryHalifax')
     goBack = function(){
         $ionicHistory.goBack()
     }
-
-    buttonClassPrefix = "button button-icon button-clear "
-
+    navClassPrefix="button button-icon button-clear "
     setMenuMode = function(){
-        $scope.buttonClass = buttonClassPrefix+'ion-navicon'
-        $scope.buttonClick = toggleMenu
+        $scope.navButtonClass = navClassPrefix+'ion-navicon'
+        $scope.navButtonClick = toggleMenu
         exitOnBack=true
     }
 
     setBackMode = function(){
         // TODO Use the correct icon for the platform (ios or android)
         // or possibly animate for that #momentofcharm
-        $scope.buttonClass = buttonClassPrefix+'ion-chevron-left'
-        $scope.buttonClick = goBack
+        $scope.navButtonClass = navClassPrefix+'ion-chevron-left'
+        $scope.navButtonClick = goBack
         exitOnBack=false
     }
 
@@ -70,6 +68,16 @@ angular.module('literaryHalifax')
             setBackMode()
         }
     })
+    
+    $scope.audioButtonClass="button button-icon button-clear ion-volume-high pulse"
+    
+    $scope.mediaPlaying = function(){
+        return mediaPlayer.isPlaying()
+    }
+    
+    $scope.mediaAvailable = function(){
+        return mediaPlayer.hasTrack()
+    }
     
     //the first state. Hacky
     $scope.navBarTitle = "Stories" //default state, there's no statechange to
@@ -123,7 +131,7 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal){
+}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer){
 
     $scope.story = undefined
     server.storyInfo($stateParams.storyID,['name','description','location','images','audio'])
@@ -147,7 +155,13 @@ angular.module('literaryHalifax')
             $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
         }, 0);
     })
-
+    
+    
+    //description tab
+    $scope.playAudio = function(){
+        mediaPlayer.setTrack($scope.story.audio)
+        mediaPlayer.play()
+    }
 
     //Images tab
 
