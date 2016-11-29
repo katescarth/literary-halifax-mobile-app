@@ -41,3 +41,15 @@
     animation-duration: 1s;
     opacity:0;
 }
+
+@keyframes pulse-in-out {
+    0% {opacity: 1;}
+    50%{opacity:0.5;}
+    100%{opacity: 1;}
+}
+
+.pulse{
+    animation-name: pulse-in-out;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}

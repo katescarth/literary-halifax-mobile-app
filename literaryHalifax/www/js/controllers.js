@@ -71,13 +71,7 @@ angular.module('literaryHalifax')
     
     $scope.audioButtonClass="button button-icon button-clear ion-volume-high pulse"
     
-    $scope.mediaPlaying = function(){
-        return mediaPlayer.isPlaying()
-    }
-    
-    $scope.mediaAvailable = function(){
-        return mediaPlayer.hasTrack()
-    }
+    $scope.media = mediaPlayer
     
     //the first state. Hacky
     $scope.navBarTitle = "Stories" //default state, there's no statechange to

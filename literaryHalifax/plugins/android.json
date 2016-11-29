@@ -13,9 +13,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
-        "cordova-plugin-media": {
-            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
-        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
@@ -26,6 +23,9 @@
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
+        },
+        "cordova-plugin-media": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         }
     },

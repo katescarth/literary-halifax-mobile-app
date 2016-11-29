@@ -4,11 +4,11 @@
     </button>
   <h1 class="title">{{navBarTitle}}</h1>
   <!-- TODO share button -->
-    <button class="{{audioButtonClass}}"
+    <button ng-if="media.hasTrack" class="{{audioButtonClass}}"
           ng-click="audioButtonClick()">
     </button>
 </ion-header-bar>
-
+{{JSON.stringify(media)}}
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
     <ion-nav-view name="mainContent"></ion-nav-view>

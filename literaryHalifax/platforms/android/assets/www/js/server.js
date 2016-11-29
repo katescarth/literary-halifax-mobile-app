@@ -13,7 +13,7 @@ angular.module('literaryHalifax')
                  paragraph)
  *  images: a list of images associated with the story. The first image is the
             thumbnail/main image (array[image])
- *  audio:  a list of audio tracks associated with the story. array[audio]
+ *  audio:  an audio reading of the stroy's description
  *
  
  *Spec for server: 
@@ -65,7 +65,7 @@ angular.module('literaryHalifax')
             ],
             id: "story-id-1",
             images:["img/HCL1.jpg"],
-            audio:["audio/library.ogg"]
+            audio:"/android_asset/www/audio/library.ogg"
         },
         {
             name:"Public Gardens",
@@ -80,7 +80,8 @@ angular.module('literaryHalifax')
                 designated a National Historic Site of Canada in 1984."
             ],
             id: "story-id-2",
-            images:["img/PBG1.jpg"]
+            images:["img/PBG1.jpg"],
+            audio:"/android_asset/www/audio/static.mp3"
         },
         {
             name:"The Dingle",
@@ -100,7 +101,8 @@ angular.module('literaryHalifax')
                 in St. John's (1900)"
             ],
             id: "story-id-3",
-            images:["img/DNG1.jpg"]
+            images:["img/DNG1.jpg"],
+            audio:"/android_asset/www/audio/dingle.ogg"
         },
         {
             name:"Old Burying Ground",
