@@ -35,7 +35,7 @@ angular.module('literaryHalifax').directive('simpleInfoWindow', function () {
                 return str
             }
             $scope.$watch('story', function (newVal, oldVal) {
-                if(newVal){
+                if(newVal&&!(newVal.name&&newVal.description)){
                     refresh()
                 }
             })

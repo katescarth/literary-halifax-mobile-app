@@ -1,10 +1,15 @@
 /* Empty. Add your own CSS if you like */
 
 .info-window {
+    width: 175px;
     max-width: 175px !important;
     align-content: center;
 }
 
+.info-window a {
+  color: black;
+  text-decoration: none; /* no underline */
+}
 .info-window-spinner{
     align-self: center !important;
 }
