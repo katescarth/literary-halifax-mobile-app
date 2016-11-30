@@ -1,5 +1,14 @@
 /* Empty. Add your own CSS if you like */
 
+.info-window {
+    max-width: 175px !important;
+    align-content: center;
+}
+
+.info-window-spinner{
+    align-self: center !important;
+}
+
 .media-button {
     font-size:30px !important;
 }

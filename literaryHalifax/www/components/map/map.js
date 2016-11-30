@@ -2,10 +2,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             restrict: 'E'
             , scope: {
-                // a collection of 'place' objects which have at least
+                // a collection of 'story' objects which have at least
                 // id: a unique id
                 // location: a location (lat/lng, address...)
-                places: '='
+                stories: '='
                 , // true to display info windows, false otherwise
                 infoWindows: '='
                 , // the name of the directive to display in the infoWindow. The directive
@@ -28,10 +28,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             scope: {
                 windowType: '@'
-                , place: '='
+                , story: '='
             }
             , link: function (scope, element) {
-                var generatedTemplate = '<' + scope.windowType + ' place="place"></' + scope.windowType + '>';
+                var generatedTemplate = '<' + scope.windowType + ' story="story"></' + scope.windowType + '>';
                 //this function is getting called more than once, so we need to clear out
                 //the element each time
                 //TODO get this function called only once
@@ -79,16 +79,15 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             })
         }, geoUpdatePeriodMillis);
         //display an info window.
-        handlePlaceClicked = function (place) {
-            console.log($scope.places)
+        handleStoryClicked = function (story) {
             // make the currently selected place available to the info window
-            $scope.place = place
-            $scope.map.showInfoWindow('infoWindow', place.id)
+            $scope.story = story
+            $scope.map.showInfoWindow('infoWindow', story.id)
             if ($scope.centerOnClick) {
-                $scope.map.panTo(coordinates(place.location))
+                $scope.map.panTo(coordinates(story.location))
             }
         }
-        $scope.markerClicked = function (element, place) {
-            handlePlaceClicked(place)
+        $scope.markerClicked = function (element, story) {
+            handleStoryClicked(story)
         }
     })

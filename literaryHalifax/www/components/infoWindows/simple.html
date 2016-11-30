@@ -1,5 +1,5 @@
-<div>
-  <p>
-      {{place.name}}
-  </p>
-</div>
+    <div class="info-window">
+        <h5>{{title()}}</h5>
+        <ion-spinner class="info-window-spinner" ng-if="loading" ng-show="loading"></ion-spinner>
+        <p>{{truncatedDescription()}}</p>
+    </div>
