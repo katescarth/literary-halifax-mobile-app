@@ -26,16 +26,6 @@ overscroll-pane {
   height: 100%;
 }
 
-.horizontal-center {
-    display: table;
-    height:100%;
-    width: 100%;
-}
-.vertical-center {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-}
 
 .zoom-scroll {
     height:100%;
@@ -74,19 +64,20 @@ overscroll-pane {
     float:left;
 }
 
-
 .image-modal {
-  width: 100% !important;
   height: 100%;
-  top: 0 !important;
-  left: 0 !important;
+}
+
+.zoom-scroll {
+    height:100%;
+}
+.zoom-scroll .scroll{
+    min-height: 100% !important;
+	align-items: center;
+    background-color:transparent;
 }
 
 .fullscreen-image {
+    position:relative;top:50%; transform: translateY(60%);
     width: 100%;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    overflow: auto;
-    vertical-align: middle
 }

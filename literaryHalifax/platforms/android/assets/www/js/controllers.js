@@ -2,6 +2,7 @@ angular.module('literaryHalifax')
 
 .controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory,
                                  $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
+    // items for the side menu
     $scope.menuItems =[
         {
             displayName:'Stories',
@@ -21,12 +22,13 @@ angular.module('literaryHalifax')
         }
     ]
     var exitOnBack = false
-    
+    // take control of back button when it tries to navigate back
+    // (not when it closes popups, etc.)
     $ionicPlatform.registerBackButtonAction(function(event) {
         if (exitOnBack) {
             $ionicPopup.confirm({
-                title: 'System warning',
-                template: 'are you sure you want to exit?'
+                title: 'Leave app?',
+                template: ''
             }).then(function(res) {
                 if (res) {
                     ionic.Platform.exitApp();
@@ -44,12 +46,15 @@ angular.module('literaryHalifax')
     goBack = function(){
         $ionicHistory.goBack()
     }
+    
+    // set the navbar to show a 'top level' state
     setMenuMode = function(){
         $scope.navButtonIcon = 'ion-navicon'
         $scope.navButtonClick = toggleMenu
         exitOnBack=true
     }
-
+    
+    // set the navbar to show a 'secondary' state
     setBackMode = function(){
         // TODO Use the correct icon for the platform (ios or android)
         // or possibly animate for that #momentofcharm
@@ -58,6 +63,7 @@ angular.module('literaryHalifax')
         exitOnBack=false
     }
 
+    // check every state change and update navbar accordingly
     $scope.$root.$on('$stateChangeSuccess',
     function(event, toState, toParams, fromState, fromParams){
         if(toState.title){
@@ -67,26 +73,30 @@ angular.module('literaryHalifax')
             setBackMode()
         }
     })
-    var popover = undefined
+    
+    
+    var mediaController = undefined
     $scope.audioButtonClass="button button-icon button-clear ion-volume-high pulse"
     $ionicPopover.fromTemplateUrl('components/mediaControl/mediaControl.html', {
             scope: $scope,
             animation:'in-from-right'
           }).then(function(constructedPopover){
-            popover = constructedPopover
+            mediaController = constructedPopover
           });
     $scope.audioButtonClick = function($event){
-      popover.show($event)
+      mediaController.show($event)
     }
     
     $scope.closePopover = function(){
-        popover.hide()
+        mediaController.hide()
     }
     
+    //expose this to the popover
     $scope.media = mediaPlayer
     
+    //default state, there's no statechange to
     //the first state. Hacky
-    $scope.navBarTitle = "Stories" //default state, there's no statechange to
+    $scope.navBarTitle = "Stories" 
     
     // The start state is always a base-level one
     setMenuMode()
@@ -105,12 +115,12 @@ angular.module('literaryHalifax')
         center:"44.6474,-63.5806",
         zoom: 15
     }
-    $scope.places = []
+    $scope.stories = []
 
     //TODO should not run this at app start
     server.getStories(['name','location','id','images'])
     .then(function(result){
-        $scope.places = result
+        $scope.stories = result
     }).catch(function(error){
         console.log(error)
     })
@@ -137,7 +147,7 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer){
+}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
     $scope.story = undefined
     server.storyInfo($stateParams.storyID,['name','description','location','images','audio'])
@@ -179,7 +189,6 @@ angular.module('literaryHalifax')
         $scope.modal = modal;
     });
 
-
     openModal = function() {
         $scope.modal.show()
     }
@@ -198,6 +207,7 @@ angular.module('literaryHalifax')
         $timeout(1000)
         .then(function(){
             $scope.modal.hide()
+            $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })
     };
 

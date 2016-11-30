@@ -1,6 +1,10 @@
 angular.module('literaryHalifax')
 
 /*
+ * A single media player which handles one track at a time throughout the app
+ *
+ * the player exposes the variables isPlaying, hasTrack, progress, and title for fast binding
+ *
  */
 .factory('mediaPlayer', function($timeout, $interval){
 
@@ -9,15 +13,21 @@ angular.module('literaryHalifax')
     var media = undefined
     
     
-    
+    //plays the currently selected track
     play=function(){
-        player.isPlaying=true
-        media.play()//TODO add  iOS options
+        if(player.hasTrack){
+            player.isPlaying=true
+            media.play()//TODO add  iOS options
+        }
     }
+    //pauses the currently playing track (which can be resumed using play())
     pause=function(){
-        player.isPlaying=false
-        media.pause()
+        if(player.hasTrack){
+            player.isPlaying=false
+            media.pause()
+        }
     }
+    // shuts down the media player
     stop=function(){
         player.hasTrack=false
         player.isPlaying=false
@@ -28,6 +38,7 @@ angular.module('literaryHalifax')
         }
         media=undefined
     }
+    // initializes the media player with a src (url) and a title for the track
     setTrack=function(src, title){
         stop()
         player.hasTrack=true
@@ -38,7 +49,7 @@ angular.module('literaryHalifax')
             },0,true)
         })
     }
-    
+    //scans to a particular location (between 0 and 1)
     scan=function(position){
         media.seekTo(media.getDuration()*position*1000)
         player.progress=position
@@ -52,7 +63,8 @@ angular.module('literaryHalifax')
         scan:scan,
         isPlaying:false,
         hasTrack:false,
-        title:undefined
+        title:undefined,
+        progress:0
     }
     $interval(function(){
         if(media){

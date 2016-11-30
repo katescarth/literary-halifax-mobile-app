@@ -20,6 +20,18 @@
   background: rgba(0,0,0,0)
 }
 
+.frost{
+  animation-duration: 1s;
+}
+
+.frost.ng-enter{
+    animation-name: frost-appear;
+}
+
+.frost.ng-leave{
+    animation-name: frost-disappear;
+}
+
 @keyframes fade-in-complete{
   from{opacity: 0;}
   to{opacity:1;}

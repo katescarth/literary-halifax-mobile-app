@@ -147,7 +147,7 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer){
+}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
     $scope.story = undefined
     server.storyInfo($stateParams.storyID,['name','description','location','images','audio'])
@@ -189,7 +189,6 @@ angular.module('literaryHalifax')
         $scope.modal = modal;
     });
 
-
     openModal = function() {
         $scope.modal.show()
     }
@@ -208,6 +207,8 @@ angular.module('literaryHalifax')
         $timeout(1000)
         .then(function(){
             $scope.modal.hide()
+            $scope.imageSrc = undefined
+            $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })
     };
 
