@@ -53,3 +53,38 @@
     animation-duration: 2s;
     animation-iteration-count: infinite;
 }
+
+
+@keyframes slide-left {
+	0% {
+		transform: translateX(150%);
+	}
+	100% {
+		transform: translateX(0%);
+	}
+}
+    
+@keyframes slide-right {
+	0% {
+		transform: translateX(0%);
+	}
+	100% {
+		transform: translateX(150%);
+	}
+}
+.in-from-right{
+    animation-duration: 1s;
+}
+.in-from-right.ng-enter{
+    animation-name: slide-left;
+}
+/*
+.in-from-right.ng-leave{
+    animation-name: slide-right;
+}
+*/
+    
+    
+    
+    
+    

@@ -2,14 +2,13 @@ angular.module('literaryHalifax')
 
 /*
  */
-.factory('mediaPlayer', function($timeout){
+.factory('mediaPlayer', function($timeout, $interval){
 
     var player = undefined
     
-    var track = undefined
     var media = undefined
     
-    var listeners = []
+    
     
     play=function(){
         player.isPlaying=true
@@ -22,22 +21,27 @@ angular.module('literaryHalifax')
     stop=function(){
         player.hasTrack=false
         player.isPlaying=false
+        player.title=undefined
         if(media){
             media.stop()
             media.release()
         }
-        track=undefined
         media=undefined
     }
-    setTrack=function(newTrack){
+    setTrack=function(src, title){
         stop()
-        track=newTrack
         player.hasTrack=true
-        media=new Media(track, function(){
+        player.title=title
+        media=new Media(src, function(){
             $timeout(function(){
                 stop()
             },0,true)
         })
+    }
+    
+    scan=function(position){
+        media.seekTo(media.getDuration()*position*1000)
+        player.progress=position
     }
 
     player = {
@@ -45,9 +49,18 @@ angular.module('literaryHalifax')
         play:play,
         pause:pause,
         stop:stop,
+        scan:scan,
         isPlaying:false,
-        hasTrack:false
+        hasTrack:false,
+        title:undefined
     }
+    $interval(function(){
+        if(media){
+            media.getCurrentPosition(function(pos){
+                player.progress=pos/(1.0*media.getDuration())
+            })
+        }
+    }, 300)
 
     return player
 })

@@ -1,4 +1,4 @@
-angular.module('literaryHalifax', ['ionic','ngMap','ngCordova'])
+angular.module('literaryHalifax', ['ionic','ngMap'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

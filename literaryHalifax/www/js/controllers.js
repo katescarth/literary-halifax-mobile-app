@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
 .controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory,
-                                 $state, $ionicPopup, $ionicPlatform, mediaPlayer) {
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
     $scope.menuItems =[
         {
             displayName:'Stories',
@@ -68,8 +68,21 @@ angular.module('literaryHalifax')
             setBackMode()
         }
     })
-    
+    var popover = undefined
     $scope.audioButtonClass="button button-icon button-clear ion-volume-high pulse"
+    $ionicPopover.fromTemplateUrl('components/mediaControl/mediaControl.html', {
+            scope: $scope,
+            animation:'in-from-right'
+          }).then(function(constructedPopover){
+            popover = constructedPopover
+          });
+    $scope.audioButtonClick = function($event){
+      popover.show($event)
+    }
+    
+    $scope.closePopover = function(){
+        popover.hide()
+    }
     
     $scope.media = mediaPlayer
     
@@ -153,7 +166,7 @@ angular.module('literaryHalifax')
     
     //description tab
     $scope.playAudio = function(){
-        mediaPlayer.setTrack($scope.story.audio)
+        mediaPlayer.setTrack($scope.story.audio, $scope.story.name)
         mediaPlayer.play()
     }
 

@@ -5,7 +5,7 @@
   <h1 class="title">{{navBarTitle}}</h1>
   <!-- TODO share button -->
     <button ng-if="media.hasTrack" class="{{audioButtonClass}}"
-          ng-click="audioButtonClick()">
+          ng-click="audioButtonClick($event)">
     </button>
 </ion-header-bar>
 {{JSON.stringify(media)}}
