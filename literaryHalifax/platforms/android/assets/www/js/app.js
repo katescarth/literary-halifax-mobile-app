@@ -99,6 +99,7 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     })
     .state('app.storyView', {
         url: '/story/:storyID',
+        cache:false,
         views: {
             'mainContent': {
                 templateUrl: 'templates/story.html',

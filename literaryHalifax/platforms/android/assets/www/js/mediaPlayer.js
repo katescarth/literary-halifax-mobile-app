@@ -11,26 +11,38 @@ angular.module('literaryHalifax')
     var player = undefined
     
     var media = undefined
+    var track = undefined
+    
+    statusManager=function(status){
+        if(status==Media.MEDIA_RUNNING){
+            player.isPlaying=true
+            player.hasTrack=true
+            
+        } else if(status==Media.MEDIA_PAUSED){
+            player.isPlaying=false
+            player.hasTrack=true
+            
+        } else if(status==Media.MEDIA_STOPPED){
+            player.isPlaying=false
+            player.hasTrack=false            
+        } 
+    }
     
     
     //plays the currently selected track
     play=function(){
-        if(player.hasTrack){
-            player.isPlaying=true
+        if(media){   
             media.play()//TODO add  iOS options
         }
     }
     //pauses the currently playing track (which can be resumed using play())
     pause=function(){
-        if(player.hasTrack){
-            player.isPlaying=false
+        if(media){
             media.pause()
         }
     }
     // shuts down the media player
     stop=function(){
-        player.hasTrack=false
-        player.isPlaying=false
         player.title=undefined
         if(media){
             media.stop()
@@ -38,20 +50,28 @@ angular.module('literaryHalifax')
         }
         media=undefined
     }
+    
     // initializes the media player with a src (url) and a title for the track
     setTrack=function(src, title){
         stop()
-        player.hasTrack=true
         player.title=title
-        media=new Media(src, function(){
-            $timeout(function(){
-                stop()
-            },0,true)
-        })
+        track=src
+        media=new Media(src, function(){},function(){},statusManager)
     }
     //scans to a particular location (between 0 and 1)
     scan=function(position){
-        media.seekTo(media.getDuration()*position*1000)
+        if(position==0){
+            if(player.isPlaying){
+                player.setTrack(track,player.title)
+                player.play()
+            } else {
+                player.setTrack(track,player.title)
+            }
+        } else {
+            if(media){
+                media.seekTo(media.getDuration()*position*1000)
+            }
+        }
         player.progress=position
     }
 

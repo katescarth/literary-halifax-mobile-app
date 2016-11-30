@@ -207,6 +207,7 @@ angular.module('literaryHalifax')
         $timeout(1000)
         .then(function(){
             $scope.modal.hide()
+            $scope.imageSrc = undefined
             $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })
     };
