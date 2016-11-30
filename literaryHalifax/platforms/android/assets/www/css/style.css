@@ -4,6 +4,11 @@
     font-size:30px !important;
 }
 
+.media-content {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
 .popover {
     height: auto !important;
     width:70% !important;

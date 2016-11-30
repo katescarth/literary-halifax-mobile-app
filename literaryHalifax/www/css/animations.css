@@ -54,6 +54,10 @@
     animation-iteration-count: infinite;
 }
 
+.pulse-idle{
+    opacity:0.5;
+}
+
 
 @keyframes slide-left {
 	0% {
@@ -73,7 +77,7 @@
 	}
 }
 .in-from-right{
-    animation-duration: 1s;
+    animation-duration: 0.5s;
 }
 .in-from-right.ng-enter{
     animation-name: slide-left;

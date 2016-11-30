@@ -1,16 +1,20 @@
 <ion-popover-view>
     <ion-content> 
-        <h4>Audio title</h4>
-        <div class="range">
-        <input type="range" name="volume" min="0" max="1" step="0.001" ng-model="media.progress" on-release="media.scan($event.target.valueAsNumber)">
-        </div>
+        <div class="media-content">
+            <h4 align="center">{{media.title}}</h4>
+            <div class="range">
+                <input type="range" name="volume" min="0" max="1" step="0.001" ng-model="media.progress" on-release="media.scan($event.target.valueAsNumber)">
+                
+                <button class="button button-icon media-button button-assertive 
+                               button-clear ion-stop" ng-click="closePopover();media.stop()">
+                </button>
+                
+                <button class="button button-icon media-button button-balanced button-clear"
+                        ng-class="media.isPlaying?'ion-pause':'ion-play'"
+                        ng-click="media.isPlaying?media.pause():media.play()">
+                </button>
+            </div>
 
-        <button class="button button-icon media-button button-assertive 
-                       button-clear ion-stop" ng-click="closePopover();media.stop()">
-        </button>
-        <button class="button button-icon media-button button-balanced button-clear"
-                ng-class="media.isPlaying?'ion-pause':'ion-play'"
-                ng-click="media.isPlaying?media.pause():media.play()">
-        </button>
+        </div>
     </ion-content>
 </ion-popover-view>

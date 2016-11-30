@@ -44,9 +44,8 @@ angular.module('literaryHalifax')
     goBack = function(){
         $ionicHistory.goBack()
     }
-    navClassPrefix="button button-icon button-clear "
     setMenuMode = function(){
-        $scope.navButtonClass = navClassPrefix+'ion-navicon'
+        $scope.navButtonIcon = 'ion-navicon'
         $scope.navButtonClick = toggleMenu
         exitOnBack=true
     }
@@ -54,7 +53,7 @@ angular.module('literaryHalifax')
     setBackMode = function(){
         // TODO Use the correct icon for the platform (ios or android)
         // or possibly animate for that #momentofcharm
-        $scope.navButtonClass = navClassPrefix+'ion-chevron-left'
+        $scope.navButtonIcon = 'ion-chevron-left'
         $scope.navButtonClick = goBack
         exitOnBack=false
     }

@@ -1,10 +1,12 @@
 <ion-header-bar class="bar-balanced" align-title="left">
 
-    <button class="{{navButtonClass}}" ng-click="navButtonClick()">
+    <button class="button button-icon button-clear" ng-class="navButtonIcon"
+            ng-click="navButtonClick()">
     </button>
   <h1 class="title">{{navBarTitle}}</h1>
   <!-- TODO share button -->
-    <button ng-if="media.hasTrack" class="{{audioButtonClass}}"
+    <button ng-show="media.hasTrack" class="button button-icon button-clear ion-volume-high"
+            ng-class="media.isPlaying?'pulse':'pulse-idle'"
           ng-click="audioButtonClick($event)">
     </button>
 </ion-header-bar>
