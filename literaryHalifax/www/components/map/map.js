@@ -41,10 +41,48 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         };
     }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
         $scope.id = "marker-map-id"
+        // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
+        $scope.styles=[
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            },
+            {
+                featureType: "poi.park",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "on" }
+                ]
+            },
+            {
+                featureType: "administrative",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            },
+            {
+                featureType: "administrative.neighborhood",
+                elementType: "labels",
+                stylers: [
+                    { 
+                        visibility:"on"
+                    }
+                ]
+            },
+            {
+                featureType: "transit",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
         
         $scope.$on('$ionicView.enter', function() {
             NgMap.getMap($scope.id).then(function (map) {
-                console.log("got a map")
                 $scope.map = map;
             }, function (error) {
                 console.log(error)
@@ -67,17 +105,20 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 , lng: parseFloat(tmp[1])
             }
         }
-        var geoUpdatePeriodMillis = 10000
-        //periodically check the user's loaction and update it
-        $interval(function () {
-            NgMap.getGeoLocation('current-location', {
-                maximumAge: 3000
-                , timeout: 5000
-                , enableHighAccuracy: true
-            }).then(function (latlng) {
-                $scope.currentPosition = latlng
-            })
-        }, geoUpdatePeriodMillis);
+    
+        if(navigator.geolocation){
+            navigator.geolocation.watchPosition(
+                function(result){
+                    $scope.userLocation = {
+                        lat:result.coords.latitude,
+                        lng:result.coords.longitude
+                    }
+                }, function(error){
+                    console.log(error)
+                }, { timeout: 30000 }
+            )
+        }
+    
         //display an info window.
         handleStoryClicked = function (story) {
             // make the currently selected place available to the info window

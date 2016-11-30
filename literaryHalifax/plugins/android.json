@@ -27,6 +27,9 @@
         },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         }
     },
     "dependent_plugins": {

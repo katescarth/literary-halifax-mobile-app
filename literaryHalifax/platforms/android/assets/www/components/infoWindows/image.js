@@ -1,23 +1,24 @@
 angular.module('literaryHalifax').directive('imageInfoWindow', function () {
     return {
         scope: {
-            place: '='
+            story: '='
         }
         , templateUrl: 'components/infoWindows/image.html'
         , controller: ['$scope', function ($scope) {
             $scope.imageSrc = undefined
             $scope.loading = true
-            $scope.$watch('place', function (newVal, oldVal) {
+            $scope.$watch('story', function (newVal, oldVal) {
+                console.log($scope.story)
                 if (newVal && !newVal.images) {
                     $scope.loading = true
                     server.storyInfo(newVal.id, ['images']).then(function (result) {
-                        $scope.place.images = result.images
-                        console.log($scope.place)
+                        $scope.story.images = result.images
+                        console.log($scope.story)
                         $scope.loading = false
                     })
                 }
             })
-            $scope.$watch('place.images', function (newVal, oldVal) {
+            $scope.$watch('story.images', function (newVal, oldVal) {
                 if (!newVal) {
                     $scope.imageSrc = undefined
                     return

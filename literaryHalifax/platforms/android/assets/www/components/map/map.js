@@ -2,10 +2,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             restrict: 'E'
             , scope: {
-                // a collection of 'place' objects which have at least
+                // a collection of 'story' objects which have at least
                 // id: a unique id
                 // location: a location (lat/lng, address...)
-                places: '='
+                stories: '='
                 , // true to display info windows, false otherwise
                 infoWindows: '='
                 , // the name of the directive to display in the infoWindow. The directive
@@ -28,10 +28,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             scope: {
                 windowType: '@'
-                , place: '='
+                , story: '='
             }
             , link: function (scope, element) {
-                var generatedTemplate = '<' + scope.windowType + ' place="place"></' + scope.windowType + '>';
+                var generatedTemplate = '<' + scope.windowType + ' story="story"></' + scope.windowType + '>';
                 //this function is getting called more than once, so we need to clear out
                 //the element each time
                 //TODO get this function called only once
@@ -41,10 +41,48 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         };
     }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
         $scope.id = "marker-map-id"
+        // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
+        $scope.styles=[
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            },
+            {
+                featureType: "poi.park",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "on" }
+                ]
+            },
+            {
+                featureType: "administrative",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            },
+            {
+                featureType: "administrative.neighborhood",
+                elementType: "labels",
+                stylers: [
+                    { 
+                        visibility:"on"
+                    }
+                ]
+            },
+            {
+                featureType: "transit",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
         
         $scope.$on('$ionicView.enter', function() {
             NgMap.getMap($scope.id).then(function (map) {
-                console.log("got a map")
                 $scope.map = map;
             }, function (error) {
                 console.log(error)
@@ -67,28 +105,30 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 , lng: parseFloat(tmp[1])
             }
         }
-        var geoUpdatePeriodMillis = 10000
-        //periodically check the user's loaction and update it
-        $interval(function () {
-            NgMap.getGeoLocation('current-location', {
-                maximumAge: 3000
-                , timeout: 5000
-                , enableHighAccuracy: true
-            }).then(function (latlng) {
-                $scope.currentPosition = latlng
-            })
-        }, geoUpdatePeriodMillis);
+    
+        if(navigator.geolocation){
+            navigator.geolocation.watchPosition(
+                function(result){
+                    $scope.userLocation = {
+                        lat:result.coords.latitude,
+                        lng:result.coords.longitude
+                    }
+                }, function(error){
+                    console.log(error)
+                }, { timeout: 30000 }
+            )
+        }
+    
         //display an info window.
-        handlePlaceClicked = function (place) {
-            console.log($scope.places)
+        handleStoryClicked = function (story) {
             // make the currently selected place available to the info window
-            $scope.place = place
-            $scope.map.showInfoWindow('infoWindow', place.id)
+            $scope.story = story
+            $scope.map.showInfoWindow('infoWindow', story.id)
             if ($scope.centerOnClick) {
-                $scope.map.panTo(coordinates(place.location))
+                $scope.map.panTo(coordinates(story.location))
             }
         }
-        $scope.markerClicked = function (element, place) {
-            handlePlaceClicked(place)
+        $scope.markerClicked = function (element, story) {
+            handleStoryClicked(story)
         }
     })

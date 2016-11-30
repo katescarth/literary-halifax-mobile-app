@@ -1,7 +1,9 @@
 <div map-lazy-load="https://maps.google.com/maps/api/js" on-touch="fingerDown()" on-release="fingerUp()" ng-controller="mapCtrl">
-    <ng-map id="{{id}}" default-style="true" center="{{center}}" zoom="{{zoom}}" clickable-icons="false">
+    <ng-map id="{{id}}" styles="{{styles}}" center="{{center}}" zoom="{{zoom}}" clickable-icons="false"
+            street-view-control="false" map-type-control="false" zoom-control="false" fullscreen-control="false"
+            gesture-handling="greedy">
         <marker id='{{story.id}}' position="{{story.location}}" ng-repeat="story in stories" on-click="markerClicked(story, id)" clickable="{{infoWindows}}"> </marker>
-        <marker id='user_location_marker' position="{{currentPosition}}" icon='/img/Air.png' clickable='false'> </marker>
+        <marker id='user_location_marker' position="{{userLocation}}" icon='/android_asset/www/img/Air.png' clickable='false'> </marker>
         <info-window id="infoWindow" ng-if="infoWindows">
             <info-window-selector story="story" window-type="{{windowDirective}}"> </info-window-selector>
         </info-window>
