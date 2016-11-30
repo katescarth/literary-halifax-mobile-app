@@ -77,14 +77,16 @@
 	}
 }
 .in-from-right{
-    animation-duration: 1s;
+    animation-duration: 0.5s;
 }
 .in-from-right.ng-enter{
     animation-name: slide-left;
 }
+/*
 .in-from-right.ng-leave{
     animation-name: slide-right;
 }
+*/
     
     
     
