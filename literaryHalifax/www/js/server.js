@@ -65,7 +65,7 @@ angular.module('literaryHalifax')
             ],
             id: "story-id-1",
             images:["img/HCL1.jpg"],
-            audio:"/android_asset/www/audio/library.ogg"
+            audio:"/android_asset/www/audio/library.mp3"
         },
         {
             name:"Public Gardens",
@@ -102,7 +102,7 @@ angular.module('literaryHalifax')
             ],
             id: "story-id-3",
             images:["img/DNG1.jpg"],
-            audio:"/android_asset/www/audio/dingle.ogg"
+            audio:"/android_asset/www/audio/tower.mp3"
         },
         {
             name:"Old Burying Ground",
@@ -155,7 +155,8 @@ angular.module('literaryHalifax')
             images: [
                 "img/OBG1.png",
                 "img/OBG2.png"
-            ]
+            ],
+            audio:"/android_asset/www/audio/cemetary.ogg"
         }
     ]
 
