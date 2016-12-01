@@ -6,7 +6,7 @@
     align-content: center;
 }
 
-.info-window a {
+a {
   color: black;
   text-decoration: none; /* no underline */
 }

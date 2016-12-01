@@ -10,10 +10,8 @@ angular.module('literaryHalifax').directive('simpleInfoWindow', function () {
             
             refresh = function(){
                 $scope.loading=true
-                server.storyInfo($scope.story.id, ['name','description'])
-                .then(function(result){
-                    angular.extend($scope.story,result)
-                }).finally(function(){
+                server.updateStory($scope.story, ['name','description'])
+                .finally(function(){
                     $scope.loading=false
                 })
             }
