@@ -161,7 +161,7 @@ angular.module('literaryHalifax')
         }
         
         $scope.story = newStory
-        $scope.places=[newStory]
+        $scope.stories=[newStory]
         }, 
         function(error){
             console.log(error)
