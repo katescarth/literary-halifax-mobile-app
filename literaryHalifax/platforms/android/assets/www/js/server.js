@@ -18,9 +18,8 @@ angular.module('literaryHalifax')
  
  *Spec for server: 
 
- * getStories(): resolves to a list of stories. The stories have ids, locations,
-                and names - enough  info to display in a list without further
-                requests.
+ * getStories(attrs): resolves to a list of stories with the specified attributes 
+                      filled in
  * storyInfo(id, attributes): resolves to an object with all of the properties
                               listed in attributes (a string array). The values
                               for these properties are copied from the story
@@ -168,12 +167,7 @@ angular.module('literaryHalifax')
             result = []
 
             for(i=0;i<stories.length;i++){
-                story = stories[i]
-                clone = {}
-                for(j=0;j<attrs.length;j++){
-                    clone[attrs[j]] =story[attrs[j]]
-                }
-                    result.push(clone)
+                result.push(angular.extend({},stories[i]))
             }
 
             return $timeout(function(){

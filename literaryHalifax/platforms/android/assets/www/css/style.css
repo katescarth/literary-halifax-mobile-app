@@ -1,5 +1,14 @@
-/* Empty. Add your own CSS if you like */
+.platform-android ion-nav-view{
+    background: url(/android_asset/www/img/BG1.jpg);    
+}
 
+.platform-browser ion-nav-view{
+    background: url(/img/BG1.jpg);    
+}
+
+.pane{
+    background-color: transparent;
+}
 .info-window {
     width: 175px;
     max-width: 175px !important;
@@ -59,7 +68,7 @@ overscroll-pane {
   border-radius: 2px;
   margin-left:20px;
   margin-right:20px;
-  margin-bottom:20px;
+  margin-top:20px;
   padding-left: 10px;
   padding-right:10px;
   padding-top:10px;

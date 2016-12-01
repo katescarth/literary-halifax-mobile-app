@@ -118,7 +118,7 @@ angular.module('literaryHalifax')
     $scope.stories = []
 
     //TODO should not run this at app start
-    server.getStories(['name','location','id','description'])
+    server.getStories(['id','name','location','description','images'])
     .then(function(result){
         $scope.stories = result
     }).catch(function(error){
