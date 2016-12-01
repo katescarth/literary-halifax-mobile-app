@@ -26,7 +26,7 @@ angular.module('literaryHalifax')
                               for these properties are copied from the story
                               matching id
  */
-.factory('server', function($timeout){
+.factory('server', function($timeout,$q){
     var SMALL_DELAY = 200
     var LARGE_DELAY = 2000
 
@@ -195,6 +195,26 @@ angular.module('literaryHalifax')
                         return result
                     }, LARGE_DELAY)
                 }
+            }
+        },
+        updateStory:function(story, attributes){
+            if(!story.id){
+                return $q.reject("attempted to update a story with no id")
+            }
+            newAttrs = []
+            for(i=0;i<attributes.length;i++){
+                if(!story[attributes[i]]){
+                   newAttrs.push(attributes[i])
+                }
+            }
+            if(newAttrs.length>0){
+                return server.storyInfo(story.id,newAttrs)
+                .then(function(newStory){
+                    angular.extend(story,newStory)
+                    return story
+                })
+            }  else {
+                return $q.when(story)
             }
         }
     }

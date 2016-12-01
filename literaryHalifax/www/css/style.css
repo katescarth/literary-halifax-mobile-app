@@ -1,5 +1,10 @@
-/* Empty. Add your own CSS if you like */
+ion-nav-view {
+    background: url(/img/BG1.jpg);
+}
 
+.pane{
+    background-color: transparent
+}
 .info-window {
     width: 175px;
     max-width: 175px !important;

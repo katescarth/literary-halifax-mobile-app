@@ -78,6 +78,13 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 stylers: [
                     { visibility: "off" }
                 ]
+            },
+            {
+                featureType: "road.highway",
+                elementType:"labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
             }
         ]
         

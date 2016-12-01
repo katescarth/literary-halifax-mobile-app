@@ -118,7 +118,7 @@ angular.module('literaryHalifax')
     $scope.stories = []
 
     //TODO should not run this at app start
-    server.getStories(['name','location','id','images'])
+    server.getStories(['name','location','id','description'])
     .then(function(result){
         $scope.stories = result
     }).catch(function(error){
@@ -149,27 +149,18 @@ angular.module('literaryHalifax')
 
 }).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
-    $scope.story = undefined
-    server.storyInfo($stateParams.storyID,['name','description','location','images','audio'])
-    .then(function(placeAttrs){
-        newStory = {
-            id:$stateParams.storyID
-        }
-        
-        for(attr in placeAttrs){
-            newStory[attr] = placeAttrs[attr]
-        }
-        
-        $scope.story = newStory
-        $scope.places=[newStory]
-        }, 
-        function(error){
-            console.log(error)
-        })
+    $scope.story = {
+        id:$stateParams.storyID
+    }
+    $scope.loading=true
+    server.updateStory($scope.story,['name','description','location','images','audio'])
     .then(function(){
+        $scope.loading=false
         $timeout(function () {
             $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
         }, 0);
+    }).catch(function(){
+        $scope.loading=false
     })
     
     
