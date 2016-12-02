@@ -46,9 +46,14 @@ angular.module('literaryHalifax')
             goBack()
         }
     }
-    
+    menuOpen=false
     toggleMenu = function(){
-        $ionicSideMenuDelegate.toggleLeft()
+        menuOpen=!menuOpen
+        if(menuOpen){
+            $scope.menuClass = 'slideRight'
+        } else {
+            $scope.menuClass = 'slideLeft'
+        }
     }
 
     goBack = function(){

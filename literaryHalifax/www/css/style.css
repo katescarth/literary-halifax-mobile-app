@@ -1,6 +1,14 @@
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
+
+
+
+.side-menu{
+    z-index: 99;
+    width: 275px;
+    height:100%;
+    position:absolute;
+    left:-275px;
 }
+
 
 ion-nav-view{
     background-color: white;
