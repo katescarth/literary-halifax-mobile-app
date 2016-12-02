@@ -22,15 +22,15 @@
                    ng-click="filter.text=''"></i>
             </div>
             
-            <div class="story-listing" ng-repeat="story in stories" ng-if="showStory(story)">
-                <a href="{{'#/app/story/'+story.id}}">
+                <a href="{{'#/app/story/'+story.id}}" ng-repeat="story in stories" ng-if="showStory(story)">
+            <div class="story-listing" >
                   <img ng-src="{{story.images[0]}}" width="100px"
                      style="display:inline-block; vertical-align:middle">
                   <span style="display:inline-block; vertical-align:middle">
                     {{story.name}}
                   </span>
-                </a>
             </div>
+                </a>
         </div>
         
         

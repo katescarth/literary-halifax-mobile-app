@@ -1,0 +1,28 @@
+.bar-header{
+    border-width: 0;
+}
+
+.bar{
+    background-image: none;
+    background-position: none;
+    background-size: 0;
+}
+
+.bar .title{
+    margin: 0 20px !important;
+}
+
+.tab-item{
+    border-width: 0 !important;
+    background-color:#2cb553 !important;
+}
+
+.tabs-striped.tabs-balanced .tabs{
+    border-width: 0 !important;
+    background-color:#2cb553 !important;
+}
+
+.tab-item.tab-item-active {
+    margin-top: 0 !important;
+    background-color:#33cd5f !important;
+}

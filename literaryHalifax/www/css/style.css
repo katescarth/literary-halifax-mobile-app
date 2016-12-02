@@ -1,3 +1,7 @@
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
 ion-nav-view{
     background-color: white;
 }
@@ -8,10 +12,6 @@ ion-nav-view{
 
 .platform-browser ion-nav-view{
     background: url(/img/BG1.jpg);    
-}
-
-.bar-header {
-    border-width: 0;
 }
 
 .tab-nav {
@@ -34,11 +34,6 @@ ion-nav-view{
     border-bottom-color: silver;
     border-bottom-width: 1px;
     border-style:solid;
-}
-
-.tab-item.tab-item-active {
-    border-width: 0 !important;
-    background-color: aquamarine !important;
 }
 
 .pane{

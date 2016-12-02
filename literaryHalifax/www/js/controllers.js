@@ -21,11 +21,10 @@ angular.module('literaryHalifax')
             href:'#/app/about'
         }
     ]
-    var exitOnBack = false
     // take control of back button when it tries to navigate back
     // (not when it closes popups, etc.)
     $ionicPlatform.registerBackButtonAction(function(event) {
-        if (exitOnBack) {
+        if ($scope.menuMode) {
             $ionicPopup.confirm({
                 title: 'Leave app?',
                 template: ''
@@ -39,6 +38,15 @@ angular.module('literaryHalifax')
         }
     }, 100);
 
+    $scope.navButtonClick=function(){
+        if($scope.menuMode){
+            toggleMenu()
+        }
+        else{
+            goBack()
+        }
+    }
+    
     toggleMenu = function(){
         $ionicSideMenuDelegate.toggleLeft()
     }
@@ -47,32 +55,23 @@ angular.module('literaryHalifax')
         $ionicHistory.goBack()
     }
     
-    // set the navbar to show a 'top level' state
-    setMenuMode = function(){
-        $scope.navButtonIcon = 'ion-navicon'
-        $scope.navButtonClick = toggleMenu
-        exitOnBack=true
-    }
-    
-    // set the navbar to show a 'secondary' state
-    setBackMode = function(){
-        // TODO Use the correct icon for the platform (ios or android)
-        // or possibly animate for that #momentofcharm
-        $scope.navButtonIcon = 'ion-chevron-left'
-        $scope.navButtonClick = goBack
-        exitOnBack=false
-    }
 
     // check every state change and update navbar accordingly
     $scope.$root.$on('$stateChangeSuccess',
     function(event, toState, toParams, fromState, fromParams){
         if(toState.title){
             $scope.navBarTitle = toState.title
-            setMenuMode()
+            $scope.menuMode=true
         } else {
-            setBackMode()
+            $scope.menuMode=false
         }
     })
+    
+    //default state, there's no statechange to
+    //the first state. Hacky
+    $scope.menuMode=true
+    $scope.navBarTitle = "Stories"
+
     
     
     var mediaController = undefined
@@ -93,14 +92,6 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-    
-    //default state, there's no statechange to
-    //the first state. Hacky
-    $scope.navBarTitle = "Stories" 
-    
-    // The start state is always a base-level one
-    setMenuMode()
-
 }).controller('storiesCtrl', function($scope, $state, server, NgMap){
     
     $scope.mapHandle=8183

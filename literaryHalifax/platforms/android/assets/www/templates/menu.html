@@ -1,13 +1,13 @@
 <ion-header-bar class="bar-balanced" align-title="left">
 
-    <button class="button button-icon button-clear" ng-class="navButtonIcon"
+    <button class="button button-icon button-clear menu-button" ng-class="menuMode?'ion-navicon':'ion-chevron-left'"
             ng-click="navButtonClick()">
     </button>
   <h1 class="title">{{navBarTitle}}</h1>
   <!-- TODO share button -->
     <button ng-show="media.hasTrack" class="button button-icon button-clear ion-volume-high"
             ng-class="media.isPlaying?'pulse':'pulse-idle'"
-          ng-click="audioButtonClick($event)">
+          ng-click="audioButtonClick($event)" ng-cloak>
     </button>
 </ion-header-bar>
 <ion-side-menus enable-menu-with-back-views="false">
