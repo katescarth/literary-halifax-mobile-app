@@ -103,18 +103,15 @@ angular.module('literaryHalifax')
 
 }).controller('storiesCtrl', function($scope, $state, server){
 
-    MAP_STATE='app.stories.map'
-    LIST_STATE = 'app.stories.list'
-    CLEAR_BUTTON= "button button-full button-outline button-balanced"
-    FILLED_BUTTON= "button button-full button-balanced"
-
-    $scope.mapButton = FILLED_BUTTON
-    $scope.listButton=CLEAR_BUTTON
-
     $scope.mapInfo = {
         center:"44.6474,-63.5806",
         zoom: 15
     }
+    
+    $scope.filter={
+        text:''
+    }
+    
     $scope.stories = []
 
     //TODO should not run this at app start
@@ -124,26 +121,15 @@ angular.module('literaryHalifax')
     }).catch(function(error){
         console.log(error)
     })
-
-
-    $scope.toMapTab = function(){
-        $state.go(MAP_STATE)
-    }
-
-    $scope.toListTab = function(){
-        $state.go(LIST_STATE)
-    }
-
-    $scope.$root.$on('$stateChangeSuccess',
-    function(event, toState, toParams, fromState, fromParams){
-        if (toState.name==MAP_STATE) {
-            $scope.mapButton = FILLED_BUTTON
-            $scope.listButton=CLEAR_BUTTON
-        } else if (toState.name==LIST_STATE) {
-            $scope.mapButton = CLEAR_BUTTON
-            $scope.listButton=FILLED_BUTTON
+    
+    $scope.showStory=function(story){
+        if(!$scope.filter.text){
+            return true
         }
-    })
+        return story.name.toLowerCase().indexOf(
+            $scope.filter.text.toLowerCase()
+        )>=0
+    }
 
 
 

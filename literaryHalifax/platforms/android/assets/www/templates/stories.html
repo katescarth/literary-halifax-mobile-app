@@ -1,27 +1,37 @@
 <ion-view view-title="Stories" >
 
 
-    <ion-nav-view name="stories" class="has-header has-footer"></ion-nav-view>
-
-
-  <ion-footer-bar align-title="left" class="bar-stable" padding="0px">
-
-    <table style="width:100%">
-      <tr>
-        <td>
-          <a ng-click="toMapTab()" class="{{mapButton}}"
-                  width="100%" display="block">
-            Map
-          </a>
-        </td>
-        <td>
-          <a ng-click="toListTab()" class="{{listButton}}"
-                  width="100%" display="block" margin-top="0px">
-            List
-          </a>
-        </td>
-      </tr>
-    </table>
-
-  </ion-footer-bar>
+    <ion-content>
+        <div class="display-card">
+            <marker-map stories="stories"
+                  center="mapInfo.center" zoom="mapInfo.zoom"
+                    window-directive="simple-info-window"
+                      info-windows="true"
+                    center-on-click="false">
+          </marker-map>
+        </div>
+        <div class="display-card edge-to-edge">
+            
+            <div class="item item-input filter-bar">
+                <input type="search" placeholder="Filter by title..." ng-model="filter.text"
+                       ng-change="filterUpdated()">
+                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
+                   ng-click="filter.text=''"></i>
+            </div>
+            
+            <div class="story-listing" ng-repeat="story in stories" ng-if="showStory(story)">
+                <a href="{{'#/app/story/'+story.id}}">
+                  <img ng-src="{{story.images[0]}}" width="100px"
+                     style="display:inline-block; vertical-align:middle">
+                  <span style="display:inline-block; vertical-align:middle">
+                    {{story.name}}
+                  </span>
+                </a>
+            </div>
+        </div>
+        
+        
+        
+    </ion-content>
+    
 </ion-view>

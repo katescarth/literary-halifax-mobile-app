@@ -1,9 +1,44 @@
+ion-nav-view{
+    background-color: white;
+}
+
 .platform-android ion-nav-view{
     background: url(/android_asset/www/img/BG1.jpg);    
 }
 
 .platform-browser ion-nav-view{
     background: url(/img/BG1.jpg);    
+}
+
+.bar-header {
+    border-width: 0;
+}
+
+.tab-nav {
+    border-width: 0 !important;
+}
+
+.filter-icon{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.filter-bar{
+    margin-left:5px;
+    margin-right:5px;
+    padding: 0px !important;
+}
+
+.story-listing {
+    padding:4px;
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-style:solid;
+}
+
+.tab-item.tab-item-active {
+    border-width: 0 !important;
+    background-color: aquamarine !important;
 }
 
 .pane{
@@ -68,13 +103,16 @@ overscroll-pane {
   border-radius: 2px;
   margin-left:20px;
   margin-right:20px;
-  margin-top:20px;
-  padding-left: 10px;
-  padding-right:10px;
-  padding-top:10px;
-  padding-bottom:5px;
+  margin-top:10px;
+  margin-bottom:10px;
   background-color: #EEEEEE;
+    padding:10px;
   box-shadow: 0px 2px 10px #111111;
+}
+
+.edge-to-edge{
+    padding-left:0px !important;
+    padding-right:0px !important;
 }
 
 .audio-button {

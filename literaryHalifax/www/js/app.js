@@ -38,31 +38,10 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 
     .state('app.stories', {
         url: '/stories',
-        abstract: true,
+        cache: false,//TODO MULTIPLE MAPS PREVENT CACHING
         views: {
             'mainContent': {
                 templateUrl: 'templates/stories.html',
-                controller: 'storiesCtrl'
-            }
-        }
-    })
-    .state('app.stories.map', {
-        url: '/map',
-        title:'Stories',
-        cache:false, // TODO:the map doesn't support caching
-        views: {
-            'stories': {
-                templateUrl: 'templates/stories_map.html',
-                controller: 'storiesCtrl'
-            }
-        }
-    })
-    .state('app.stories.list', {
-        url: '/list',
-        title:'Stories',
-        views: {
-            'stories': {
-                templateUrl: 'templates/stories_list.html',
                 controller: 'storiesCtrl'
             }
         }
@@ -109,5 +88,5 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/stories/map');
+    $urlRouterProvider.otherwise('/app/stories');
 });
