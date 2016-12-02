@@ -101,7 +101,26 @@ angular.module('literaryHalifax')
     // The start state is always a base-level one
     setMenuMode()
 
-}).controller('storiesCtrl', function($scope, $state, server){
+}).controller('storiesCtrl', function($scope, $state, server, NgMap){
+    
+    $scope.mapHandle=8183
+    
+    NgMap.getMap($scope.mapHandle).then(function (map) {
+        $scope.map = map;
+    }, function (error) {
+        console.log(error)
+    });
+    
+    //display an info window.
+    handleStoryClicked = function (story) {
+        // make the currently selected place available to the info window
+        $scope.clickedStory = story
+        console.log(story)
+        $scope.map.showInfoWindow('infoWindow', story.id)
+    }
+    $scope.markerClicked = function (element, story) {
+        handleStoryClicked(story)
+    }
 
     $scope.mapInfo = {
         center:"44.6474,-63.5806",
@@ -188,6 +207,10 @@ angular.module('literaryHalifax')
             $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })
     };
+    
+    // Map tab
+    
+    $scope.mapHandle=943571
 
 
 

@@ -48,17 +48,14 @@
 
         <ion-tab title="Map" icon="ion-android-pin" ng-if="story.location">
           <overscroll-pane>
-            <div class="display-card">
+            <div class="display-card">                
+                <marker-map map-handle="mapHandle" center="story.location" zoom="mapInfo.zoom">
+                    <marker position="{{story.location}}" clickable="false"> </marker>
+                    <user-location-marker></user-location-marker>
 
-                  <marker-map stories="[story]"
-                              center="story.location" 
-                              zoom="mapInfo.zoom"
-                              info-windows="false"
-                              center-on-click="true"
-                              destination="story.location">
-                  </marker-map>
-              </div>
-            </overscroll-pane>
+                </marker-map>
+            </div>
+          </overscroll-pane>
         </ion-tab>
 
       </ion-tabs>

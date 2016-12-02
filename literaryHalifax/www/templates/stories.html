@@ -3,11 +3,14 @@
 
     <ion-content>
         <div class="display-card">
-            <marker-map stories="stories"
-                  center="mapInfo.center" zoom="mapInfo.zoom"
-                    window-directive="simple-info-window"
-                      info-windows="true"
-                    center-on-click="false">
+            <marker-map map-handle="mapHandle" center="mapInfo.center" zoom="mapInfo.zoom">
+                <marker id='{{story.id}}' position="{{story.location}}" ng-repeat="story in stories" ng-if="showStory(story)" on-click="markerClicked(story, id)" clickable="true"> </marker>
+                <user-location-marker></user-location-marker>
+                <info-window id="infoWindow">
+                    <simple-info-window story="clickedStory">
+                    </simple-info-window>
+                </info-window>
+                
           </marker-map>
         </div>
         <div class="display-card edge-to-edge">

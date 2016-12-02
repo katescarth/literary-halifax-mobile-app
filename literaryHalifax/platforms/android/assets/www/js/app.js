@@ -38,7 +38,6 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
 
     .state('app.stories', {
         url: '/stories',
-        cache: false,//TODO MULTIPLE MAPS PREVENT CACHING
         views: {
             'mainContent': {
                 templateUrl: 'templates/stories.html',
