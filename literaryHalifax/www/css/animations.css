@@ -105,8 +105,8 @@
 	animation-name: slideRight;
 	-webkit-animation-name: slideRight;	
 
-	animation-duration: 0.4s;	
-	-webkit-animation-duration: 0.4s;
+	animation-duration: 0.2s;	
+	-webkit-animation-duration: 0.2s;
 
 	animation-timing-function: ease-in-out;	
 	-webkit-animation-timing-function: ease-in-out;		
@@ -136,8 +136,8 @@
 	animation-name: slideLeft;
 	-webkit-animation-name: slideLeft;	
 
-	animation-duration: 0.4s;	
-	-webkit-animation-duration: 0.4s;
+	animation-duration: 0.2s;	
+	-webkit-animation-duration: 0.2s;
 
 	animation-timing-function: ease-in-out;	
 	-webkit-animation-timing-function: ease-in-out;		

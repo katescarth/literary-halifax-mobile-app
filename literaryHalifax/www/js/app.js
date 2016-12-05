@@ -21,10 +21,10 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
     $ionicConfigProvider.tabs.position('top')
 
     /*
-    * Note that some states have a 'title' attribute. This is the text displayed
-    * in the header bar. If a state has a tite, the menu button will appear in
-    * the header bar. Otherwise, the back button will.
-    */
+     * Note that some states have a 'title' attribute. This is the text displayed
+     * in the header bar. If a state has a tite, the menu button will appear in
+     * the header bar. Otherwise, the back button will.
+     */
 
 
     $stateProvider

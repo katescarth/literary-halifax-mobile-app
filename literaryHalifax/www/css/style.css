@@ -1,12 +1,10 @@
-
-
-
 .side-menu{
-    z-index: 99;
+    z-index: 9;
     width: 275px;
+    left:-275px;
     height:100%;
     position:absolute;
-    left:-275px;
+    background-color: white;
 }
 
 
@@ -139,6 +137,15 @@ overscroll-pane {
     min-height: 100% !important;
 	align-items: center;
     background-color:transparent;
+}
+
+.modal-close {
+    position:absolute;
+    right:0;
+/*    Make this clickable*/
+    z-index:30;
+    color:darkgray;
+    font-size: 32px;
 }
 
 .fullscreen-image {

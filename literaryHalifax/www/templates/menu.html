@@ -13,10 +13,10 @@
 <ion-nav-view name="mainContent"></ion-nav-view>
 
 <ion-content class="side-menu" ng-class="menuClass">
-  <ion-list>
-    <ion-item href="{{menuItem.href}}" ng-repeat="menuItem in menuItems"
-      >
+  <div class="list menu-list">
+    <ion-item  ng-repeat="menuItem in menuItems"
+      ng-click="menuItemClick(menuItem)">
       {{menuItem.displayName}}
     </ion-item>
-  </ion-list>
+  </div>
 </ion-content>

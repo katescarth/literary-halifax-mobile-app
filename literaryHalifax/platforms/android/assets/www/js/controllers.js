@@ -6,19 +6,19 @@ angular.module('literaryHalifax')
     $scope.menuItems =[
         {
             displayName:'Stories',
-            href:'#/app/stories'
+            state:'app.stories'
         },
         {
             displayName:'Tours',
-            href:'#/app/tours'
+            state:'app.tours'
         },
         {
             displayName:'Browse by Topic',
-            href:'#/app/browseByTopic'
+            state:'app.browseByTopic'
         },
         {
             displayName:'About',
-            href:'#/app/about'
+            state:'app.about'
         }
     ]
     // take control of back button when it tries to navigate back
@@ -46,9 +46,24 @@ angular.module('literaryHalifax')
             goBack()
         }
     }
-    
+    menuOpen=false
     toggleMenu = function(){
-        $ionicSideMenuDelegate.toggleLeft()
+        menuOpen=!menuOpen
+        if(menuOpen){
+            $scope.menuClass = 'slideRight'
+        } else {
+            $scope.menuClass = 'slideLeft'
+        }
+    }
+    
+    $scope.menuItemClick=function(item){
+        $ionicHistory.nextViewOptions({
+            disableAnimate: true
+        });
+        $state.go(item.state)
+        if(menuOpen){
+            toggleMenu()
+        }
     }
 
     goBack = function(){
