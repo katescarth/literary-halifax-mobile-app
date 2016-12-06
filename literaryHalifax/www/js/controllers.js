@@ -180,6 +180,10 @@ angular.module('literaryHalifax')
     }
     
     $scope.tours = []
+    
+    $scope.go=function(tour){
+        $state.go('app.tourView',{tourID:tour.id})
+    }
 
     //TODO should not run this at app start
     server.getTours()
@@ -267,4 +271,27 @@ angular.module('literaryHalifax')
 
 
 
+}).controller('tourCtrl',function($scope,$stateParams, server, $state){
+
+    $scope.tour = {
+        id:$stateParams.tourID
+    }
+    $scope.loading=true
+    
+    $scope.go=function(story){
+        $state.go('app.storyView',{storyID:story.id})
+    }
+    
+    server.updateTour(
+        $scope.tour,['name','stories']              
+    ).then(function(){
+        for(i=0;i<$scope.tour.stories.length;i++){
+            server.updateStory($scope.tour.stories[i],['name','description'])
+        }
+    })
+    .finally(function(){
+        //UX: Go back to previous page, plus an error toast?
+        $scope.loading=false
+    })
+    
 });

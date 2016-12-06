@@ -86,6 +86,16 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
                 
             }
         }
+    }).state('app.tourView', {
+        url: '/tour/:tourID',
+        cache:false,
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/tour.html',
+                controller: 'tourCtrl'
+                
+            }
+        }
     });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/stories');

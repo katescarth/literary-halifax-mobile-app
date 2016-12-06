@@ -1,0 +1,14 @@
+<ion-view view-title="Tour">
+    <ion-content>
+        <div class="display-card">
+            <h1 class="title">{{tour.name}}</h1>
+            
+            <div class="list">
+                <ion-item  ng-repeat="story in tour.stories"
+                  ng-click="go(story)">
+                  {{$index + 1}}. {{story.name}}
+                </ion-item>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

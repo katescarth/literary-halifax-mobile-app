@@ -34,9 +34,9 @@ angular.module('literaryHalifax')
             name:"Central Halifax",
             description:"A tour of the Landmarks in central halifax",
             stories:[
-                "story-id-1",
-                "story-id-2",
-                "story-id-4"
+                {id:"story-id-1"},
+                {id:"story-id-2"},
+                {id:"story-id-4"}
             ],
             id:"tour-id-1"
         },
@@ -44,10 +44,10 @@ angular.module('literaryHalifax')
             name:"The Full Monty",
             description:"Every landmark in the system, in the best order",
             stories:[
-                "story-id-4",
-                "story-id-1",
-                "story-id-2",
-                "stroy-id-3"
+                {id:"story-id-4"},
+                {id:"story-id-1"},
+                {id:"story-id-2"},
+                {id:"stroy-id-3"}
             ],
             id:"tour-id-2"
         }
@@ -187,20 +187,19 @@ angular.module('literaryHalifax')
     server = {
         getStories:function(attrs){
 
-            result = []
+            var result = []
 
             for(i=0;i<stories.length;i++){
                 result.push(angular.extend({},stories[i]))
             }
 
             return $timeout(function(){
-                console.log(result)
                 return result
             }, SMALL_DELAY)
 
         },
         storyInfo:function(id, attributes){
-            result = {}
+            var result = {}
             for(i=0;i<stories.length;i++){
 
                 if(stories[i].id==id){
@@ -216,7 +215,7 @@ angular.module('literaryHalifax')
         },
         
         getTours:function(){
-            result = []
+            var result = []
 
             for(i=0;i<tours.length;i++){
                 result.push(angular.extend({},tours[i]))
@@ -228,7 +227,7 @@ angular.module('literaryHalifax')
             }, SMALL_DELAY)
         },
         tourInfo:function(id,attributes){
-            result = {}
+            var result = {}
             for(i=0;i<tours.length;i++){
 
                 if(tours[i].id==id){
@@ -262,6 +261,28 @@ angular.module('literaryHalifax')
                 })
             }  else {
                 return $q.when(story)
+            }
+        },
+        // Helper method for updating a tour object without requesting 
+        // extra info. This is not fixture code, it belongs in the final product.
+        updateTour:function(tour, attributes){
+            if(!tour.id){
+                return $q.reject("attempted to update a tour with no id")
+            }
+            var newAttrs = []
+            for(i=0;i<attributes.length;i++){
+                if(!tour[attributes[i]]){
+                   newAttrs.push(attributes[i])
+                }
+            }
+            if(newAttrs.length>0){
+                return server.tourInfo(tour.id,newAttrs)
+                .then(function(newTour){
+                    angular.extend(tour,newTour)
+                    return tour
+                })
+            }  else {
+                return $q.when(tour)
             }
         }
     }
