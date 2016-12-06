@@ -191,6 +191,8 @@ angular.module('literaryHalifax')
                 }
             }
         },
+        // Helper method for updating a story object without requesting 
+        // extra info. This is not fixture code, it belongs in the final product.
         updateStory:function(story, attributes){
             if(!story.id){
                 return $q.reject("attempted to update a story with no id")

@@ -1,6 +1,6 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory,
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory, $ionicPopup,
                                  $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
     // items for the side menu
     $scope.menuItems =[

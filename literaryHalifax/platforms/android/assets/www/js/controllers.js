@@ -1,6 +1,6 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory,
+.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory, $ionicPopup,
                                  $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
     // items for the side menu
     $scope.menuItems =[
@@ -90,7 +90,8 @@ angular.module('literaryHalifax')
     
     
     var mediaController = undefined
-    $scope.audioButtonClass="button button-icon button-clear ion-volume-high pulse"
+    
+    
     $ionicPopover.fromTemplateUrl('components/mediaControl/mediaControl.html', {
             scope: $scope,
             animation:'in-from-right'
@@ -111,28 +112,34 @@ angular.module('literaryHalifax')
     
     $scope.mapHandle=8183
     
-    NgMap.getMap($scope.mapHandle).then(function (map) {
-        $scope.map = map;
-    }, function (error) {
-        console.log(error)
+    $scope.$on( "$ionicView.enter", function() {
+        NgMap.getMap($scope.mapHandle).then(function (map) {
+            $scope.map = map;
+        }, function (error) {
+            console.log(error)
+        });
     });
+    
     
     //display an info window.
     handleStoryClicked = function (story) {
         // make the currently selected place available to the info window
         $scope.clickedStory = story
-        console.log(story)
         $scope.map.showInfoWindow('infoWindow', story.id)
     }
     $scope.markerClicked = function (element, story) {
         handleStoryClicked(story)
     }
 
+    // display the map centered on citadel hill.
+    // UX: The map is the first thing people see when opening the app.
+    //     What will they want to see? Where they are, or where the stories are?
     $scope.mapInfo = {
         center:"44.6474,-63.5806",
         zoom: 15
     }
     
+    //ngModel doesn't work without a dot
     $scope.filter={
         text:''
     }
@@ -160,17 +167,22 @@ angular.module('literaryHalifax')
 
 }).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
+    // UX: The screen is pretty empty when this opens. Could pass the image 
+    //     in to display background immediately?
     $scope.story = {
         id:$stateParams.storyID
     }
     $scope.loading=true
-    server.updateStory($scope.story,['name','description','location','images','audio'])
+    
+    server.updateStory(
+        $scope.story,['name','description','location','images','audio']              
+    )
     .then(function(){
-        $scope.loading=false
         $timeout(function () {
             $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
         }, 0);
-    }).catch(function(){
+    }).finally(function(){
+        //UX: Go back to previous page, plus an error toast?
         $scope.loading=false
     })
     
@@ -182,17 +194,17 @@ angular.module('literaryHalifax')
     }
 
     //Images tab
-
+    var modal
     $ionicModal.fromTemplateUrl('components/imageView/imageView.html', {
         scope: $scope,
         animation: 'none'
     })
-    .then(function(modal) {
-        $scope.modal = modal;
+    .then(function(constructedModal) {
+        modal = constructedModal;
     });
 
     openModal = function() {
-        $scope.modal.show()
+        modal.show()
     }
     
     $scope.display = function(img){
@@ -208,7 +220,7 @@ angular.module('literaryHalifax')
         // It takes 1 second to fade out
         $timeout(1000)
         .then(function(){
-            $scope.modal.hide()
+            modal.hide()
             $scope.imageSrc = undefined
             $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })

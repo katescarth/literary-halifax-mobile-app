@@ -29,7 +29,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                             }
                         }, function(error){
                             console.log(error)
-                        }, { timeout: 30000 }
+                        }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
                     )
                 } else {
                     console.log('no navigator!')
@@ -40,33 +40,30 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         };
     }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
         // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
-        console.log($scope.mapHandle)
-        console.log($scope.center)
-        console.log($scope.zoom)
         $scope.styles=[
             {
-                featureType: "poi",
+                featureType: "poi", // points of interest. In general, we don't want their labels diplayed
                 elementType: "labels",
                 stylers: [
                     { visibility: "off" }
                 ]
             },
             {
-                featureType: "poi.park",
+                featureType: "poi.park",// parks, however, should be displayed
                 elementType: "labels",
                 stylers: [
                     { visibility: "on" }
                 ]
             },
             {
-                featureType: "administrative",
+                featureType: "administrative",//countries, cities, etc. Not of interest
                 elementType: "labels",
                 stylers: [
                     { visibility: "off" }
                 ]
             },
             {
-                featureType: "administrative.neighborhood",
+                featureType: "administrative.neighborhood",// South end, North end...
                 elementType: "labels",
                 stylers: [
                     { 
@@ -75,13 +72,13 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 ]
             },
             {
-                featureType: "transit",
+                featureType: "transit", // bus stops and the like. Remove labels AND map elements
                 stylers: [
                     { visibility: "off" }
                 ]
             },
             {
-                featureType: "road.highway",
+                featureType: "road.highway", // large roads, don't need to display the name
                 elementType:"labels",
                 stylers: [
                     { visibility: "off" }
