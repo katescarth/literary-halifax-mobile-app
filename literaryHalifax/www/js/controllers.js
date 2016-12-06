@@ -167,6 +167,39 @@ angular.module('literaryHalifax')
 
 
 
+}).controller('toursCtrl', function($scope, $state, server){
+        
+    $scope.$on( "$ionicView.enter", function() {
+    
+    });
+    
+    
+    //ngModel doesn't work without a dot
+    $scope.filter={
+        text:''
+    }
+    
+    $scope.tours = []
+
+    //TODO should not run this at app start
+    server.getTours()
+    .then(function(result){
+        $scope.tours = result
+    }).catch(function(error){
+        console.log(error)
+    })
+    
+    $scope.showTour=function(tour){
+        if(!$scope.filter.text){
+            return true
+        }
+        return tour.name.toLowerCase().indexOf(
+            $scope.filter.text.toLowerCase()
+        )>=0
+    }
+
+
+
 }).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
     // UX: The screen is pretty empty when this opens. Could pass the image 

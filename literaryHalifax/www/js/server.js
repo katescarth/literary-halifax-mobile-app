@@ -29,6 +29,29 @@ angular.module('literaryHalifax')
     var SMALL_DELAY = 200
     var LARGE_DELAY = 2000
 
+    var tours = [
+        {
+            name:"Central Halifax",
+            description:"A tour of the Landmarks in central halifax",
+            stories:[
+                "story-id-1",
+                "story-id-2",
+                "story-id-4"
+            ],
+            id:"tour-id-1"
+        },
+        {
+            name:"The Full Monty",
+            description:"Every landmark in the system, in the best order",
+            stories:[
+                "story-id-4",
+                "story-id-1",
+                "story-id-2",
+                "stroy-id-3"
+            ],
+            id:"tour-id-2"
+        }
+    ]
 
     var stories = [
         {
@@ -183,6 +206,34 @@ angular.module('literaryHalifax')
                 if(stories[i].id==id){
                     for(j=0;j<attributes.length;j++){
                         result[attributes[j]] =stories[i][attributes[j]]
+                    }
+
+                    return $timeout(function(){
+                        return result
+                    }, LARGE_DELAY)
+                }
+            }
+        },
+        
+        getTours:function(){
+            result = []
+
+            for(i=0;i<tours.length;i++){
+                result.push(angular.extend({},tours[i]))
+            }
+
+            return $timeout(function(){
+                console.log(result)
+                return result
+            }, SMALL_DELAY)
+        },
+        tourInfo:function(id,attributes){
+            result = {}
+            for(i=0;i<tours.length;i++){
+
+                if(tours[i].id==id){
+                    for(j=0;j<attributes.length;j++){
+                        result[attributes[j]] =tours[i][attributes[j]]
                     }
 
                     return $timeout(function(){

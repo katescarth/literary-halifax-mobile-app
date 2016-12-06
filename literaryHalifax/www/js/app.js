@@ -51,8 +51,8 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
         title:'Tours',
         views: {
             'mainContent': {
-                templateUrl: 'templates/tours.html'
-
+                templateUrl: 'templates/tours.html',
+                controller: 'toursCtrl'
             }
         }
     })

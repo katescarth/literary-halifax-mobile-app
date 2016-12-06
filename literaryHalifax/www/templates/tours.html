@@ -2,6 +2,13 @@
     <ion-content>
         <div class="display-card">
             <h1 class="title">Tours</h1>
+            
+            <div class="list menu-list">
+                <ion-item  ng-repeat="tour in tours"
+                  ng-click="go(tour)">
+                  {{$index + 1}}. {{tour.name}}
+                </ion-item>
+            </div>
         </div>
     </ion-content>
 </ion-view>
