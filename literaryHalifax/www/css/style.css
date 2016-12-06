@@ -57,6 +57,10 @@ a {
 .info-window-spinner{
     align-self: center !important;
 }
+.inline-spinner svg{
+    height:16px;
+    width:16px;
+}
 
 .media-button {
     font-size:30px !important;

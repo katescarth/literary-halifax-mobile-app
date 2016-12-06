@@ -2,11 +2,11 @@
     <ion-content>
         <div class="display-card">
             <h1 class="title">{{tour.name}}</h1>
-            
+            <p>{{tour.description}}</p>
             <div class="list">
                 <ion-item  ng-repeat="story in tour.stories"
                   ng-click="go(story)">
-                  {{$index + 1}}. {{story.name}}
+                  {{$index + 1}}. {{story.name}} <ion-spinner class="inline-spinner" ng-if="!story.name"></ion-spinner>
                 </ion-item>
             </div>
         </div>

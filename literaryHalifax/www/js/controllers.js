@@ -283,7 +283,7 @@ angular.module('literaryHalifax')
     }
     
     server.updateTour(
-        $scope.tour,['name','stories']              
+        $scope.tour,['name','stories','description']              
     ).then(function(){
         for(i=0;i<$scope.tour.stories.length;i++){
             server.updateStory($scope.tour.stories[i],['name','description'])
