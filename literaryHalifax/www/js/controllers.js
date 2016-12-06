@@ -21,13 +21,15 @@ angular.module('literaryHalifax')
             state:'app.about'
         }
     ]
+    
     // take control of back button when it tries to navigate back
     // (not when it closes popups, etc.)
     $ionicPlatform.registerBackButtonAction(function(event) {
         if ($scope.menuMode) {
             $ionicPopup.confirm({
                 title: 'Leave app?',
-                template: ''
+                template: '',
+                okType: 'button-balanced'
             }).then(function(res) {
                 if (res) {
                     ionic.Platform.exitApp();
