@@ -82,6 +82,9 @@ angular.module('literaryHalifax')
         } else {
             $scope.menuMode=false
         }
+        if(menuOpen){
+            toggleMenu()
+        }
     })
     
     //default state, there's no statechange to

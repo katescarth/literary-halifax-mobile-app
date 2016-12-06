@@ -47,7 +47,7 @@ angular.module('literaryHalifax')
                 {id:"story-id-4"},
                 {id:"story-id-1"},
                 {id:"story-id-2"},
-                {id:"stroy-id-3"}
+                {id:"story-id-3"}
             ],
             id:"tour-id-2"
         }
@@ -188,6 +188,7 @@ angular.module('literaryHalifax')
         getStories:function(attrs){
 
             var result = []
+            var i=0
 
             for(i=0;i<stories.length;i++){
                 result.push(angular.extend({},stories[i]))
@@ -200,9 +201,11 @@ angular.module('literaryHalifax')
         },
         storyInfo:function(id, attributes){
             var result = {}
+            var i=0
             for(i=0;i<stories.length;i++){
 
                 if(stories[i].id==id){
+                    var j=0
                     for(j=0;j<attributes.length;j++){
                         result[attributes[j]] =stories[i][attributes[j]]
                     }
@@ -216,6 +219,7 @@ angular.module('literaryHalifax')
         
         getTours:function(){
             var result = []
+            var i=0
 
             for(i=0;i<tours.length;i++){
                 result.push(angular.extend({},tours[i]))
@@ -228,16 +232,18 @@ angular.module('literaryHalifax')
         },
         tourInfo:function(id,attributes){
             var result = {}
+            var i=0
             for(i=0;i<tours.length;i++){
 
                 if(tours[i].id==id){
+                    var j=0
                     for(j=0;j<attributes.length;j++){
                         result[attributes[j]] =tours[i][attributes[j]]
                     }
 
                     return $timeout(function(){
                         return result
-                    }, LARGE_DELAY)
+                    }, SMALL_DELAY)
                 }
             }
         },
@@ -247,6 +253,7 @@ angular.module('literaryHalifax')
             if(!story.id){
                 return $q.reject("attempted to update a story with no id")
             }
+            var i=0
             newAttrs = []
             for(i=0;i<attributes.length;i++){
                 if(!story[attributes[i]]){
@@ -269,6 +276,7 @@ angular.module('literaryHalifax')
             if(!tour.id){
                 return $q.reject("attempted to update a tour with no id")
             }
+            var i=0
             var newAttrs = []
             for(i=0;i<attributes.length;i++){
                 if(!tour[attributes[i]]){

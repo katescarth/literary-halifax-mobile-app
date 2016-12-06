@@ -41,6 +41,7 @@ ion-nav-view{
     border-style:solid;
 }
 
+
 .pane{
     background-color: transparent;
 }
@@ -117,6 +118,20 @@ overscroll-pane {
 .edge-to-edge{
     padding-left:0px !important;
     padding-right:0px !important;
+}
+
+.padded-title{
+  margin-left:20px;
+  margin-right:20px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.list-item-div {
+    padding:14px;
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-style:solid;
 }
 
 .audio-button {
