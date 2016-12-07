@@ -1,0 +1,40 @@
+<ion-view view-title="Landmarks" >
+
+
+    <ion-content>
+        <div class="display-card">
+            <marker-map map-handle="mapHandle" center="mapInfo.center" zoom="mapInfo.zoom">
+                <marker id='{{landmark.id}}' position="{{landmark.location}}" ng-repeat="landmark in landmarks" ng-if="showLandmark(landmark)" on-click="markerClicked(landmark, id)" clickable="true"> </marker>
+                <user-location-marker></user-location-marker>
+                <info-window id="infoWindow">
+                    <simple-info-window landmark="clickedLandmark">
+                    </simple-info-window>
+                </info-window>
+                
+          </marker-map>
+        </div>
+        <div class="display-card edge-to-edge">
+            
+            <div class="item item-input filter-bar">
+                <input type="search" placeholder="Filter by title..." ng-model="filter.text"
+                       ng-change="filterUpdated()">
+                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
+                   ng-click="filter.text=''"></i>
+            </div>
+            
+                <a href="{{'#/app/landmark/'+landmark.id}}" ng-repeat="landmark in landmarks" ng-if="showLandmark(landmark)">
+            <div class="landmark-listing" >
+                  <img ng-src="{{landmark.images[0]}}" width="100px"
+                     style="display:inline-block; vertical-align:middle">
+                  <span style="display:inline-block; vertical-align:middle">
+                    {{landmark.name}}
+                  </span>
+            </div>
+                </a>
+        </div>
+        
+        
+        
+    </ion-content>
+    
+</ion-view>

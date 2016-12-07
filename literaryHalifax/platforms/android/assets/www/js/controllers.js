@@ -5,16 +5,16 @@ angular.module('literaryHalifax')
     // items for the side menu
     $scope.menuItems =[
         {
-            displayName:'Stories',
-            state:'app.stories'
+            displayName:'Landmarks',
+            state:'app.landmarks'
         },
         {
             displayName:'Tours',
             state:'app.tours'
         },
         {
-            displayName:'Browse by Topic',
-            state:'app.browseByTopic'
+            displayName:'Cache Control',
+            state:'app.cacheControl'
         },
         {
             displayName:'About',
@@ -82,12 +82,15 @@ angular.module('literaryHalifax')
         } else {
             $scope.menuMode=false
         }
+        if(menuOpen){
+            toggleMenu()
+        }
     })
     
     //default state, there's no statechange to
     //the first state. Hacky
     $scope.menuMode=true
-    $scope.navBarTitle = "Stories"
+    $scope.navBarTitle = "Landmarks"
 
     
     
@@ -110,7 +113,7 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('storiesCtrl', function($scope, $state, server, NgMap){
+}).controller('landmarksCtrl', function($scope, $state, server, NgMap){
     
     $scope.mapHandle=8183
     
@@ -124,18 +127,18 @@ angular.module('literaryHalifax')
     
     
     //display an info window.
-    handleStoryClicked = function (story) {
+    handleLandmarkClicked = function (landmark) {
         // make the currently selected place available to the info window
-        $scope.clickedStory = story
-        $scope.map.showInfoWindow('infoWindow', story.id)
+        $scope.clickedLandmark = landmark
+        $scope.map.showInfoWindow('infoWindow', landmark.id)
     }
-    $scope.markerClicked = function (element, story) {
-        handleStoryClicked(story)
+    $scope.markerClicked = function (element, landmark) {
+        handleLandmarkClicked(landmark)
     }
 
     // display the map centered on citadel hill.
     // UX: The map is the first thing people see when opening the app.
-    //     What will they want to see? Where they are, or where the stories are?
+    //     What will they want to see? Where they are, or where the landmarks are?
     $scope.mapInfo = {
         center:"44.6474,-63.5806",
         zoom: 15
@@ -146,42 +149,79 @@ angular.module('literaryHalifax')
         text:''
     }
     
-    $scope.stories = []
+    $scope.landmarks = []
 
     //TODO should not run this at app start
-    server.getStories(['id','name','location','description','images'])
+    server.getLandmarks(['id','name','location','description','images'])
     .then(function(result){
-        $scope.stories = result
+        $scope.landmarks = result
     }).catch(function(error){
         console.log(error)
     })
     
-    $scope.showStory=function(story){
+    $scope.showLandmark=function(landmark){
         if(!$scope.filter.text){
             return true
         }
-        return story.name.toLowerCase().indexOf(
+        return landmark.name.toLowerCase().indexOf(
             $scope.filter.text.toLowerCase()
         )>=0
     }
 
 
 
-}).controller('storyCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
+}).controller('toursCtrl', function($scope, $state, server){
+        
+    $scope.$on( "$ionicView.enter", function() {
+    
+    });
+    
+    
+    //ngModel doesn't work without a dot
+    $scope.filter={
+        text:''
+    }
+    
+    $scope.tours = []
+    
+    $scope.go=function(tour){
+        $state.go('app.tourView',{tourID:tour.id})
+    }
+
+    //TODO should not run this at app start
+    server.getTours()
+    .then(function(result){
+        $scope.tours = result
+    }).catch(function(error){
+        console.log(error)
+    })
+    
+    $scope.showTour=function(tour){
+        if(!$scope.filter.text){
+            return true
+        }
+        return tour.name.toLowerCase().indexOf(
+            $scope.filter.text.toLowerCase()
+        )>=0
+    }
+
+
+
+}).controller('landmarkCtrl',function($scope,$stateParams,server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate){
 
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
-    $scope.story = {
-        id:$stateParams.storyID
+    $scope.landmark = {
+        id:$stateParams.landmarkID
     }
     $scope.loading=true
     
-    server.updateStory(
-        $scope.story,['name','description','location','images','audio']              
+    server.updateLandmark(
+        $scope.landmark,['name','description','location','images','audio']              
     )
     .then(function(){
         $timeout(function () {
-            $ionicTabsDelegate.$getByHandle('story-tabs-delegate').select(0)
+            $ionicTabsDelegate.$getByHandle('landmark-tabs-delegate').select(0)
         }, 0);
     }).finally(function(){
         //UX: Go back to previous page, plus an error toast?
@@ -191,7 +231,7 @@ angular.module('literaryHalifax')
     
     //description tab
     $scope.playAudio = function(){
-        mediaPlayer.setTrack($scope.story.audio, $scope.story.name)
+        mediaPlayer.setTrack($scope.landmark.audio, $scope.landmark.name)
         mediaPlayer.play()
     }
 
@@ -234,4 +274,27 @@ angular.module('literaryHalifax')
 
 
 
+}).controller('tourCtrl',function($scope,$stateParams, server, $state){
+
+    $scope.tour = {
+        id:$stateParams.tourID
+    }
+    $scope.loading=true
+    
+    $scope.go=function(landmark){
+        $state.go('app.landmarkView',{landmarkID:landmark.id})
+    }
+    
+    server.updateTour(
+        $scope.tour,['name','landmarks','description']              
+    ).then(function(){
+        for(i=0;i<$scope.tour.landmarks.length;i++){
+            server.updateLandmark($scope.tour.landmarks[i],['name','description'])
+        }
+    })
+    .finally(function(){
+        //UX: Go back to previous page, plus an error toast?
+        $scope.loading=false
+    })
+    
 });

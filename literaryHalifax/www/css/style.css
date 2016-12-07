@@ -1,3 +1,8 @@
+a {
+  color: black;
+  text-decoration: none; /* no underline */
+}
+
 .side-menu{
     z-index: 9;
     width: 275px;
@@ -34,12 +39,6 @@ ion-nav-view{
     padding: 0px !important;
 }
 
-.landmark-listing {
-    padding:4px;
-    border-bottom-color: silver;
-    border-bottom-width: 1px;
-    border-style:solid;
-}
 
 
 .pane{
@@ -51,10 +50,6 @@ ion-nav-view{
     align-content: center;
 }
 
-a {
-  color: black;
-  text-decoration: none; /* no underline */
-}
 .info-window-spinner{
     align-self: center !important;
 }
@@ -127,11 +122,48 @@ overscroll-pane {
   margin-bottom:10px;
 }
 
+.landmark-listing {
+    padding:4px;
+    width:100%;
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-style:solid;
+}
+
+.list-control {
+    padding:14px;
+    width:100%;
+}
+
 .list-item-div {
     padding:14px;
     border-bottom-color: silver;
     border-bottom-width: 1px;
     border-style:solid;
+}
+
+.list-item-title {
+    width:100%;
+    font-size: 14px;
+    color:#222;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+}
+
+.list-item-subtitle {
+    width:100%;
+    font-size: 10px;
+    color:grey;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+}
+
+.list-item-distance{
+    font-size: 10px;
+    color:grey;
+    float:right;
 }
 
 .audio-button {

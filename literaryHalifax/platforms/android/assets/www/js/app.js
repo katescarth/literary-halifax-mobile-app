@@ -36,13 +36,13 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
         controller: 'menuCtrl'
     })
 
-    .state('app.stories', {
-        url: '/stories',
-        title:'Stories',
+    .state('app.landmarks', {
+        url: '/landmarks',
+        title:'Landmarks',
         views: {
             'mainContent': {
-                templateUrl: 'templates/stories.html',
-                controller: 'storiesCtrl'
+                templateUrl: 'templates/landmarks.html',
+                controller: 'landmarksCtrl'
             }
         }
     })
@@ -51,17 +51,17 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
         title:'Tours',
         views: {
             'mainContent': {
-                templateUrl: 'templates/tours.html'
-
+                templateUrl: 'templates/tours.html',
+                controller: 'toursCtrl'
             }
         }
     })
-    .state('app.browseByTopic', {
-        url: '/browseByTopic',
-        title: 'Browse by Topic',
+    .state('app.cacheControl', {
+        url: '/cacheControl',
+        title: 'Cache Control',
         views: {
             'mainContent': {
-                templateUrl: 'templates/browseByTopic.html'
+                templateUrl: 'templates/cacheControl.html'
 
             }
         }
@@ -76,17 +76,27 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
             }
         }
     })
-    .state('app.storyView', {
-        url: '/story/:storyID',
+    .state('app.landmarkView', {
+        url: '/landmark/:landmarkID',
         cache:false,
         views: {
             'mainContent': {
-                templateUrl: 'templates/story.html',
-                controller: 'storyCtrl'
+                templateUrl: 'templates/landmark.html',
+                controller: 'landmarkCtrl'
+                
+            }
+        }
+    }).state('app.tourView', {
+        url: '/tour/:tourID',
+        cache:false,
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/tour.html',
+                controller: 'tourCtrl'
                 
             }
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/stories');
+    $urlRouterProvider.otherwise('/app/landmarks');
 });

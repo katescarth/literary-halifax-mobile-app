@@ -13,8 +13,8 @@ angular.module('literaryHalifax')
             state:'app.tours'
         },
         {
-            displayName:'Browse by Topic',
-            state:'app.browseByTopic'
+            displayName:'Cache Control',
+            state:'app.cacheControl'
         },
         {
             displayName:'About',

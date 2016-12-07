@@ -42,7 +42,7 @@ angular.module('literaryHalifax')
         },
         {
             name:"The Full Monty",
-            description:"Every landmark in the system, in the best order",
+            description:"Every landmark in the system, in the best order. There is no better tour in the system",
             landmarks:[
                 {id:"landmark-id-4"},
                 {id:"landmark-id-1"},

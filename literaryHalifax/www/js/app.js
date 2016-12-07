@@ -56,12 +56,12 @@ angular.module('literaryHalifax', ['ionic','ngMap'])
             }
         }
     })
-    .state('app.browseByTopic', {
-        url: '/browseByTopic',
-        title: 'Browse by Topic',
+    .state('app.cacheControl', {
+        url: '/cacheControl',
+        title: 'Cache Control',
         views: {
             'mainContent': {
-                templateUrl: 'templates/browseByTopic.html'
+                templateUrl: 'templates/cacheControl.html'
 
             }
         }

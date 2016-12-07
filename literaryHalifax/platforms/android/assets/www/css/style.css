@@ -1,3 +1,8 @@
+a {
+  color: black;
+  text-decoration: none; /* no underline */
+}
+
 .side-menu{
     z-index: 9;
     width: 275px;
@@ -34,12 +39,7 @@ ion-nav-view{
     padding: 0px !important;
 }
 
-.story-listing {
-    padding:4px;
-    border-bottom-color: silver;
-    border-bottom-width: 1px;
-    border-style:solid;
-}
+
 
 .pane{
     background-color: transparent;
@@ -50,12 +50,12 @@ ion-nav-view{
     align-content: center;
 }
 
-a {
-  color: black;
-  text-decoration: none; /* no underline */
-}
 .info-window-spinner{
     align-self: center !important;
+}
+.inline-spinner svg{
+    height:16px;
+    width:16px;
 }
 
 .media-button {
@@ -115,6 +115,51 @@ overscroll-pane {
     padding-right:0px !important;
 }
 
+.padded-title{
+  margin-left:20px;
+  margin-right:20px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.landmark-listing {
+    padding:4px;
+    width:100%;
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-style:solid;
+}
+
+.landmark-listing-table {
+    width:100%;
+    overflow: hidden;
+}
+
+.list-item-div {
+    padding:14px;
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-style:solid;
+}
+
+.list-item-title {
+    width:100%;
+    font-size: 14px;
+    color:#222;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+}
+
+.list-item-subtitle {
+    width:100%;
+    font-size: 10px;
+    color:grey;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+}
+
 .audio-button {
     float:right;
     margin-right:7px;
@@ -151,3 +196,29 @@ overscroll-pane {
     position:relative;top:50%; transform: translateY(60%);
     width: 100%;
 }
+
+
+
+/* tell the container's children to float left: */
+.float-my-children > * {
+    float:left;
+    margin-right:5px;
+}
+
+/* this is called a clearfix. it makes sure that the container's children floats are cleared, without using extra markup */
+
+.clearfix {
+    *zoom:1 /* for IE */
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* end clearfix*/
