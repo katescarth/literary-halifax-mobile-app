@@ -49,8 +49,8 @@
         <ion-tab title="Map" icon="ion-android-pin" ng-if="landmark.location">
           <overscroll-pane>
             <div class="display-card">                
-                <marker-map map-handle="mapHandle" center="landmark.location" zoom="mapInfo.zoom">
-                    <marker position="{{landmark.location}}" clickable="false"> </marker>
+                <marker-map map-handle="mapHandle" zoom="mapInfo.zoom">
+                    <marker position="{{[landmark.location.lat,landmark.location.lng]}}" clickable="false" centered="true"> </marker>
                     <user-location-marker></user-location-marker>
 
                 </marker-map>

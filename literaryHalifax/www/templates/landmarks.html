@@ -4,7 +4,7 @@
     <ion-content>
         <div class="display-card">
             <marker-map map-handle="mapHandle" center="mapInfo.center" zoom="mapInfo.zoom">
-                <marker id='{{landmark.id}}' position="{{landmark.location}}" ng-repeat="landmark in landmarks" ng-if="showLandmark(landmark)" on-click="markerClicked(landmark, id)" clickable="true"> </marker>
+                <marker id='{{landmark.id}}' position="{{[landmark.location.lat,landmark.location.lng]}}" ng-repeat="landmark in landmarks" ng-if="showLandmark(landmark)" on-click="markerClicked(landmark, id)" clickable="true"> </marker>
                 <user-location-marker></user-location-marker>
                 <info-window id="infoWindow">
                     <simple-info-window landmark="clickedLandmark">
