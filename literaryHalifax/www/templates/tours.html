@@ -1,12 +1,14 @@
 <ion-view view-title="Tours">
     <ion-content>
         <div class="display-card edge-to-edge">
-            <h1 class="title padded-title">Tours</h1>
             
             <div class="list">
                 <div class="list-item-div"  ng-repeat="tour in tours"
                   ng-click="go(tour)">
-                  {{tour.name}}
+                  <h5>
+                    {{tour.name}}
+                  </h5>
+                 
                 </div>
             </div>
         </div>
