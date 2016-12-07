@@ -1,0 +1,8 @@
+<div width="100%">
+    <a href="{{'#/app/story/'+story.id}}"> 
+        <ion-spinner class="info-window-spinner" ng-if="loading" ng-show="loading"></ion-spinner>
+        
+        <img ng-src="{{story.images[0]}}" height="100px">
+        <p> {{story.name}} </p>
+    </a>
+</div>
