@@ -171,10 +171,47 @@ angular.module('literaryHalifax')
 
 
 }).controller('toursCtrl', function($scope, $state, server){
-        
-    $scope.$on( "$ionicView.enter", function() {
     
+    var location = undefined
+    
+    $scope.$on( "$ionicView.enter", function() {
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                function(currentPosition){
+                    console.log('entering')
+                    location={
+                        lat: currentPosition.coords.latitude,
+                        lng:currentPosition.coords.longitude
+                    }
+                },function(error){
+                    console.log(error)
+                })
+        } else {
+            console.log('no navigator!')
+        }
     });
+    
+    var distanceTo=function(tour){
+        if(!(location&&tour.start)){
+            console.log('no')
+            return -1
+        }
+        dLat = tour.start.lat-location.lat
+        dLng = tour.start.lng-location.lng
+        squarekms = Math.pow((dLat*111.1),2) + Math.pow((dLng*79.3),2)
+        if(!squarekms){
+            console.log(tour.start)
+            console.log(location)
+        }
+        return Math.sqrt(squarekms)
+    }
+    
+    $scope.displayDistance=function(tour){
+        dist=distanceTo(tour)
+        if(dist>=0){
+            return Number(dist).toPrecision(2)
+        }
+    }
     
     
     //ngModel doesn't work without a dot

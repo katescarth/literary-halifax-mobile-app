@@ -12,8 +12,8 @@
                 <div class="list-item-div"  ng-repeat="tour in tours"
                   ng-click="go(tour)">
                     <div class="list-item-title">
-                        <div class="list-item-distance">
-                            0.5km
+                        <div class="list-item-distance" ng-if="displayDistance(tour)">
+                            {{displayDistance(tour)}}km
                         </div>
                         <div >
                             {{tour.name}}

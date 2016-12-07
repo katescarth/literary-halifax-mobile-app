@@ -202,6 +202,7 @@ angular.module('literaryHalifax')
         landmarkInfo:function(id, attributes){
             var result = {}
             var i=0
+            var j=0
             for(i=0;i<landmarks.length;i++){
 
                 if(landmarks[i].id==id){
@@ -220,9 +221,19 @@ angular.module('literaryHalifax')
         getTours:function(){
             var result = []
             var i=0
-
+            var j=0
             for(i=0;i<tours.length;i++){
                 result.push(angular.extend({},tours[i]))
+            }
+            
+            
+            // the start of a tour is the location of its first landmark
+            for(i=0;i<result.length;i++){
+                for(j=0;j<landmarks.length;j++){
+                    if(landmarks[j].id==result[i].landmarks[0].id){
+                        result[i].start=landmarks[j].location
+                    }
+                }
             }
 
             return $timeout(function(){
