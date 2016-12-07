@@ -5,24 +5,24 @@ angular.module('literaryHalifax')
  * the rest of the app from the server (this is the only part of the code that
  * knows there's not actually a server)
 
- * Spec for story:
+ * Spec for landmark:
  *  id: a unique identifier (str)
- *  name: The name of the story (str)
- *  location: the lat,lng of the story (str) TODO update to numerical data
- *  description: text description of the story (array[str]. Each element is a
+ *  name: The name of the landmark (str)
+ *  location: the lat,lng of the landmark (str) TODO update to numerical data
+ *  description: text description of the landmark (array[str]. Each element is a
                  paragraph)
- *  images: a list of images associated with the story. The first image is the
+ *  images: a list of images associated with the landmark. The first image is the
             thumbnail/main image (array[image])
  *  audio:  an audio reading of the stroy's description
  *
  
  *Spec for server: 
 
- * getStories(attrs): resolves to a list of stories with the specified attributes 
+ * getLandmarks(attrs): resolves to a list of landmarks with the specified attributes 
                       filled in
- * storyInfo(id, attributes): resolves to an object with all of the properties
+ * landmarkInfo(id, attributes): resolves to an object with all of the properties
                               listed in attributes (a string array). The values
-                              for these properties are copied from the story
+                              for these properties are copied from the landmark
                               matching id
  */
 .factory('server', function($timeout,$q){
@@ -33,27 +33,27 @@ angular.module('literaryHalifax')
         {
             name:"Central Halifax",
             description:"A tour of the Landmarks in central halifax",
-            stories:[
-                {id:"story-id-1"},
-                {id:"story-id-2"},
-                {id:"story-id-4"}
+            landmarks:[
+                {id:"landmark-id-1"},
+                {id:"landmark-id-2"},
+                {id:"landmark-id-4"}
             ],
             id:"tour-id-1"
         },
         {
             name:"The Full Monty",
             description:"Every landmark in the system, in the best order",
-            stories:[
-                {id:"story-id-4"},
-                {id:"story-id-1"},
-                {id:"story-id-2"},
-                {id:"story-id-3"}
+            landmarks:[
+                {id:"landmark-id-4"},
+                {id:"landmark-id-1"},
+                {id:"landmark-id-2"},
+                {id:"landmark-id-3"}
             ],
             id:"tour-id-2"
         }
     ]
 
-    var stories = [
+    var landmarks = [
         {
             name:"Halifax Central Library",
             location:"44.6431,-63.5752",
@@ -85,7 +85,7 @@ angular.module('literaryHalifax')
                 library won a Lieutenant Governor’s Design Award in \
                 Architecture for 2014."
             ],
-            id: "story-id-1",
+            id: "landmark-id-1",
             images:["img/HCL1.jpg"],
             audio:"/android_asset/www/audio/library.mp3"
         },
@@ -101,7 +101,7 @@ angular.module('literaryHalifax')
                 Garden Road and opposite Victoria Park. The gardens were \
                 designated a National Historic Site of Canada in 1984."
             ],
-            id: "story-id-2",
+            id: "landmark-id-2",
             images:["img/PBG1.jpg"],
             audio:"/android_asset/www/audio/static.mp3"
         },
@@ -122,7 +122,7 @@ angular.module('literaryHalifax')
                 Cabot Tower in Bristol, England (1898) and Cabot Tower \
                 in St. John's (1900)"
             ],
-            id: "story-id-3",
+            id: "landmark-id-3",
             images:["img/DNG1.jpg"],
             audio:"/android_asset/www/audio/tower.mp3"
         },
@@ -173,7 +173,7 @@ angular.module('literaryHalifax')
                 designated a Provincially Registered Property in 1988 \
                 under Nova Scotia's Heritage Property Act."
             ],
-            id: "story-id-4",
+            id: "landmark-id-4",
             images: [
                 "img/OBG1.png",
                 "img/OBG2.png"
@@ -185,13 +185,13 @@ angular.module('literaryHalifax')
 
 
     server = {
-        getStories:function(attrs){
+        getLandmarks:function(attrs){
 
             var result = []
             var i=0
 
-            for(i=0;i<stories.length;i++){
-                result.push(angular.extend({},stories[i]))
+            for(i=0;i<landmarks.length;i++){
+                result.push(angular.extend({},landmarks[i]))
             }
 
             return $timeout(function(){
@@ -199,15 +199,15 @@ angular.module('literaryHalifax')
             }, SMALL_DELAY)
 
         },
-        storyInfo:function(id, attributes){
+        landmarkInfo:function(id, attributes){
             var result = {}
             var i=0
-            for(i=0;i<stories.length;i++){
+            for(i=0;i<landmarks.length;i++){
 
-                if(stories[i].id==id){
+                if(landmarks[i].id==id){
                     var j=0
                     for(j=0;j<attributes.length;j++){
-                        result[attributes[j]] =stories[i][attributes[j]]
+                        result[attributes[j]] =landmarks[i][attributes[j]]
                     }
 
                     return $timeout(function(){
@@ -247,27 +247,27 @@ angular.module('literaryHalifax')
                 }
             }
         },
-        // Helper method for updating a story object without requesting 
+        // Helper method for updating a landmark object without requesting 
         // extra info. This is not fixture code, it belongs in the final product.
-        updateStory:function(story, attributes){
-            if(!story.id){
-                return $q.reject("attempted to update a story with no id")
+        updateLandmark:function(landmark, attributes){
+            if(!landmark.id){
+                return $q.reject("attempted to update a landmark with no id")
             }
             var i=0
             newAttrs = []
             for(i=0;i<attributes.length;i++){
-                if(!story[attributes[i]]){
+                if(!landmark[attributes[i]]){
                    newAttrs.push(attributes[i])
                 }
             }
             if(newAttrs.length>0){
-                return server.storyInfo(story.id,newAttrs)
-                .then(function(newStory){
-                    angular.extend(story,newStory)
-                    return story
+                return server.landmarkInfo(landmark.id,newAttrs)
+                .then(function(newLandmark){
+                    angular.extend(landmark,newLandmark)
+                    return landmark
                 })
             }  else {
-                return $q.when(story)
+                return $q.when(landmark)
             }
         },
         // Helper method for updating a tour object without requesting 
