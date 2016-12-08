@@ -56,7 +56,12 @@ angular.module('literaryHalifax')
     var menuPosition = -275
     updateMenuPosition = function(newPosition){
         menuPosition=newPosition
+        
+        var shadowLength= newPosition/27.5
+        
         $scope.menuStyle={'left':newPosition+'px'}
+                         
+        $scope.listStyle={'box-shadow':shadowLength+'px 2px 10px #111111'}
     }
     
     smoothScroll = function(from,to){

@@ -13,7 +13,7 @@
 <ion-nav-view  name="mainContent"></ion-nav-view>
 
 <ion-content on-drag="onDrag($event)" on-drag-start="onDragStart($event)" on-drag-end="onDragEnd($event)" class="side-menu" ng-style="menuStyle">
-  <div class="list menu-list">
+  <div class="list side-menu-list" ng-style="listStyle">
     <ion-item  ng-repeat="menuItem in menuItems"
       ng-click="menuItemClick(menuItem)">
       {{menuItem.displayName}}
