@@ -17,11 +17,15 @@ ion-nav-view{
 
 .side-menu{
     z-index: 9;
-    padding-right:10px;
-    width: 285px;
+    width: 290px;
     left:-275px;
     height:100%;
     position:absolute;
+}
+
+.menu-list{
+    width: 275px;
+    height:100%;
     background-color: white;
 }
 
