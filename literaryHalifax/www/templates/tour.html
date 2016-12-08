@@ -3,7 +3,10 @@
         <div class="display-card">
             <h1 class="title">{{tour.name}}</h1>
             <p>{{tour.description}}</p>
-            <div class="list">                
+            <div class="list">
+                
+                <list-loader loading-msg="loadingMsg"></list-loader>
+                
                 <div class="list-item-div"  ng-repeat="landmark in tour.landmarks"
                   ng-click="go(landmark)">
                     <div class="list-item-title">

@@ -253,7 +253,7 @@ angular.module('literaryHalifax')
             return $timeout(function(){
                 console.log(result)
                 return result
-            }, SMALL_DELAY)
+            }, LARGE_DELAY)
         },
         tourInfo:function(id,attributes){
             var result = {}

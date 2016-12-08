@@ -3,15 +3,6 @@ a {
   text-decoration: none; /* no underline */
 }
 
-.side-menu{
-    z-index: 9;
-    width: 275px;
-    left:-275px;
-    height:100%;
-    position:absolute;
-    background-color: white;
-}
-
 ion-nav-view{
     background-color: white;
 }
@@ -24,22 +15,14 @@ ion-nav-view{
     background: url(/img/BG1.jpg);    
 }
 
-.tab-nav {
-    border-width: 0 !important;
+.side-menu{
+    z-index: 9;
+    width: 275px;
+    left:-275px;
+    height:100%;
+    position:absolute;
+    background-color: white;
 }
-
-.filter-icon{
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
-.filter-bar{
-    margin-left:5px;
-    margin-right:5px;
-    padding: 0px !important;
-}
-
-
 
 .pane{
     background-color: transparent;
@@ -130,11 +113,7 @@ overscroll-pane {
     border-style:solid;
 }
 
-.list-control {
-    padding:14px;
-    width:100%;
-}
-
+/*Makes sure content floats correctly*/
 .clearfix:after {
    content: " "; /* Older browser do not support empty content */
    visibility: hidden;
@@ -142,6 +121,12 @@ overscroll-pane {
    height: 0;
    clear: both;
 }
+
+.list-control {
+    padding:14px;
+    width:100%;
+}
+
 .list-item-div {
     padding:5px;
     border-bottom-color: silver;
@@ -149,6 +134,20 @@ overscroll-pane {
     border-style:solid;
 }
 
+.centered-list-item {
+    text-align: center;
+}
+
+.filter-icon{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.filter-bar{
+    margin-left:5px;
+    margin-right:5px;
+    padding: 0px !important;
+}
 
 .list-item-title {
     font-size: 14px;
@@ -210,6 +209,6 @@ overscroll-pane {
 }
 
 .fullscreen-image {
-    position:relative;top:50%; transform: translateY(60%);
+    position:relative;top:50%; transform: translateY(50%);
     width: 100%;
 }
