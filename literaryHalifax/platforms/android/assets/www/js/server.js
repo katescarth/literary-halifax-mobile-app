@@ -25,7 +25,7 @@ angular.module('literaryHalifax')
                               for these properties are copied from the landmark
                               matching id
  */
-.factory('server', function($timeout,$q){
+.factory('server', function($timeout,$q,utils,lodash){
     var SMALL_DELAY = 200
     var LARGE_DELAY = 2000
 
@@ -218,7 +218,7 @@ angular.module('literaryHalifax')
             }
         },
         
-        getTours:function(){
+        getTours:function(nearPoint){
             var result = []
             var i=0
             var j=0
@@ -234,6 +234,12 @@ angular.module('literaryHalifax')
                         result[i].start=landmarks[j].location
                     }
                 }
+            }
+            
+            if(nearPoint){
+                result=lodash.sortBy(result, function(tour){
+                    return utils.distance(nearPoint,tour.start)
+                })
             }
 
             return $timeout(function(){

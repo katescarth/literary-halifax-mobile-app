@@ -135,15 +135,22 @@ overscroll-pane {
     width:100%;
 }
 
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
 .list-item-div {
-    padding:14px;
+    padding:5px;
     border-bottom-color: silver;
     border-bottom-width: 1px;
     border-style:solid;
 }
 
+
 .list-item-title {
-    width:100%;
     font-size: 14px;
     color:#222;
     text-overflow:ellipsis;
@@ -152,7 +159,6 @@ overscroll-pane {
 }
 
 .list-item-subtitle {
-    width:100%;
     font-size: 10px;
     color:grey;
     text-overflow:ellipsis;
@@ -160,10 +166,15 @@ overscroll-pane {
     white-space: nowrap;
 }
 
-.list-item-distance{
+.list-item-distance {
     font-size: 10px;
     color:grey;
     float:right;
+}
+
+.list-item-thumb {
+    width:75px;
+    margin:4px;
 }
 
 .audio-button {

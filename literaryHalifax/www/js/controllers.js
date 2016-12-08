@@ -119,12 +119,50 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap){
+}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q){
     
     //random number
     $scope.mapHandle=8183
     
     $scope.$on( "$ionicView.enter", function() {
+        
+        
+        
+        var attrs = ['id','name','location','description','images']
+        var deferred=$q.defer()
+        
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                function(currentPosition){
+                    deferred.resolve(server.getLandmarks(
+                        attrs,
+                        {
+                            lat: currentPosition.coords.latitude,
+                            lng:currentPosition.coords.longitude
+                        }
+                    ))
+                },
+                function(error){
+                    console.log(error)
+                    deferred.resolve(server.getLandmarks(attrs))
+                },
+                {
+                    //we can accept an old result - stalling here shoud be avoided
+                    maximumAge: 60000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
+                }
+            )
+        } else {
+            deferred.resolve(server.getLandmarks(attrs))
+        }
+        
+        deferred.promise.then(function(result){
+            $scope.landmarks = result
+        }).catch(function(error){
+            console.log(error)
+        })
+        
         NgMap.getMap($scope.mapHandle).then(function (map) {
             $scope.map = map;
         }, function (error) {
@@ -157,13 +195,6 @@ angular.module('literaryHalifax')
     }
     
     $scope.landmarks = []
-
-    server.getLandmarks(['id','name','location','description','images'])
-    .then(function(result){
-        $scope.landmarks = result
-    }).catch(function(error){
-        console.log(error)
-    })
     
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark=function(landmark){

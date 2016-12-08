@@ -185,13 +185,21 @@ angular.module('literaryHalifax')
 
 
     server = {
-        getLandmarks:function(attrs){
+        getLandmarks:function(attrs, nearPoint){
 
             var result = []
             var i=0
 
             for(i=0;i<landmarks.length;i++){
                 result.push(angular.extend({},landmarks[i]))
+            }
+            
+            if(nearPoint && lodash.includes(attrs,'location')){
+                result=lodash.sortBy(result,
+                    function(landmark){
+                        return utils.distance(nearPoint,landmark.location)
+                    }
+                )
             }
 
             return $timeout(function(){
