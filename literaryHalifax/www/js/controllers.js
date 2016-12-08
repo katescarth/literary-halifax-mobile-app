@@ -21,24 +21,6 @@ angular.module('literaryHalifax')
             state:'app.about'
         }
     ]
-    
-    // take control of back button when it tries to navigate back
-    // (not when it closes popups, etc.)
-    $ionicPlatform.registerBackButtonAction(function(event) {
-        if ($scope.menuMode) {
-            $ionicPopup.confirm({
-                title: 'Leave app?',
-                template: '',
-                okType: 'button-balanced'
-            }).then(function(res) {
-                if (res) {
-                    ionic.Platform.exitApp();
-                }
-            })
-        } else {
-            goBack()
-        }
-    }, 100);
 
     //the nav button is either a menu button or a back button
     $scope.navButtonClick=function(){
@@ -190,6 +172,26 @@ angular.module('literaryHalifax')
     $scope.menuMode=true
     $scope.navBarTitle = "Landmarks"
 
+    // take control of back button when it tries to navigate back
+    // (not when it closes popups, etc.)
+    $ionicPlatform.registerBackButtonAction(function(event) {
+        
+        if(menuOpen){
+            closeMenu()
+        } else if ($scope.menuMode) {
+            $ionicPopup.confirm({
+                title: 'Leave app?',
+                template: '',
+                okType: 'button-balanced'
+            }).then(function(res) {
+                if (res) {
+                    ionic.Platform.exitApp();
+                }
+            })
+        } else {
+            goBack()
+        }
+    }, 100);
     
     // the popover which controls audio that is being played
     var mediaController = undefined

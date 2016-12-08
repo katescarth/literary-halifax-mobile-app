@@ -21,24 +21,6 @@ angular.module('literaryHalifax')
             state:'app.about'
         }
     ]
-    
-    // take control of back button when it tries to navigate back
-    // (not when it closes popups, etc.)
-    $ionicPlatform.registerBackButtonAction(function(event) {
-        if ($scope.menuMode) {
-            $ionicPopup.confirm({
-                title: 'Leave app?',
-                template: '',
-                okType: 'button-balanced'
-            }).then(function(res) {
-                if (res) {
-                    ionic.Platform.exitApp();
-                }
-            })
-        } else {
-            goBack()
-        }
-    }, 100);
 
     //the nav button is either a menu button or a back button
     $scope.navButtonClick=function(){
@@ -66,7 +48,11 @@ angular.module('literaryHalifax')
     
     var frameLength=1000/60.0
     var maxSteps=(250/frameLength)
+    var animationPromise = undefined
     smoothScroll = function(from,to){
+        if(animationPromise){
+            $interval.cancel(animationPromise)
+        }
         var stepCount=Math.round(maxSteps*Math.abs(from-to)/275)
         if(!stepCount){
             stepCount=1
@@ -74,7 +60,7 @@ angular.module('literaryHalifax')
         var stepSize = (to-from)/stepCount
         var count = 0
         console.log(stepCount)
-        $interval(function(){
+        animationPromise=$interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
         },frameLength,stepCount)
@@ -186,6 +172,26 @@ angular.module('literaryHalifax')
     $scope.menuMode=true
     $scope.navBarTitle = "Landmarks"
 
+    // take control of back button when it tries to navigate back
+    // (not when it closes popups, etc.)
+    $ionicPlatform.registerBackButtonAction(function(event) {
+        
+        if(menuOpen){
+            closeMenu()
+        } else if ($scope.menuMode) {
+            $ionicPopup.confirm({
+                title: 'Leave app?',
+                template: '',
+                okType: 'button-balanced'
+            }).then(function(res) {
+                if (res) {
+                    ionic.Platform.exitApp();
+                }
+            })
+        } else {
+            goBack()
+        }
+    }, 100);
     
     // the popover which controls audio that is being played
     var mediaController = undefined

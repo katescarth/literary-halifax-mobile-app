@@ -16,7 +16,7 @@ ion-nav-view{
 }
 
 .side-menu{
-    z-index: 9;
+    z-index: 5;
     width: 300px;
     left:-275px;
     height:100%;
