@@ -64,15 +64,20 @@ angular.module('literaryHalifax')
         $scope.listStyle={'box-shadow':shadowLength+'px 2px 10px #111111'}
     }
     
+    var frameLength=1000/60.0
+    var maxSteps=(250/frameLength)
     smoothScroll = function(from,to){
-        var fps=1000/60.0
-        var stepCount=20
+        var stepCount=Math.round(maxSteps*Math.abs(from-to)/275)
+        if(!stepCount){
+            stepCoun=1
+        }
         var stepSize = (to-from)/stepCount
         var count = 0
+        console.log(stepCount)
         $interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
-        },fps,stepCount)
+        },frameLength,stepCount)
     }
     
     slideTo = function(position){
@@ -124,7 +129,7 @@ angular.module('literaryHalifax')
     
     $scope.onDragEnd = function(event){
         
-        var threshold = 6*6
+        var threshold = 4*4
         
         if(dragVelocity*dragVelocity>threshold){
             if(dragVelocity>0){

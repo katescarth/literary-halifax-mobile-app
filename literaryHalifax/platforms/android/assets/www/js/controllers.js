@@ -50,28 +50,71 @@ angular.module('literaryHalifax')
         }
     }
     
-    //track whether or not the menu is open
+    // track whether or not the menu is open
     var menuOpen = false
-    
+    // track the menu's location. CHANGING THIS VARIABLE DOES NOTHING
+    var menuPosition = -275
     updateMenuPosition = function(newPosition){
-        console.log('moving to'+newPosition)
+        menuPosition=newPosition
+        
+        var shadowLength= newPosition/27.5
+        
         $scope.menuStyle={'left':newPosition+'px'}
+                         
+        $scope.listStyle={'box-shadow':shadowLength+'px 2px 10px #111111'}
+    }
+    
+    var frameLength=1000/60.0
+    var maxSteps=(250/frameLength)
+    smoothScroll = function(from,to){
+        var stepCount=Math.round(20*Math.abs(to-from)/275)
+        var stepSize = (to-from)/stepCount
+        var count = 0
+        $interval(function(){
+            count++
+            updateMenuPosition(from+stepSize*count)
+        },frameLength,stepCount)
+    }
+    
+    slideTo = function(position){
+        smoothScroll(menuPosition, position)
+    }
+    
+    openMenu=function(){
+        slideTo(0)
+        menuOpen=true
+    }
+    
+    closeMenu=function(){
+        slideTo(-275)
+        menuOpen=false
     }
     
     toggleMenu = function(){
-        var newPosition
         if(menuOpen){
-            newPosition=-275
+            closeMenu()
         } else {
-            newPosition=0
+            openMenu()
         }
-        menuOpen=!menuOpen
-        updateMenuPosition(newPosition)
     }
     
-    $scope.draglog=function(event){
-        var base = menuOpen?0:-275
-        newPosition = base+event.gesture.deltaX
+    
+    var dragBase =0.0
+    var dragPrev =0.0
+    var dragVelocity =0.0
+    
+    // at smaller values, more recent movements matter more.
+    var decayConstant = 0.8
+    $scope.onDragStart = function(event){
+        dragBase = menuPosition
+    }
+    
+    $scope.onDrag=function(event){
+        newPosition = dragBase+event.gesture.deltaX
+        dragVelocity *= decayConstant
+        dragVelocity += (newPosition - dragPrev)
+        dragPrev = newPosition
+        
         if(newPosition<-275){
             newPosition=-275
         } else if(newPosition>0){
@@ -79,6 +122,30 @@ angular.module('literaryHalifax')
         }
         updateMenuPosition(newPosition)
     }
+    
+    $scope.onDragEnd = function(event){
+        
+        var threshold = 4*4
+        
+        if(dragVelocity*dragVelocity>threshold){
+            if(dragVelocity>0){
+                openMenu()
+            } else {
+                closeMenu()
+            }
+        } else {
+            if(menuOpen){
+                openMenu()
+            } else {
+                closeMenu()
+            }
+        }
+        
+        dragBase =0.0
+        dragPrev =0.0
+        dragVelocity =0.0
+    }
+    
     
     //navigate to the selected destination, and close the menu
     $scope.menuItemClick=function(item){
