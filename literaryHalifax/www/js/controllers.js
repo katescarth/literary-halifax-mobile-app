@@ -119,16 +119,30 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q){
+}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q, utils){
     
     //random number
     $scope.mapHandle=8183
     
-    $scope.loadingMsg = ''
+    var location = undefined
     
+    
+    
+    // Number of kilometers to display, rounded to two decimal points.
+    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // return undefined
+    $scope.displayDistance=function(landmark){
+        if(location && landmark && landmark.location){
+            dist=utils.distance(location,landmark.location)
+            if(dist>=0){
+                return Number(dist).toPrecision(2)
+            }
+        }
+        return undefined
+    }
         
         
-        
+    $scope.loadingMsg = ''
     var attrs = ['id','name','location','description','images']
     var deferred=$q.defer()
     if(navigator.geolocation){
@@ -136,14 +150,13 @@ angular.module('literaryHalifax')
         navigator.geolocation.getCurrentPosition(
             function(currentPosition){
                 $scope.loadingMsg = 'Getting landmarks...'
-
-                deferred.resolve(server.getLandmarks(
-                    attrs,
-                    {
-                        lat: currentPosition.coords.latitude,
-                        lng:currentPosition.coords.longitude
-                    }
-                ))
+                location ={
+                    lat: currentPosition.coords.latitude,
+                    lng:currentPosition.coords.longitude
+                }
+                deferred.resolve(
+                    server.getLandmarks(attrs, location)
+                )
             },
             function(error){
                 console.log(error)

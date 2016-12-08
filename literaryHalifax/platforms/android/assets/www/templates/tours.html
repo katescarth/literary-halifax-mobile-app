@@ -9,6 +9,7 @@
             </div>
             
             <div class="list">
+                <list-loader loading-msg="loadingMsg"></list-loader>
                 <div class="list-item-div"  ng-repeat="tour in tours"
                   ng-click="go(tour)" ng-if="showTour(tour)">
                     <div class="list-item-title">

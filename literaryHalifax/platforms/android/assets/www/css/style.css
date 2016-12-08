@@ -3,15 +3,6 @@ a {
   text-decoration: none; /* no underline */
 }
 
-.side-menu{
-    z-index: 9;
-    width: 275px;
-    left:-275px;
-    height:100%;
-    position:absolute;
-    background-color: white;
-}
-
 ion-nav-view{
     background-color: white;
 }
@@ -24,22 +15,14 @@ ion-nav-view{
     background: url(/img/BG1.jpg);    
 }
 
-.tab-nav {
-    border-width: 0 !important;
+.side-menu{
+    z-index: 9;
+    width: 275px;
+    left:-275px;
+    height:100%;
+    position:absolute;
+    background-color: white;
 }
-
-.filter-icon{
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
-.filter-bar{
-    margin-left:5px;
-    margin-right:5px;
-    padding: 0px !important;
-}
-
-
 
 .pane{
     background-color: transparent;
@@ -130,20 +113,43 @@ overscroll-pane {
     border-style:solid;
 }
 
+/*Makes sure content floats correctly*/
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
 .list-control {
     padding:14px;
     width:100%;
 }
 
 .list-item-div {
-    padding:14px;
+    padding:5px;
     border-bottom-color: silver;
     border-bottom-width: 1px;
     border-style:solid;
 }
 
+.centered-list-item {
+    text-align: center;
+}
+
+.filter-icon{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.filter-bar{
+    margin-left:5px;
+    margin-right:5px;
+    padding: 0px !important;
+}
+
 .list-item-title {
-    width:100%;
     font-size: 14px;
     color:#222;
     text-overflow:ellipsis;
@@ -152,7 +158,6 @@ overscroll-pane {
 }
 
 .list-item-subtitle {
-    width:100%;
     font-size: 10px;
     color:grey;
     text-overflow:ellipsis;
@@ -160,10 +165,15 @@ overscroll-pane {
     white-space: nowrap;
 }
 
-.list-item-distance{
+.list-item-distance {
     font-size: 10px;
     color:grey;
     float:right;
+}
+
+.list-item-thumb {
+    width:75px;
+    margin:4px;
 }
 
 .audio-button {
@@ -199,6 +209,6 @@ overscroll-pane {
 }
 
 .fullscreen-image {
-    position:relative;top:50%; transform: translateY(60%);
+    position:relative;top:50%; transform: translateY(50%);
     width: 100%;
 }

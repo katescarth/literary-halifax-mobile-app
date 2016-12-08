@@ -21,15 +21,26 @@
                    ng-click="filter.text=''"></i>
             </div>
             
-                <a href="{{'#/app/landmark/'+landmark.id}}" ng-repeat="landmark in landmarks" ng-if="showLandmark(landmark)">
-            <div class="landmark-listing" >
-                  <img ng-src="{{landmark.images[0]}}" width="100px"
-                     style="display:inline-block; vertical-align:middle">
-                  <span style="display:inline-block; vertical-align:middle">
-                    {{landmark.name}}
-                  </span>
+            <div class="list">
+                
+                <list-loader loading-msg="loadingMsg"></list-loader>
+                
+                <div class="list-item-div clearfix"  ng-repeat="landmark in landmarks"
+                  ng-click="go(landmark)" ng-if="showLandmark(landmark)">
+                    <img class="list-item-thumb "ng-src="{{landmark.images[0]}}" align="left">
+                    <div class="list-item-title">
+                        <div class="list-item-distance">
+                            2.1km
+                        </div>
+                        <div >
+                            {{landmark.name}}
+                        </div>
+                    </div>
+                    <div class="list-item-subtitle">
+                        {{landmark.description[0]}}
+                    </div>
+                </div>
             </div>
-                </a>
         </div>
         
         

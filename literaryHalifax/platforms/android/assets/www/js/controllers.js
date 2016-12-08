@@ -119,17 +119,60 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap){
+}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q){
     
     //random number
     $scope.mapHandle=8183
     
-    $scope.$on( "$ionicView.enter", function() {
-        NgMap.getMap($scope.mapHandle).then(function (map) {
-            $scope.map = map;
-        }, function (error) {
-            console.log(error)
-        });
+    $scope.loadingMsg = ''
+    
+        
+        
+        
+    var attrs = ['id','name','location','description','images']
+    var deferred=$q.defer()
+    if(navigator.geolocation){
+        $scope.loadingMsg = 'Getting your location...'
+        navigator.geolocation.getCurrentPosition(
+            function(currentPosition){
+                $scope.loadingMsg = 'Getting landmarks...'
+
+                deferred.resolve(server.getLandmarks(
+                    attrs,
+                    {
+                        lat: currentPosition.coords.latitude,
+                        lng:currentPosition.coords.longitude
+                    }
+                ))
+            },
+            function(error){
+                console.log(error)
+                $scope.loadingMsg = 'Getting landmarks...'
+                deferred.resolve(server.getLandmarks(attrs))
+            },
+            {
+                //we can accept an old result - stalling here shoud be avoided
+                maximumAge: 60000, 
+                timeout: 5000, 
+                enableHighAccuracy: true 
+            }
+        )
+    } else {
+        $scope.loadingMsg = 'Getting landmarks...'
+        deferred.resolve(server.getLandmarks(attrs))
+    }
+
+    deferred.promise.then(function(result){
+        $scope.loadingMsg = ''
+        $scope.landmarks = result
+    }).catch(function(error){
+        console.log(error)
+    })
+
+    NgMap.getMap($scope.mapHandle).then(function (map) {
+        $scope.map = map;
+    }, function (error) {
+        console.log(error)
     });
     
     
@@ -157,13 +200,6 @@ angular.module('literaryHalifax')
     }
     
     $scope.landmarks = []
-
-    server.getLandmarks(['id','name','location','description','images'])
-    .then(function(result){
-        $scope.landmarks = result
-    }).catch(function(error){
-        console.log(error)
-    })
     
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark=function(landmark){
@@ -174,6 +210,10 @@ angular.module('literaryHalifax')
             $scope.filter.text.toLowerCase()
         )>=0
     }
+    
+    $scope.go=function(landmark){
+        $state.go('app.landmarkView',{landmarkID:landmark.id})
+    }
 
 
 
@@ -181,43 +221,46 @@ angular.module('literaryHalifax')
     
     var location = undefined
     
+    $scope.loadingMsg = ''
+    
     // When the view is entered, try to get the user's location.
     // If successful, use it to get the tours from the server
     // in order of nearness. Otherwise, get the tours in arbitrary order
-    $scope.$on( "$ionicView.enter", function() {
-        var deferred=$q.defer()
         
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(
-                function(currentPosition){
-                    location={
-                        lat: currentPosition.coords.latitude,
-                        lng:currentPosition.coords.longitude
-                    }
-
-                    deferred.resolve(server.getTours(location))
-                },
-                function(error){
-                    console.log(error)
-                    deferred.resolve(server.getTours())
-                },
-                {
-                    //we can accept an old result - stalling here shoud be avoided
-                    maximumAge: 60000, 
-                    timeout: 5000, 
-                    enableHighAccuracy: true 
+    var deferred=$q.defer()
+    if(navigator.geolocation){
+        $scope.loadingMsg='getting your location...'
+        navigator.geolocation.getCurrentPosition(
+            function(currentPosition){
+                location={
+                    lat: currentPosition.coords.latitude,
+                    lng:currentPosition.coords.longitude
                 }
-            )
-        } else {
-            deferred.resolve(server.getTours())
-        }
-        
-        deferred.promise.then(function(result){
-            $scope.tours = result
-        }).catch(function(error){
-            console.log(error)
-        })
-    });
+                $scope.loadingMsg='getting tours...'
+                deferred.resolve(server.getTours(location))
+            },
+            function(error){
+                $scope.loadingMsg='getting tours...'
+                deferred.resolve(server.getTours())
+            },
+            {
+                //we can accept an old result - stalling here shoud be avoided
+                maximumAge: 60000, 
+                timeout: 5000, 
+                enableHighAccuracy: true 
+            }
+        )
+    } else {
+        $scope.loadingMsg='getting tours...'
+        deferred.resolve(server.getTours())
+    }
+
+    deferred.promise.then(function(result){
+        $scope.loadingMsg=''
+        $scope.tours = result
+    }).catch(function(error){
+        console.log(error)
+    })
     
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated ()e.g. one of the locations is missing)
@@ -323,27 +366,27 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('tourCtrl',function($scope,$stateParams, server, $state){
+}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
 
-    $scope.tour = {
-        id:$stateParams.tourID
-    }
-    $scope.loading=true
+    
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
-    
-    server.updateTour(
-        $scope.tour,['name','landmarks','description']              
-    ).then(function(){
+    server.tourInfo(
+        $stateParams.tourID,['name','landmarks','description']              
+    ).then(function(tour){
+        $scope.tour=tour
+        $scope.loadingMsg='Getting landmarks'
+        var promises = []
         for(i=0;i<$scope.tour.landmarks.length;i++){
-            server.updateLandmark($scope.tour.landmarks[i],['name','description'])
+            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description']))
         }
+        return $q.all(promises)
     })
     .finally(function(){
         //UX: Go back to previous page, plus an error toast?
-        $scope.loading=false
+        $scope.loadingMsg=''
     })
     
 });

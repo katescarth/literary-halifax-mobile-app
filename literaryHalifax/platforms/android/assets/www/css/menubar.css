@@ -30,3 +30,8 @@
 .tabs-loading{
     width:100%;
 }
+
+
+.tab-nav {
+    border-width: 0 !important;
+}

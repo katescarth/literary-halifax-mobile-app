@@ -26,7 +26,7 @@ angular.module('literaryHalifax')
                               matching id
  */
 .factory('server', function($timeout,$q,utils,lodash){
-    var SMALL_DELAY = 200
+    var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
 
     var tours = [
@@ -185,13 +185,21 @@ angular.module('literaryHalifax')
 
 
     server = {
-        getLandmarks:function(attrs){
+        getLandmarks:function(attrs, nearPoint){
 
             var result = []
             var i=0
 
             for(i=0;i<landmarks.length;i++){
                 result.push(angular.extend({},landmarks[i]))
+            }
+            
+            if(nearPoint && lodash.includes(attrs,'location')){
+                result=lodash.sortBy(result,
+                    function(landmark){
+                        return utils.distance(nearPoint,landmark.location)
+                    }
+                )
             }
 
             return $timeout(function(){
@@ -301,6 +309,7 @@ angular.module('literaryHalifax')
                 }
             }
             if(newAttrs.length>0){
+                console.log(newAttrs)
                 return server.tourInfo(tour.id,newAttrs)
                 .then(function(newTour){
                     angular.extend(tour,newTour)
