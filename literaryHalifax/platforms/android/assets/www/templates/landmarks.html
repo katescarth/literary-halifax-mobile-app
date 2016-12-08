@@ -29,8 +29,9 @@
                   ng-click="go(landmark)" ng-if="showLandmark(landmark)">
                     <img class="list-item-thumb "ng-src="{{landmark.images[0]}}" align="left">
                     <div class="list-item-title">
-                        <div class="list-item-distance">
-                            2.1km
+                        <div class="list-item-distance" ng-if="displayDistance(landmark)">
+                            {{displayDistance(landmark)}}km
+                        
                         </div>
                         <div >
                             {{landmark.name}}

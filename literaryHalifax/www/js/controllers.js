@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory, $ionicPopup,
-                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
+.controller('menuCtrl', function($scope, $ionicHistory, $ionicPopup,
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval) {
     // items for the side menu
     $scope.menuItems =[
         {
@@ -50,16 +50,96 @@ angular.module('literaryHalifax')
         }
     }
     
-    //track whether or not the menu is open
-    menuOpen=false
+    // track whether or not the menu is open
+    var menuOpen = false
+    // track the menu's location. CHANGING THIS VARIABLE DOES NOTHING
+    var menuPosition = -275
+    updateMenuPosition = function(newPosition){
+        menuPosition=newPosition
+        $scope.menuStyle={'left':newPosition+'px'}
+    }
+    
+    smoothScroll = function(from,to){
+        var fps=1000/60.0
+        var stepCount=20
+        var stepSize = (to-from)/stepCount
+        var count = 0
+        $interval(function(){
+            count++
+            updateMenuPosition(from+stepSize*count)
+        },fps,stepCount)
+    }
+    
+    slideTo = function(position){
+        smoothScroll(menuPosition, position)
+    }
+    
+    openMenu=function(){
+        slideTo(0)
+        menuOpen=true
+    }
+    
+    closeMenu=function(){
+        slideTo(-275)
+        menuOpen=false
+    }
+    
     toggleMenu = function(){
-        menuOpen=!menuOpen
         if(menuOpen){
-            $scope.menuClass = 'slideRight'
+            closeMenu()
         } else {
-            $scope.menuClass = 'slideLeft'
+            openMenu()
         }
     }
+    
+    
+    var dragBase =0.0
+    var dragPrev =0.0
+    var dragVelocity =0.0
+    
+    // at smaller values, more recent movements matter more.
+    var decayConstant = 0.8
+    $scope.onDragStart = function(event){
+        dragBase = menuPosition
+    }
+    
+    $scope.onDrag=function(event){
+        newPosition = dragBase+event.gesture.deltaX
+        dragVelocity *= decayConstant
+        dragVelocity += (newPosition - dragPrev)
+        dragPrev = newPosition
+        
+        if(newPosition<-275){
+            newPosition=-275
+        } else if(newPosition>0){
+            newPosition=0
+        }
+        updateMenuPosition(newPosition)
+    }
+    
+    $scope.onDragEnd = function(event){
+        
+        var threshold = 6*6
+        
+        if(dragVelocity*dragVelocity>threshold){
+            if(dragVelocity>0){
+                openMenu()
+            } else {
+                closeMenu()
+            }
+        } else {
+            if(menuOpen){
+                openMenu()
+            } else {
+                closeMenu()
+            }
+        }
+        
+        dragBase =0.0
+        dragPrev =0.0
+        dragVelocity =0.0
+    }
+    
     
     //navigate to the selected destination, and close the menu
     $scope.menuItemClick=function(item){
@@ -130,7 +210,7 @@ angular.module('literaryHalifax')
     
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated ()e.g. one of the locations is missing)
-    // return undefined
+    // return undefinedliterary-halifax-mobile-app
     $scope.displayDistance=function(landmark){
         if(location && landmark && landmark.location){
             dist=utils.distance(location,landmark.location)

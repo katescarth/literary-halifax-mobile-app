@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
-.controller('menuCtrl', function($scope, $ionicSideMenuDelegate, $ionicHistory, $ionicPopup,
-                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover) {
+.controller('menuCtrl', function($scope, $ionicHistory, $ionicPopup,
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval) {
     // items for the side menu
     $scope.menuItems =[
         {
@@ -51,14 +51,33 @@ angular.module('literaryHalifax')
     }
     
     //track whether or not the menu is open
-    menuOpen=false
+    var menuOpen = false
+    
+    updateMenuPosition = function(newPosition){
+        console.log('moving to'+newPosition)
+        $scope.menuStyle={'left':newPosition+'px'}
+    }
+    
     toggleMenu = function(){
-        menuOpen=!menuOpen
+        var newPosition
         if(menuOpen){
-            $scope.menuClass = 'slideRight'
+            newPosition=-275
         } else {
-            $scope.menuClass = 'slideLeft'
+            newPosition=0
         }
+        menuOpen=!menuOpen
+        updateMenuPosition(newPosition)
+    }
+    
+    $scope.draglog=function(event){
+        var base = menuOpen?0:-275
+        newPosition = base+event.gesture.deltaX
+        if(newPosition<-275){
+            newPosition=-275
+        } else if(newPosition>0){
+            newPosition=0
+        }
+        updateMenuPosition(newPosition)
     }
     
     //navigate to the selected destination, and close the menu
@@ -119,16 +138,30 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q){
+}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q, utils){
     
     //random number
     $scope.mapHandle=8183
     
-    $scope.loadingMsg = ''
+    var location = undefined
     
+    
+    
+    // Number of kilometers to display, rounded to two decimal points.
+    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // return undefinedliterary-halifax-mobile-app
+    $scope.displayDistance=function(landmark){
+        if(location && landmark && landmark.location){
+            dist=utils.distance(location,landmark.location)
+            if(dist>=0){
+                return Number(dist).toPrecision(2)
+            }
+        }
+        return undefined
+    }
         
         
-        
+    $scope.loadingMsg = ''
     var attrs = ['id','name','location','description','images']
     var deferred=$q.defer()
     if(navigator.geolocation){
@@ -136,14 +169,13 @@ angular.module('literaryHalifax')
         navigator.geolocation.getCurrentPosition(
             function(currentPosition){
                 $scope.loadingMsg = 'Getting landmarks...'
-
-                deferred.resolve(server.getLandmarks(
-                    attrs,
-                    {
-                        lat: currentPosition.coords.latitude,
-                        lng:currentPosition.coords.longitude
-                    }
-                ))
+                location ={
+                    lat: currentPosition.coords.latitude,
+                    lng:currentPosition.coords.longitude
+                }
+                deferred.resolve(
+                    server.getLandmarks(attrs, location)
+                )
             },
             function(error){
                 console.log(error)
