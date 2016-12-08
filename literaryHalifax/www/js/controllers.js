@@ -366,23 +366,23 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('tourCtrl',function($scope,$stateParams, server, $state){
+}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
 
-    $scope.tour = {
-        id:$stateParams.tourID
-    }
-    $scope.loadingMsg='Getting landmarks...'
+    
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
-    server.updateTour(
-        $scope.tour,['name','landmarks','description']              
-    ).then(function(){
-        $scope.loadingMsg=''
+    server.tourInfo(
+        $stateParams.tourID,['name','landmarks','description']              
+    ).then(function(tour){
+        $scope.tour=tour
+        $scope.loadingMsg='Getting landmarks'
+        var promises = []
         for(i=0;i<$scope.tour.landmarks.length;i++){
-            server.updateLandmark($scope.tour.landmarks[i],['name','description'])
+            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description']))
         }
+        return $q.all(promises)
     })
     .finally(function(){
         //UX: Go back to previous page, plus an error toast?

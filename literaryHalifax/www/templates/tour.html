@@ -7,7 +7,7 @@
                 
                 <list-loader loading-msg="loadingMsg"></list-loader>
                 
-                <div class="list-item-div"  ng-repeat="landmark in tour.landmarks"
+                <div class="list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks"
                   ng-click="go(landmark)">
                     <div class="list-item-title">
                         {{$index + 1}}. {{landmark.name}}<ion-spinner class="inline-spinner" ng-if="!landmark.name"></ion-spinner>

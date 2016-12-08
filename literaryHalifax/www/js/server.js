@@ -26,7 +26,7 @@ angular.module('literaryHalifax')
                               matching id
  */
 .factory('server', function($timeout,$q,utils,lodash){
-    var SMALL_DELAY = 200
+    var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
 
     var tours = [
@@ -253,7 +253,7 @@ angular.module('literaryHalifax')
             return $timeout(function(){
                 console.log(result)
                 return result
-            }, LARGE_DELAY)
+            }, SMALL_DELAY)
         },
         tourInfo:function(id,attributes){
             var result = {}
@@ -309,6 +309,7 @@ angular.module('literaryHalifax')
                 }
             }
             if(newAttrs.length>0){
+                console.log(newAttrs)
                 return server.tourInfo(tour.id,newAttrs)
                 .then(function(newTour){
                     angular.extend(tour,newTour)
