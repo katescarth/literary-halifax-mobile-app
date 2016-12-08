@@ -66,15 +66,19 @@ angular.module('literaryHalifax')
     
     var frameLength=1000/60.0
     var maxSteps=(250/frameLength)
+    var animationPromise = undefined
     smoothScroll = function(from,to){
+        if(animationPromise){
+            $interval.cancel(animationPromise)
+        }
         var stepCount=Math.round(maxSteps*Math.abs(from-to)/275)
         if(!stepCount){
-            stepCoun=1
+            stepCount=1
         }
         var stepSize = (to-from)/stepCount
         var count = 0
         console.log(stepCount)
-        $interval(function(){
+        animationPromise=$interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
         },frameLength,stepCount)
