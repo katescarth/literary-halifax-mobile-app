@@ -3,11 +3,16 @@
         <div class="display-card">
             <h1 class="title">{{tour.name}}</h1>
             <p>{{tour.description}}</p>
-            <div class="list">
-                <ion-item  ng-repeat="landmark in tour.landmarks"
+            <div class="list">                
+                <div class="list-item-div"  ng-repeat="landmark in tour.landmarks"
                   ng-click="go(landmark)">
-                  {{$index + 1}}. {{landmark.name}} <ion-spinner class="inline-spinner" ng-if="!landmark.name"></ion-spinner>
-                </ion-item>
+                    <div class="list-item-title">
+                        {{$index + 1}}. {{landmark.name}}<ion-spinner class="inline-spinner" ng-if="!landmark.name"></ion-spinner>
+                    </div>
+                    <div class="list-item-subtitle">
+                        {{landmark.description[0]}}
+                    </div>
+                </div>
             </div>
         </div>
     </ion-content>

@@ -170,12 +170,14 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('toursCtrl', function($scope, $state, server){
+}).controller('toursCtrl', function($scope, $state, $q, server, utils){
     
     var location = undefined
     
     
     $scope.$on( "$ionicView.enter", function() {
+        var deferred=$q.defer()
+        
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(
                 function(currentPosition){
@@ -183,34 +185,36 @@ angular.module('literaryHalifax')
                         lat: currentPosition.coords.latitude,
                         lng:currentPosition.coords.longitude
                     }
-                    console.log(location)
-                },function(error){
-                    console.log(error)
-                })
+
+                    deferred.resolve(server.getTours(location))
+                },
+                function(error){
+                    deferred.resolve(server.getTours())
+                },
+                {
+                    //we can accept an old result - stalling here shoud be avoided
+                    maximumAge: 60000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
+                }
+            )
         } else {
-            console.log('no navigator!')
+            deferred.resolve(server.getTours())
         }
+        
+        deferred.promise.then(function(result){
+            $scope.tours = result
+        }).catch(function(error){
+            console.log(error)
+        })
     });
     
-    var distanceTo=function(tour){
-        if(!(location&&tour.start)){
-            console.log('no')
-            return -1
-        }
-        dLat = tour.start.lat-location.lat
-        dLng = tour.start.lng-location.lng
-        squarekms = Math.pow((dLat*111.1),2) + Math.pow((dLng*79.3),2)
-        if(!squarekms){
-            console.log(tour.start)
-            console.log(location)
-        }
-        return Math.sqrt(squarekms)
-    }
-    
     $scope.displayDistance=function(tour){
-        dist=distanceTo(tour)
-        if(dist>=0){
-            return Number(dist).toPrecision(2)
+        if(location && tour && tour.start){
+            dist=utils.distance(location,tour.start)
+            if(dist>=0){
+                return Number(dist).toPrecision(2)
+            }
         }
     }
     
@@ -225,14 +229,6 @@ angular.module('literaryHalifax')
     $scope.go=function(tour){
         $state.go('app.tourView',{tourID:tour.id})
     }
-
-    //TODO should not run this at app start
-    server.getTours()
-    .then(function(result){
-        $scope.tours = result
-    }).catch(function(error){
-        console.log(error)
-    })
     
     $scope.showTour=function(tour){
         if(!$scope.filter.text){

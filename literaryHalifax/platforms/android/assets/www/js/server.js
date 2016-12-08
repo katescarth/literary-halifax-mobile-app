@@ -56,7 +56,7 @@ angular.module('literaryHalifax')
     var landmarks = [
         {
             name:"Halifax Central Library",
-            location:"44.6431,-63.5752",
+            location:{lat:44.6431,lng:-63.5752},
             description:[
                 "The Halifax Central Library is a public library in \
                 Halifax, Nova Scotia on the corner of Spring Garden Road \
@@ -91,7 +91,7 @@ angular.module('literaryHalifax')
         },
         {
             name:"Public Gardens",
-            location:"44.6428,-63.5821",
+            location:{lat:44.6428,lng:-63.5821},
             description:[
                 "The Halifax Public Gardens are Victorian era public \
                 gardens formally established in 1867, the year of Canadian \
@@ -107,7 +107,7 @@ angular.module('literaryHalifax')
         },
         {
             name:"The Dingle",
-            location:"44.6304,-63.6028",
+            location:{lat:44.6304,lng:-63.6028},
             description:[
                 "Sandford Fleming Park is a 95-acre (38 ha) Canadian urban \
                 park located in the community of Jollimore in Halifax \
@@ -128,7 +128,7 @@ angular.module('literaryHalifax')
         },
         {
             name:"Old Burying Ground",
-            location:"44.6437,-63.5728",
+            location:{lat:44.6437,lng:-63.5728},
             description:[
                 "The Old Burying Ground was founded in 1749, the same year \
                 as the settlement, as the town's first burial ground. It \
@@ -202,6 +202,7 @@ angular.module('literaryHalifax')
         landmarkInfo:function(id, attributes){
             var result = {}
             var i=0
+            var j=0
             for(i=0;i<landmarks.length;i++){
 
                 if(landmarks[i].id==id){
@@ -220,9 +221,19 @@ angular.module('literaryHalifax')
         getTours:function(){
             var result = []
             var i=0
-
+            var j=0
             for(i=0;i<tours.length;i++){
                 result.push(angular.extend({},tours[i]))
+            }
+            
+            
+            // the start of a tour is the location of its first landmark
+            for(i=0;i<result.length;i++){
+                for(j=0;j<landmarks.length;j++){
+                    if(landmarks[j].id==result[i].landmarks[0].id){
+                        result[i].start=landmarks[j].location
+                    }
+                }
             }
 
             return $timeout(function(){

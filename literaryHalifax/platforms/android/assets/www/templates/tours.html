@@ -2,11 +2,22 @@
     <ion-content>
         <div class="display-card edge-to-edge">
             
+            <div class="item item-input filter-bar">
+                <input type="search" placeholder="Filter by title..." ng-model="filter.text">
+                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
+                   ng-click="filter.text=''"></i>
+            </div>
+            
             <div class="list">
                 <div class="list-item-div"  ng-repeat="tour in tours"
                   ng-click="go(tour)">
                     <div class="list-item-title">
-                        {{tour.name}}
+                        <div class="list-item-distance" ng-if="displayDistance(tour)">
+                            {{displayDistance(tour)}}km
+                        </div>
+                        <div >
+                            {{tour.name}}
+                        </div>
                     </div>
                     <div class="list-item-subtitle">
                         {{tour.description}}
