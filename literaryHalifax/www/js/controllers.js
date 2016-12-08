@@ -40,6 +40,7 @@ angular.module('literaryHalifax')
         }
     }, 100);
 
+    //the nav button is either a menu button or a back button
     $scope.navButtonClick=function(){
         if($scope.menuMode){
             toggleMenu()
@@ -48,6 +49,8 @@ angular.module('literaryHalifax')
             goBack()
         }
     }
+    
+    //track whether or not the menu is open
     menuOpen=false
     toggleMenu = function(){
         menuOpen=!menuOpen
@@ -58,6 +61,7 @@ angular.module('literaryHalifax')
         }
     }
     
+    //navigate to the selected destination, and close the menu
     $scope.menuItemClick=function(item){
         $ionicHistory.nextViewOptions({
             disableAnimate: true
@@ -93,7 +97,7 @@ angular.module('literaryHalifax')
     $scope.navBarTitle = "Landmarks"
 
     
-    
+    // the popover which controls audio that is being played
     var mediaController = undefined
     
     
@@ -103,6 +107,8 @@ angular.module('literaryHalifax')
           }).then(function(constructedPopover){
             mediaController = constructedPopover
           });
+    
+    //display the popover. $event tells the popover where to appear
     $scope.audioButtonClick = function($event){
       mediaController.show($event)
     }
@@ -115,6 +121,7 @@ angular.module('literaryHalifax')
     $scope.media = mediaPlayer
 }).controller('landmarksCtrl', function($scope, $state, server, NgMap){
     
+    //random number
     $scope.mapHandle=8183
     
     $scope.$on( "$ionicView.enter", function() {
@@ -151,7 +158,6 @@ angular.module('literaryHalifax')
     
     $scope.landmarks = []
 
-    //TODO should not run this at app start
     server.getLandmarks(['id','name','location','description','images'])
     .then(function(result){
         $scope.landmarks = result
@@ -159,6 +165,7 @@ angular.module('literaryHalifax')
         console.log(error)
     })
     
+    //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark=function(landmark){
         if(!$scope.filter.text){
             return true
@@ -174,7 +181,9 @@ angular.module('literaryHalifax')
     
     var location = undefined
     
-    
+    // When the view is entered, try to get the user's location.
+    // If successful, use it to get the tours from the server
+    // in order of nearness. Otherwise, get the tours in arbitrary order
     $scope.$on( "$ionicView.enter", function() {
         var deferred=$q.defer()
         
@@ -189,6 +198,7 @@ angular.module('literaryHalifax')
                     deferred.resolve(server.getTours(location))
                 },
                 function(error){
+                    console.log(error)
                     deferred.resolve(server.getTours())
                 },
                 {
@@ -209,6 +219,9 @@ angular.module('literaryHalifax')
         })
     });
     
+    // Number of kilometers to display, rounded to two decimal points.
+    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // return undefined
     $scope.displayDistance=function(tour){
         if(location && tour && tour.start){
             dist=utils.distance(location,tour.start)
@@ -216,6 +229,7 @@ angular.module('literaryHalifax')
                 return Number(dist).toPrecision(2)
             }
         }
+        return undefined
     }
     
     
@@ -230,6 +244,7 @@ angular.module('literaryHalifax')
         $state.go('app.tourView',{tourID:tour.id})
     }
     
+    // false if a tour is filtered out, otherwise true
     $scope.showTour=function(tour){
         if(!$scope.filter.text){
             return true
