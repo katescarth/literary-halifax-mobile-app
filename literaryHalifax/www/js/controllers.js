@@ -174,15 +174,16 @@ angular.module('literaryHalifax')
     
     var location = undefined
     
+    
     $scope.$on( "$ionicView.enter", function() {
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(
                 function(currentPosition){
-                    console.log('entering')
                     location={
                         lat: currentPosition.coords.latitude,
                         lng:currentPosition.coords.longitude
                     }
+                    console.log(location)
                 },function(error){
                     console.log(error)
                 })
