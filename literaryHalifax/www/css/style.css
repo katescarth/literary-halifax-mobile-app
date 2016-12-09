@@ -127,6 +127,7 @@ overscroll-pane {
 
 .list-item-subtitle {
     font-size: 10px;
+    line-height: 13px;
     color:grey;
     text-overflow:ellipsis;
     overflow:hidden;
@@ -141,7 +142,7 @@ overscroll-pane {
 
 .list-item-thumb {
     width:75px;
-    margin:4px;
+    margin:4px 4px 4px 0px;
 }
 
 .audio-button {
