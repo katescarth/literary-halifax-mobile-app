@@ -31,25 +31,76 @@ angular.module('literaryHalifax')
 
     var tours = [
         {
-            name:"Central Halifax",
-            description:"A tour of the Landmarks in central halifax",
+            name:"Prime numbered lights",
+            description:"Only the prime numbered ids",
             landmarks:[
-                {id:"landmark-id-1"},
-                {id:"landmark-id-2"},
-                {id:"landmark-id-4"}
+                {id:"christmas-id-2"},
+                {id:"christmas-id-3"},
+                {id:"christmas-id-5"},
+                {id:"christmas-id-7"},
+                {id:"christmas-id-11"},
+                {id:"christmas-id-13"},
+                {id:"christmas-id-17"},
+                {id:"christmas-id-23"},
+                {id:"christmas-id-29"},
+                {id:"christmas-id-31"}
             ],
             id:"tour-id-1"
         },
         {
-            name:"The Full Monty",
-            description:"Every landmark in the system, in the best order. There is no better tour in the system",
+            name:"Someone messed up",
+            description:"This tour is just here to showcase someone putting the pin in the middle of the ocean. You're going to need a solid wetsuit to complete this one.",
             landmarks:[
-                {id:"landmark-id-4"},
-                {id:"landmark-id-1"},
-                {id:"landmark-id-2"},
-                {id:"landmark-id-3"}
+                {id:"christmas-id-27"}
             ],
             id:"tour-id-2"
+        },
+        {
+            name:"Central Halifax",
+            description:"All the lights in the city",
+            landmarks:[
+                {id:"christmas-id-15"},//connaught
+                {id:"christmas-id-29"},
+                {id:"christmas-id-18"},//Wright
+                {id:"christmas-id-31"}//Thief
+            ],
+            id:"tour-id-3"
+        },
+        {
+            name:"The full Monty",
+            description:"All the lights in the system in more or less random order. Hang on to my hat, I'm going in!",
+            landmarks:[
+                {id:"christmas-id-8"},
+                {id:"christmas-id-12"},
+                {id:"christmas-id-17"},
+                {id:"christmas-id-22"},
+                {id:"christmas-id-10"},
+                {id:"christmas-id-18"},
+                {id:"christmas-id-7"},
+                {id:"christmas-id-21"},
+                {id:"christmas-id-25"},
+                {id:"christmas-id-14"},
+                {id:"christmas-id-27"},
+                {id:"christmas-id-1"},
+                {id:"christmas-id-28"},
+                {id:"christmas-id-30"},
+                {id:"christmas-id-3"},
+                {id:"christmas-id-6"},
+                {id:"christmas-id-24"},
+                {id:"christmas-id-5"},
+                {id:"christmas-id-25"},
+                {id:"christmas-id-11"},
+                {id:"christmas-id-20"},
+                {id:"christmas-id-31"},
+                {id:"christmas-id-15"},
+                {id:"christmas-id-13"},
+                {id:"christmas-id-26"},
+                {id:"christmas-id-23"},
+                {id:"christmas-id-29"},
+                {id:"christmas-id-4"},
+                {id:"christmas-id-16"}
+            ],
+            id:"tour-id-4"
         }
     ]
 
