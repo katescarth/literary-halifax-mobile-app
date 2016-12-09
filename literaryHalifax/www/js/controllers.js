@@ -43,7 +43,7 @@ angular.module('literaryHalifax')
         
         $scope.menuStyle={'left':newPosition+'px'}
                          
-        $scope.listStyle={'box-shadow':shadowLength+'px 2px 10px #111111'}
+        $scope.listStyle={'box-shadow':shadowLength+'px 0px 10px #111111'}
     }
     
     var frameLength=1000/60.0
