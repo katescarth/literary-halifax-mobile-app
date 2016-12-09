@@ -59,7 +59,6 @@ angular.module('literaryHalifax')
         }
         var stepSize = (to-from)/stepCount
         var count = 0
-        console.log(stepCount)
         animationPromise=$interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
