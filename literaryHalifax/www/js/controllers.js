@@ -414,6 +414,10 @@ angular.module('literaryHalifax')
     $scope.landmark = {
         id:$stateParams.landmarkID
     }
+    
+    // expose the track name to the view
+    $scope.media = mediaPlayer
+    
     $scope.loading=true
     
     server.updateLandmark(

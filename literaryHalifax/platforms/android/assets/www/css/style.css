@@ -15,31 +15,10 @@ ion-nav-view{
     background: url(/img/BG1.jpg);    
 }
 
-.side-menu{
-    z-index: 5;
-    width: 300px;
-    left:-275px;
-    height:100%;
-    position:absolute;
-}
-
-.side-menu-list{
-    width: 275px;
-    height:100%;
-    background-color: white;
-    
-}
-
-.side-menu-list .item{
-    margin-left: 0;
-    margin-right: 0;
-    border-left-width: 0;
-    border-right-width: 0;
-}
-
 .pane{
     background-color: transparent;
 }
+
 .info-window {
     width: 175px;
     max-width: 175px !important;
@@ -48,10 +27,6 @@ ion-nav-view{
 
 .info-window-spinner{
     align-self: center !important;
-}
-.inline-spinner svg{
-    height:16px;
-    width:16px;
 }
 
 .media-button {
@@ -102,28 +77,8 @@ overscroll-pane {
   margin-top:10px;
   margin-bottom:10px;
   background-color: #EEEEEE;
-    padding:10px;
+  padding:10px;
   box-shadow: 0px 2px 10px #111111;
-}
-
-.edge-to-edge{
-    padding-left:0px !important;
-    padding-right:0px !important;
-}
-
-.padded-title{
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:10px;
-  margin-bottom:10px;
-}
-
-.landmark-listing {
-    padding:4px;
-    width:100%;
-    border-bottom-color: silver;
-    border-bottom-width: 1px;
-    border-style:solid;
 }
 
 /*Makes sure content floats correctly*/
@@ -135,22 +90,17 @@ overscroll-pane {
    clear: both;
 }
 
-.list-control {
-    padding:14px;
-    width:100%;
-}
-
 .list-item-div {
-    padding:5px;
-    border-bottom-color: silver;
-    border-bottom-width: 1px;
-    border-top-color: silver;
-    border-top-width: 1px;
-    border-style:solid;
+    padding-left:5px;
+    padding-right:5px;
+    padding-bottom:2.5px;
 }
 
 .list-item-div + .list-item-div {
-    border-top-width: 0px;
+    padding-top:2.5px;
+    border-top-color: silver;
+    border-top-width: 1px;
+    border-style:solid;
 }
 
 .centered-list-item {
@@ -163,8 +113,8 @@ overscroll-pane {
 }
 
 .filter-bar{
-    margin:5px;
-    padding: 0px !important;
+    margin-bottom:5px;
+    padding: 0px 0px 0px 5px !important;
 }
 
 .list-item-title {
@@ -177,6 +127,7 @@ overscroll-pane {
 
 .list-item-subtitle {
     font-size: 10px;
+    line-height: 13px;
     color:grey;
     text-overflow:ellipsis;
     overflow:hidden;
@@ -190,8 +141,10 @@ overscroll-pane {
 }
 
 .list-item-thumb {
+    object-fit:cover;
     width:75px;
-    margin:4px;
+    height:50px;
+    margin:4px 4px 4px 0px;
 }
 
 .audio-button {
@@ -220,7 +173,7 @@ overscroll-pane {
 .modal-close {
     position:absolute;
     right:0;
-/*    Make this clickable*/
+    /*Make this clickable*/
     z-index:30;
     color:darkgray;
     font-size: 32px;

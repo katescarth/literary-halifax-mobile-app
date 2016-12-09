@@ -251,7 +251,6 @@ angular.module('literaryHalifax')
             }
 
             return $timeout(function(){
-                console.log(result)
                 return result
             }, SMALL_DELAY)
         },

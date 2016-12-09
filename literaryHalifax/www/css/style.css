@@ -141,6 +141,7 @@ overscroll-pane {
 }
 
 .list-item-thumb {
+    object-fit:cover;
     width:75px;
     height:50px;
     margin:4px 4px 4px 0px;

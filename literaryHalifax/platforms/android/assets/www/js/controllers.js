@@ -43,7 +43,7 @@ angular.module('literaryHalifax')
         
         $scope.menuStyle={'left':newPosition+'px'}
                          
-        $scope.listStyle={'box-shadow':shadowLength+'px 2px 10px #111111'}
+        $scope.listStyle={'box-shadow':shadowLength+'px 0px 10px #111111'}
     }
     
     var frameLength=1000/60.0
@@ -59,7 +59,6 @@ angular.module('literaryHalifax')
         }
         var stepSize = (to-from)/stepCount
         var count = 0
-        console.log(stepCount)
         animationPromise=$interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
@@ -415,6 +414,10 @@ angular.module('literaryHalifax')
     $scope.landmark = {
         id:$stateParams.landmarkID
     }
+    
+    // expose the track name to the view
+    $scope.media = mediaPlayer
+    
     $scope.loading=true
     
     server.updateLandmark(

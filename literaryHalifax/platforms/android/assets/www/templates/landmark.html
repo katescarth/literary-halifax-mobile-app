@@ -16,8 +16,8 @@
             <div class="display-card">
 
               <h3 class="title">
-                <button class="button button-icon ion-volume-high audio-button"
-                        ng-click="playAudio()">
+                <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-volume-mute':'ion-volume-high'"
+                        ng-click="media.title==landmark.name?media.stop():playAudio()">
                 </button>
                   <div style="description-title">{{landmark.name}}</div>
               </h3>
