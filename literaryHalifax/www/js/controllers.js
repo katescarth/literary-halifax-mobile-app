@@ -219,6 +219,13 @@ angular.module('literaryHalifax')
     //random number
     $scope.mapHandle=8183
     
+    $scope.numListItems = 5
+    
+    $scope.displayMore = function(){
+        $scope.numListItems+=5
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+    }
+    
     var location = undefined
     
     
