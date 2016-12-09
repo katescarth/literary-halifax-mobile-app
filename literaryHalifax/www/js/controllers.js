@@ -460,6 +460,18 @@ angular.module('literaryHalifax')
         // let the class register to avoid flicker
         $timeout().then(openModal)
     }
+    
+    $scope.doubleTap = function(event){
+        delegate = $ionicScrollDelegate.$getByHandle('zoom-pane')
+        if(delegate){
+            if(delegate.getScrollPosition().zoom==1){
+                delegate.zoomBy(2,true)
+            } else {
+                delegate.zoomTo(1,true)
+            }
+        }
+    }
+    
     $scope.closeModal = function() {
         $scope.imageAnimation="fade-disappear"
         $scope.backgroundAnimation="frost-disappear"
