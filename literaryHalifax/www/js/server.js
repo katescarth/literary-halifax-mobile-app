@@ -54,133 +54,255 @@ angular.module('literaryHalifax')
     ]
 
     var landmarks = [
-        {
-            name:"Halifax Central Library",
-            location:{lat:44.6431,lng:-63.5752},
-            description:[
-                "The Halifax Central Library is a public library in \
-                Halifax, Nova Scotia on the corner of Spring Garden Road \
-                and Queen Street. It serves as the flagship library of the \
-                Halifax Public Libraries, replacing the Spring Garden Road \
-                Memorial Library.",
-
-                "A new central library was discussed by library \
-                administrators for several decades and approved by the \
-                regional council in 2008. The architects, a joint venture \
-                between local firm Fowler Bauld and Mitchell and Schmidt \
-                Hammer Lassen of Denmark, were chosen in 2010 through an \
-                international design competition. Construction began later \
-                that year on a prominent downtown site that had been a \
-                parking lot for half a century.",
-
-                "The new library opened in December 2014 and has become a \
-                highly popular gathering place. In addition to a book \
-                collection significantly larger than that of the former \
-                library, the new building houses a wide range of amenities \
-                including cafés, an auditorium, and community rooms. The \
-                striking architecture is characterised by the fifth floor's \
-                cantilever over the entrance plaza, a central atrium \
-                criss-crossed by staircases, and the building's \
-                transparency and relationship to the urban context. The \
-                library won a Lieutenant Governor’s Design Award in \
-                Architecture for 2014."
-            ],
-            id: "landmark-id-1",
-            images:["img/HCL1.jpg"],
-            audio:"/android_asset/www/audio/library.mp3"
-        },
-        {
-            name:"Public Gardens",
-            location:{lat:44.6428,lng:-63.5821},
-            description:[
-                "The Halifax Public Gardens are Victorian era public \
-                gardens formally established in 1867, the year of Canadian \
-                Confederation. The gardens are located in the Halifax \
-                Regional Municipality, Nova Scotia on the Halifax \
-                Peninsula near the popular shopping district of Spring \
-                Garden Road and opposite Victoria Park. The gardens were \
-                designated a National Historic Site of Canada in 1984."
-            ],
-            id: "landmark-id-2",
-            images:["img/PBG1.jpg"],
-            audio:"/android_asset/www/audio/static.mp3"
-        },
-        {
-            name:"The Dingle",
-            location:{lat:44.6304,lng:-63.6028},
-            description:[
-                "Sandford Fleming Park is a 95-acre (38 ha) Canadian urban \
-                park located in the community of Jollimore in Halifax \
-                Regional Municipality. It is also known as Dingle Park \
-                which means wooded valley. The park was donated to the \
-                people of Halifax by Sir Sandford Fleming. The centrepiece \
-                of the park is an impressive tower that commemorates Nova \
-                Scotia's achievement of representative government in 1758. \
-                Completed between 1908 and 1912, the Memorial Tower was \
-                erected during the same period of building other \
-                commemorative towers in the British Commonwealth, notably \
-                Cabot Tower in Bristol, England (1898) and Cabot Tower \
-                in St. John's (1900)"
-            ],
-            id: "landmark-id-3",
-            images:["img/DNG1.jpg"],
-            audio:"/android_asset/www/audio/tower.mp3"
-        },
-        {
-            name:"Old Burying Ground",
-            location:{lat:44.6437,lng:-63.5728},
-            description:[
-                "The Old Burying Ground was founded in 1749, the same year \
-                as the settlement, as the town's first burial ground. It \
-                was originally non-denominational and for several decades \
-                was the only burial place for all Haligonians. (The burial \
-                ground was also used by St. Matthew's United Church \
-                (Halifax).) In 1793 it was turned over to the Anglican \
-                St. Paul's Church. The cemetery was closed in 1844 and \
-                the Camp Hill Cemetery established for subsequent \
-                burials. The site steadily declined until the 1980s when \
-                it was restored and refurbished by the Old Burying \
-                Ground Foundation, which now maintains the site and \
-                employ tour guides to interpret the site in the summer. \
-                Ongoing restoration of the rare 18th century grave \
-                markers continues.",
-
-                "Over the decades some 12,000 people were interred in \
-                the Old Burial Ground. Today there are only some 1,200 \
-                headstones, some having been lost and many others being \
-                buried with no headstone. Many notable residents are \
-                buried in the cemetery, including British Major General \
-                Robert Ross, who led the successful Washington Raid of \
-                1814 and burned the White House before being killed in \
-                battle at Baltimore a few days later.",
-
-                "The most prominent structure is the Welsford-Parker \
-                Monument, a Triumphal arch standing at the entrance to \
-                the cemetery commemorating British victory in the \
-                Crimean War. This is the second oldest war monument in \
-                Canada and the only monument to the Crimean War in North \
-                America. The arch was built in 1860, 16 years after the \
-                cemetery had officially closed. The arch was built by \
-                George Lang and is named after two Haligonians, Major \
-                Augustus Frederick Welsford and Captain William Buck \
-                Carthew Augustus Parker. Both Nova Scotians died in the \
-                Battle of the Great Redan during the Siege of Sevastopol \
-                (1854–1855). This monument was the last grave marker in \
-                the cemetery.",
-
-                "The Old Burying Ground was designated a National \
-                Historic Site of Canada in 1991. It had earlier been \
-                designated a Provincially Registered Property in 1988 \
-                under Nova Scotia's Heritage Property Act."
-            ],
-            id: "landmark-id-4",
-            images: [
-                "img/OBG1.png",
-                "img/OBG2.png"
-            ],
-            audio:"/android_asset/www/audio/cemetary.ogg"
-        }
-    ]
+		{
+			name:"156 Brook Street",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6881948,lat:44.6556228},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-1"
+		},
+		{
+			name:"27 Chinook Ct",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5706411,lat:44.6901274},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-2"
+		},
+		{
+			name:"21 Castleton Crescent",
+			description:["Tons and Tons of white lights! (If you like white lights)","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5421538,lat:44.7050374},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-3"
+		},
+		{
+			name:"104 Cavalier Dr",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6610852,lat:44.7693574},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-4"
+		},
+		{
+			name:"Louisbourg Lane and Skeena Street",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5331048,lat:44.6796417},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-5"
+		},
+		{
+			name:"5 Bianca Ct",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.70995740000001,lat:44.7849131},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-6"
+		},
+		{
+			name:"33 Wilson Lake Dr",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.7182899,lat:44.7973234},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-7"
+		},
+		{
+			name:"Flamingo Dr & Meadowlark Crescent",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.755867,lat:44.5443017},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-8"
+		},
+		{
+			name:"Waynewood Dr",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5194517,lat:44.6478798},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-9"
+		},
+		{
+			name:"Louisburg Lane",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5277243,lat:44.6774217},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-10"
+		},
+		{
+			name:"Corner of This Street and That Street",
+			description:["amazing lights and free candycanes","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.3052397,lat:44.7382136},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-11"
+		},
+		{
+			name:"599 E Chezzetcook Rd",
+			description:["A colorful mix of everything!","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.2381178,lat:44.7280959},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-12"
+		},
+		{
+			name:"35 Circle Dr",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.61517040000001,lat:44.6215399},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-13"
+		},
+		{
+			name:"6 Cherry Drive",
+			description:["Stop by this place for Christmas cheer. So many great lights & things to see.","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5756063,lat:44.6751572},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-14"
+		},
+		{
+			name:"Connaught and Norwood House",
+			description:["Apparently a local doctor, house it always done really well","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5930035,lat:44.6435478},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-15"
+		},
+		{
+			name:"38 Canary Crescent",
+			description:["These people put out a ton of lights and inflatables each year. My kids always love this house!","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6539267,lat:44.6689088},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-16"
+		},
+		{
+			name:"Middle Sackville",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.7267894,lat:44.808074},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-17"
+		},
+		{
+			name:"1273 Wright Ave",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5765956,lat:44.6397625},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-18"
+		},
+		{
+			name:"Point 21",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6324477,lat:44.6456052},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-19"
+		},
+		{
+			name:"Lobster trap tree",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.4849262,lat:44.6064489},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-20"
+		},
+		{
+			name:"211 Taranaki Dr",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.4949014,lat:44.6934844},
+			audio:"/android_asset/www/audio/JBR.mp3",
+            id:"christmas-id-21"
+		},
+		{
+			name:"corner of Flamingo Drive and Meadowlark",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6552465,lat:44.6692289},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-22"
+		},
+		{
+			name:"206 Westwood Boulevard",
+			description:["Over 16 thousand lights on this property","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.866272,lat:44.7086822},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-23"
+		},
+		{
+			name:"31 Canary Crescent",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6539267,lat:44.6689088},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-24"
+		},
+		{
+			name:"11 Faders Rd",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.80943079999997,lat:44.52697339999999},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-25"
+		},
+		{
+			name:"5010 Nova Scotia Trunk 7",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.2951946,lat:44.7477201},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-26"
+		},
+		{
+			name:"Lakeshire Crescent",
+			description:["Two houses right across from school lit up really really well. One even plays xmas music!","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-61.9948733,lat:44.7106418},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-27"
+		},
+		{
+			name:"55 appian way",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.5464668,lat:44.7011941},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-28"
+		},
+		{
+			name:"Point 29",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.6043221,lat:44.6431854},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-29"
+		},
+		{
+			name:"181 Old Beaver Bank Rd",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.69096810000002,lat:44.7773517},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-30"
+		},
+		{
+			name:"The Bicycle Thief",
+			description:["graf1","graf2","graf3"],
+			images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
+			location:{lng:-63.568435799999975,lat:44.643625},
+			audio:"/android_asset/www/audio/SBS.mp3",
+            id:"christmas-id-31"
+		}
+]
 
 
 
