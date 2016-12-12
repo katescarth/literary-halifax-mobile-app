@@ -231,7 +231,7 @@ angular.module('literaryHalifax')
     
     
     // Number of kilometers to display, rounded to two decimal points.
-    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefinedliterary-halifax-mobile-app
     $scope.displayDistance=function(landmark){
         if(location && landmark && landmark.location){
@@ -493,8 +493,43 @@ angular.module('literaryHalifax')
 
 
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
-
     
+    $scope.mapInfo = {
+        center:"44.6474,-63.5806",
+        zoom: 15
+    }
+    
+    $scope.index=0
+    
+    $scope.upNextClicked = function(){
+        $scope.go($scope.tour.landmarks[$scope.index])
+        $scope.toNext()
+    }
+    
+    $scope.toNext = function(){
+        if($scope.index < $scope.tour.landmarks.length - 1){
+            $scope.index+=1
+        }
+    }
+    
+    $scope.toPrev = function(){
+        if($scope.index > 0){
+            $scope.index-=1
+        }
+    }
+    
+    $scope.iconFor = function(index){
+        var url
+        if (index<$scope.index) {
+            url = "img/grey-pin.png"
+        } else if (index==$scope.index) {
+            url = "img/green-pin.png"
+        } else {
+            url = "img/blue-pin.png"
+        }
+        
+        return url
+    }
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
@@ -506,7 +541,7 @@ angular.module('literaryHalifax')
         $scope.loadingMsg='Getting landmarks'
         var promises = []
         for(i=0;i<$scope.tour.landmarks.length;i++){
-            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description']))
+            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description','location']))
         }
         return $q.all(promises)
     })

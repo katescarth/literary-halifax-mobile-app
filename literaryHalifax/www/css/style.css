@@ -147,6 +147,12 @@ overscroll-pane {
     margin: 4px 4px 4px 0px;
 }
 
+.up-next-button-row {
+    font-size: 12px;
+    color: grey;
+    padding-top:4px;
+}
+
 .audio-button {
     float: right;
     margin-right: 7px;
