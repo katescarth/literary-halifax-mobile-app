@@ -2,5 +2,17 @@
     <i class="icon ion-close modal-close" ng-class="imageAnimation" ng-click="closeModal()"></i>
     <ion-scroll zooming="true" direction="xy" delegate-handle="zoom-pane" min-zoom="1" scrollbar-x="false" scrollbar-y="false" class="zoom-scroll" overflow-scroll="false" height="100%" >
         <img ng-src="{{imageSrc}}" class="fullscreen-image" on-double-tap="doubleTap($event)" ng-class="imageAnimation"/> 
-    </ion-scroll>    
+    </ion-scroll>
+    
+    <div class="image-modal-text" ng-class="imageAnimation">
+        <p class="image-title">
+            Title for the image
+        </p>
+        <p class="image-description">
+            Description of the image. This might include things like who took it, when it was taken,
+            and what's happening in it. It will probably also be long, so this had better handle multiple lines
+        </p>
+        
+    </div>
+    
 </div>

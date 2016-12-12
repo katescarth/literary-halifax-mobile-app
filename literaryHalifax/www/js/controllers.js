@@ -425,18 +425,13 @@ angular.module('literaryHalifax')
     // expose the track name to the view
     $scope.media = mediaPlayer
     
-    $scope.loading=true
+    $scope.loadingMsg='Getting landmark info...'
     
     server.updateLandmark(
         $scope.landmark,['name','description','location','images','audio']              
-    )
-    .then(function(){
-        $timeout(function () {
-            $ionicTabsDelegate.$getByHandle('landmark-tabs-delegate').select(0)
-        }, 0);
-    }).finally(function(){
-        //UX: Go back to previous page, plus an error toast?
-        $scope.loading=false
+    ).finally(function(){
+        //UX: On failure go back to previous page, plus an error toast?
+        $scope.loadingMsg=''
     })
     
     
