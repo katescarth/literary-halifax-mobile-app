@@ -3,42 +3,46 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             restrict: 'E',
             transclude: true,
             scope: {
-                // a location (lat/lng, address...)
-                center: '='
+                // a location (lat/lng, address...) TODO RENAME THIS BECAUSE IT BREAKS EVERYTHING
+                mapCenter: '='
                 , // an integer which represents how far in the map should be zoomed
                 // 0 is the lowest zoom level
-                zoom: '='
+                mapZoom: '='
                 , //a unique identifier to be applied to the map. Must be a number.
                   // use NgMap.getMap(mapHandle) to find the map (e.g. to show an info window)
-                mapHandle:'='
+                mapHandle:'=',
+                //A list of markers to display on the map
+                mapMarkers:'='
+                
             },
             templateUrl: 'components/map/map.html'
         };
     }).directive('userLocationMarker', function () {
         return {
-            retrict:'E',
-            scope: {},
-            controllerAs:'ctrl',
-            controller:function($scope,$element, $attrs, $transclude){
-                if(navigator.geolocation){
-                    navigator.geolocation.watchPosition(
-                        function(result){
-                            $scope.userLocation = {
-                                lat:result.coords.latitude,
-                                lng:result.coords.longitude
-                            }
-                        }, function(error){
-                            console.log(error)
-                        }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
-                    )
-                } else {
-                    console.log('no navigator!')
-                }
-                
-            },
-            templateUrl: 'components/map/userLocationMarker.html'
+//            retrict:'E',
+//            scope: {},
+//            controllerAs:'ctrl',
+//            controller:function($scope,$element, $attrs, $transclude){
+//                if(navigator.geolocation){
+//                    navigator.geolocation.watchPosition(
+//                        function(result){
+//                            $scope.userLocation = {
+//                                lat:result.coords.latitude,
+//                                lng:result.coords.longitude
+//                            }
+//                        }, function(error){
+//                            console.log(error)
+//                        }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
+//                    )
+//                } else {
+//                    console.log('no navigator!')
+//                }
+//                
+//            },
+//            templateUrl: 'components/map/userLocationMarker.html'
         };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval) {
+    
         // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
         $scope.styles=[
             {

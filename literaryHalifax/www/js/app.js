@@ -1,4 +1,4 @@
-angular.module('literaryHalifax', ['ionic','ngMap','ngLodash'])
+angular.module('literaryHalifax', ['ionic','ngLodash','ui-leaflet'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

@@ -3,11 +3,13 @@
         <div class="display-card">
             
             
-            <marker-map center="mapInfo.center" zoom="mapInfo.zoom">
+            <marker-map map-markers="markers">
+          </marker-map>
+<!--
                 <marker id='{{landmark.id}}' position="{{[landmark.location.lat,landmark.location.lng]}}" ng-repeat="landmark in tour.landmarks" icon="{{iconFor($index)}}"> 
                 </marker>
                 <user-location-marker></user-location-marker>                
-          </marker-map>
+-->
             
             <div ng-if="tour.landmarks[index]&&!loadingMsg">
                 

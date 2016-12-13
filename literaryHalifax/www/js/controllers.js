@@ -214,7 +214,7 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q, utils){
+}).controller('landmarksCtrl', function($scope, $state, server, $q, utils){
     
     //random number
     $scope.mapHandle=8183
@@ -284,11 +284,11 @@ angular.module('literaryHalifax')
         console.log(error)
     })
 
-    NgMap.getMap($scope.mapHandle).then(function (map) {
-        $scope.map = map;
-    }, function (error) {
-        console.log(error)
-    });
+//    NgMap.getMap($scope.mapHandle).then(function (map) {
+//        $scope.map = map;
+//    }, function (error) {
+//        console.log(error)
+//    });
     
     
     //display an info window.
@@ -494,6 +494,7 @@ angular.module('literaryHalifax')
 
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
     
+    $scope.markers =[]
     $scope.mapInfo = {
         center:"44.6474,-63.5806",
         zoom: 15
@@ -506,19 +507,28 @@ angular.module('literaryHalifax')
         $scope.toNext()
     }
     
+    updateIcon = function(index){
+            $scope.markers[index].icon.iconUrl = iconFor(index)
+        
+    }
+    
     $scope.toNext = function(){
         if($scope.index < $scope.tour.landmarks.length - 1){
             $scope.index+=1
+            updateIcon($scope.index)
+            updateIcon($scope.index-1)
         }
     }
     
     $scope.toPrev = function(){
         if($scope.index > 0){
             $scope.index-=1
+            updateIcon($scope.index+1)
+            updateIcon($scope.index)
         }
     }
     
-    $scope.iconFor = function(index){
+    iconFor = function(index){
         var url
         if (index<$scope.index) {
             url = "img/grey-pin.png"
@@ -545,7 +555,24 @@ angular.module('literaryHalifax')
         for(i=0;i<$scope.tour.landmarks.length;i++){
             promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description','location']))
         }
-        return $q.all(promises)
+        
+        return $q.all(promises).then(function(){
+            for(i=0;i<$scope.tour.landmarks.length;i++){
+                $scope.markers[i] =
+                    {
+                        lat: $scope.tour.landmarks[i].location.lat,
+                        lng: $scope.tour.landmarks[i].location.lng,
+                        message: "I'm a static marker with defaultIcon",
+                        focus: false,
+                        icon: {
+                            iconUrl: iconFor(i),
+                            iconSize:     [21, 30], // size of the icon
+                            iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                            popupAnchor:  [0, 32] // point from which the popup should open relative to the iconAnchor
+                        },
+                    }
+            }
+        })
     })
     .finally(function(){
         //UX: Go back to previous page, plus an error toast?
