@@ -72,7 +72,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             options: {
                 // TODO: This is David Walker's key, get our own for production
                 apikey: 'pk.eyJ1IjoiZHdhbGtlcmhhbGlmYXgiLCJhIjoiY2l3bzVieDNoMDAxdDJ6bXJzODg2cHF5OCJ9.AyPfYz71uJidlIqouYDNPA',
-                mapID: 'mapbox.pencil'
+                mapID: 'mapbox.light'
             }
 
         }
