@@ -495,10 +495,12 @@ angular.module('literaryHalifax')
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
     
     $scope.markers =[]
-    $scope.mapInfo = {
-        center:"44.6474,-63.5806",
-        zoom: 15
-    }
+    $scope.mapInfo = 
+        {
+            lat:44.6474,
+            lng:-63.5806,
+            zoom: 15
+        }
     
     $scope.index=0
     
@@ -568,7 +570,7 @@ angular.module('literaryHalifax')
                             iconUrl: iconFor(i),
                             iconSize:     [21, 30], // size of the icon
                             iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
-                            popupAnchor:  [0, 32] // point from which the popup should open relative to the iconAnchor
+                            popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
                         },
                     }
             }
