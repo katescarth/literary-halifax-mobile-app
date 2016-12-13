@@ -494,9 +494,26 @@ angular.module('literaryHalifax')
 
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){
     
+    iconFor = function(index){
+        var url
+        if (index<$scope.currentLandmark) {
+            url = "img/grey-pin.png"
+        } else if (index==$scope.currentLandmark) {
+            url = "img/green-pin.png"
+        } else {
+            url = "img/blue-pin.png"
+        }
+        
+        return url
+    }
+    
+    updateIcon = function(index){
+        $scope.markers[index].icon.iconUrl = iconFor(index)
+    }
+    
     $scope.markers =[]
-    $scope.mapInfo = 
-        {
+    
+    $scope.mapInfo = {
             lat:44.6474,
             lng:-63.5806,
             zoom: 15
@@ -510,16 +527,18 @@ angular.module('literaryHalifax')
         // Whether this is correct or not is a UX question
         $scope.toNext()
     }
-    
+
     $scope.focus=function(event, landmarkIndex){
+        event.stopPropagation()
         for(i=0;i<$scope.markers.length;i++){
             $scope.markers[i].focus=(i==landmarkIndex)
         }
-        event.stopPropagation()
+        $scope.mapInfo.lat=$scope.markers[landmarkIndex].lat
+        $scope.mapInfo.lng=$scope.markers[landmarkIndex].lng
     }
-    
+
     $scope.goTo=function(destIndex){
-        
+
         $scope.currentLandmark = destIndex
         for(i=0;i<$scope.markers.length;i++){
             updateIcon(i)
@@ -527,9 +546,6 @@ angular.module('literaryHalifax')
         $scope.upNextClicked()        
     }
     
-    updateIcon = function(index){
-        $scope.markers[index].icon.iconUrl = iconFor(index)
-    }
     
     $scope.toNext = function(){
         if($scope.currentLandmark < $scope.tour.landmarks.length - 1){
@@ -547,23 +563,10 @@ angular.module('literaryHalifax')
         }
     }
     
-    iconFor = function(index){
-        var url
-        if (index<$scope.currentLandmark) {
-            url = "img/grey-pin.png"
-        } else if (index==$scope.currentLandmark) {
-            url = "img/green-pin.png"
-        } else {
-            url = "img/blue-pin.png"
-        }
-        
-        return url
-    }
-    
-    
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
+    
     server.tourInfo(
         $stateParams.tourID,['name','landmarks','description','start']              
     ).then(function(tour){

@@ -17,9 +17,20 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             },
             templateUrl: 'components/map/map.html'
         };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, lodash) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate) {
     
-        $scope.userLocationMarker = {}
+        $scope.userLocationMarker = {
+            focus: false,
+            clickable: false,
+            lat:0,
+            lng:0,
+            opacity:0,//not visible until location is set
+            icon: {
+                iconUrl: "img/Air.png",
+                iconSize:     [10,10],
+                iconAnchor:   [5,5]
+            }
+        }
         
         $scope.$watch("mapMarkers", function (newValue, oldValue) {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
@@ -32,14 +43,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                         {
                             lat:result.coords.latitude,
                             lng:result.coords.longitude,
-                            focus: false,
-                            clickable: false,
-                            icon: {
-                                iconUrl: "img/Air.png",
-                                iconSize:     [10,10], // size of the icon
-                                iconAnchor:   [5,5], // point of the icon which will correspond to marker's location
-                                popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
-                            },
+                            opacity:1
                         }
                     )
                     
@@ -57,5 +61,19 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         }
         $scope.fingerUp = function () {
             $ionicScrollDelegate.freezeAllScrolls(false)
+        }
+        
+        
+        
+        $scope.tiles ={
+//            name: 'OpenStreetMap',
+            url: 'https://api.mapbox.com/v4/{mapID}/{z}/{x}/{y}.png?access_token={apikey}',
+//            type: 'xyz',
+            options: {
+                // TODO: This is David Walker's key, get our own for production
+                apikey: 'pk.eyJ1IjoiZHdhbGtlcmhhbGlmYXgiLCJhIjoiY2l3bzVieDNoMDAxdDJ6bXJzODg2cHF5OCJ9.AyPfYz71uJidlIqouYDNPA',
+                mapID: 'mapbox.pencil'
+            }
+
         }
     })
