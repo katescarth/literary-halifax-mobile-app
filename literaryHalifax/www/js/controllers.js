@@ -492,7 +492,7 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
+}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){
     
     $scope.markers =[]
     $scope.mapInfo = 
@@ -501,40 +501,57 @@ angular.module('literaryHalifax')
             lng:-63.5806,
             zoom: 15
         }
-    
-    $scope.index=0
+    // index of the current landmark (the one user will visit next)
+    $scope.currentLandmark=0
     
     $scope.upNextClicked = function(){
-        $scope.go($scope.tour.landmarks[$scope.index])
+        $scope.go($scope.tour.landmarks[$scope.currentLandmark])
+        // When the user returns, they will automatically be advanced
+        // Whether this is correct or not is a UX question
         $scope.toNext()
     }
     
-    updateIcon = function(index){
-            $scope.markers[index].icon.iconUrl = iconFor(index)
+    $scope.focus=function(event, landmarkIndex){
+        for(i=0;i<$scope.markers.length;i++){
+            $scope.markers[i].focus=(i==landmarkIndex)
+        }
+        event.stopPropagation()
+    }
+    
+    $scope.goTo=function(destIndex){
         
+        $scope.currentLandmark = destIndex
+        for(i=0;i<$scope.markers.length;i++){
+            updateIcon(i)
+        }
+        $scope.upNextClicked()        
+    }
+    
+    updateIcon = function(index){
+        $scope.markers[index].icon.iconUrl = iconFor(index)
     }
     
     $scope.toNext = function(){
-        if($scope.index < $scope.tour.landmarks.length - 1){
-            $scope.index+=1
-            updateIcon($scope.index)
-            updateIcon($scope.index-1)
+        if($scope.currentLandmark < $scope.tour.landmarks.length - 1){
+            $scope.currentLandmark+=1
+            updateIcon($scope.currentLandmark)
+            updateIcon($scope.currentLandmark-1)
         }
     }
     
     $scope.toPrev = function(){
-        if($scope.index > 0){
-            $scope.index-=1
-            updateIcon($scope.index+1)
-            updateIcon($scope.index)
+        if($scope.currentLandmark > 0){
+            $scope.currentLandmark-=1
+            updateIcon($scope.currentLandmark+1)
+            updateIcon($scope.currentLandmark)
         }
     }
     
     iconFor = function(index){
         var url
-        if (index<$scope.index) {
+        if (index<$scope.currentLandmark) {
             url = "img/grey-pin.png"
-        } else if (index==$scope.index) {
+        } else if (index==$scope.currentLandmark) {
             url = "img/green-pin.png"
         } else {
             url = "img/blue-pin.png"
@@ -542,6 +559,7 @@ angular.module('literaryHalifax')
         
         return url
     }
+    
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
@@ -564,7 +582,11 @@ angular.module('literaryHalifax')
                     {
                         lat: $scope.tour.landmarks[i].location.lat,
                         lng: $scope.tour.landmarks[i].location.lng,
-                        message: "I'm a static marker with defaultIcon",
+                        message:
+                                "<span ng-click='goTo("+i+")'>" +
+                                 $scope.tour.landmarks[i].name+
+                                 "</span>",
+                        getMessageScope: function(){return $scope},
                         focus: false,
                         icon: {
                             iconUrl: iconFor(i),

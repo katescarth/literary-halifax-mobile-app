@@ -3,23 +3,20 @@
         <div class="display-card">
             
             
-            <marker-map map-markers="markers" map-center="mapInfo" map-zoom="mapInfo.zoom">
+            <marker-map map-markers="markers" map-info="mapInfo">
           </marker-map>
-<!--
-                <marker id='{{landmark.id}}' position="{{[landmark.location.lat,landmark.location.lng]}}" ng-repeat="landmark in tour.landmarks" icon="{{iconFor($index)}}"> 
-                </marker>
-                <user-location-marker></user-location-marker>                
--->
             
-            <div ng-if="tour.landmarks[index]&&!loadingMsg">
+            
+            <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
                 
                     <div class="list-item-div clearfix" ng-click="upNextClicked()" style="padding-top:5px">
-                        <img class="pin-image" src="img/green-pin.png" align="right">
+                        <img class="pin-image" src="img/green-pin.png" align="right"
+                             ng-click="focus($event,currentLandmark)">
                         <div class="list-item-title">
-                            {{tour.landmarks[index].name}}
+                            {{tour.landmarks[currentLandmark].name}}
                         </div>
                         <div class="list-item-subtitle">
-                            {{tour.landmarks[index].description[0]}}
+                            {{tour.landmarks[currentLandmark].description[0]}}
                         </div>
                     </div>
                     <div class="list-item-div up-next-button-row" style="text-align:center;">
@@ -32,7 +29,7 @@
                             <i class="ion-chevron-right"> </i>
                         </span>
 
-                        <span>{{index+1}}/{{tour.landmarks.length}} </span>
+                        <span>{{currentLandmark+1}}/{{tour.landmarks.length}} </span>
 
                     </div>
             </div>

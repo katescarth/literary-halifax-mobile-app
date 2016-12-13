@@ -3,11 +3,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             restrict: 'E',
             transclude: true,
             scope: {
-                // a location (lat/lng, address...) TODO RENAME THIS BECAUSE IT BREAKS EVERYTHING
-                mapCenter: '='
-                , // an integer which represents how far in the map should be zoomed
-                // 0 is the lowest zoom level
-                mapZoom: '='
+                // An object with alt, lng, and zoom properties that determines the initial state
+                mapInfo: '='
                 , //a unique identifier to be applied to the map. Must be a number.
                   // use NgMap.getMap(mapHandle) to find the map (e.g. to show an info window)
                 mapHandle:'=',
@@ -15,80 +12,44 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 mapMarkers:'='
                 
             },
+            link: function ($scope, $elm, $attr) {
+
+            },
             templateUrl: 'components/map/map.html'
         };
-    }).directive('userLocationMarker', function () {
-        return {
-//            retrict:'E',
-//            scope: {},
-//            controllerAs:'ctrl',
-//            controller:function($scope,$element, $attrs, $transclude){
-//                if(navigator.geolocation){
-//                    navigator.geolocation.watchPosition(
-//                        function(result){
-//                            $scope.userLocation = {
-//                                lat:result.coords.latitude,
-//                                lng:result.coords.longitude
-//                            }
-//                        }, function(error){
-//                            console.log(error)
-//                        }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
-//                    )
-//                } else {
-//                    console.log('no navigator!')
-//                }
-//                
-//            },
-//            templateUrl: 'components/map/userLocationMarker.html'
-        };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, lodash) {
     
-        // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
-        $scope.styles=[
-            {
-                featureType: "poi", // points of interest. In general, we don't want their labels diplayed
-                elementType: "labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "poi.park",// parks, however, should be displayed
-                elementType: "labels",
-                stylers: [
-                    { visibility: "on" }
-                ]
-            },
-            {
-                featureType: "administrative",//countries, cities, etc. Not of interest
-                elementType: "labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "administrative.neighborhood",// South end, North end...
-                elementType: "labels",
-                stylers: [
-                    { 
-                        visibility:"on"
-                    }
-                ]
-            },
-            {
-                featureType: "transit", // bus stops and the like. Remove labels AND map elements
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "road.highway", // large roads, don't need to display the name
-                elementType:"labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            }
-        ]
+        $scope.userLocationMarker = {}
+        
+        $scope.$watch("mapMarkers", function (newValue, oldValue) {
+                    $scope.markers = [$scope.userLocationMarker].concat(newValue)
+                }, true);
+        
+        if(navigator.geolocation){
+            navigator.geolocation.watchPosition(
+                function(result){
+                    angular.extend($scope.userLocationMarker,
+                        {
+                            lat:result.coords.latitude,
+                            lng:result.coords.longitude,
+                            focus: false,
+                            clickable: false,
+                            icon: {
+                                iconUrl: "img/Air.png",
+                                iconSize:     [10,10], // size of the icon
+                                iconAnchor:   [5,5], // point of the icon which will correspond to marker's location
+                                popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+                            },
+                        }
+                    )
+                    
+                }, function(error){
+                    console.log(error)
+                }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
+            )
+        } else {
+            console.log('no navigator!')
+        }
         
         //prevent scrolling when touching the map
         $scope.fingerDown = function () {
