@@ -88,7 +88,7 @@ angular.module('literaryHalifax', ['ionic','ngMap','ngLodash'])
         }
     }).state('app.tourView', {
         url: '/tour/:tourID',
-        cache:false,
+        cache:true,
         views: {
             'mainContent': {
                 templateUrl: 'templates/tour.html',

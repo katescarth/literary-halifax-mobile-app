@@ -153,6 +153,11 @@ overscroll-pane {
     padding-top:4px;
 }
 
+.pin-image {
+    padding-right:6px;
+    padding-top:4px;
+}
+
 .audio-button {
     float: right;
     margin-right: 7px;

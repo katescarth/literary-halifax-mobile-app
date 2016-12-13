@@ -535,8 +535,10 @@ angular.module('literaryHalifax')
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
     server.tourInfo(
-        $stateParams.tourID,['name','landmarks','description']              
+        $stateParams.tourID,['name','landmarks','description','start']              
     ).then(function(tour){
+        //TODO pan to the start of the tour
+        
         $scope.tour=tour
         $scope.loadingMsg='Getting landmarks'
         var promises = []

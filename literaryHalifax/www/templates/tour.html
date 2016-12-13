@@ -3,21 +3,16 @@
         <div class="display-card">
             
             
-            <marker-map map-handle="mapHandle" center="mapInfo.center" zoom="mapInfo.zoom">
+            <marker-map center="mapInfo.center" zoom="mapInfo.zoom">
                 <marker id='{{landmark.id}}' position="{{[landmark.location.lat,landmark.location.lng]}}" ng-repeat="landmark in tour.landmarks" icon="{{iconFor($index)}}"> 
-                
-                    
-                
                 </marker>
                 <user-location-marker></user-location-marker>                
           </marker-map>
             
             <div ng-if="tour.landmarks[index]&&!loadingMsg">
                 
-                    <div ng-click="upNextClicked()">
-                        <div class="list-item-title">
-                            Next up
-                        </div>
+                    <div class="list-item-div clearfix" ng-click="upNextClicked()" style="padding-top:5px">
+                        <img class="pin-image" src="img/green-pin.png" align="right">
                         <div class="list-item-title">
                             {{tour.landmarks[index].name}}
                         </div>
@@ -25,7 +20,7 @@
                             {{tour.landmarks[index].description[0]}}
                         </div>
                     </div>
-                    <div class="up-next-button-row" style="text-align:center;">
+                    <div class="list-item-div up-next-button-row" style="text-align:center;">
                         <span style="float:left" ng-click="toPrev()">
                             <i class="ion-chevron-left"></i>
                             Back
@@ -40,7 +35,7 @@
                     </div>
             </div>
             
-            <h1 class="title">{{tour.name}}</h1>
+            <h3 class="title">{{tour.name}}</h3>
             <p>{{tour.description}}</p>
             <div class="list">
                 
