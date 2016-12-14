@@ -214,7 +214,7 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, $q, utils){
+}).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash){
     
     //random number
     $scope.mapHandle=8183
@@ -280,6 +280,27 @@ angular.module('literaryHalifax')
     deferred.promise.then(function(result){
         $scope.loadingMsg = ''
         $scope.landmarks = result
+        
+        $scope.markers = lodash.times(result.length, function(index){
+            
+            var landmark=result[index]
+            return {
+                lat: landmark.location.lat,
+                lng: landmark.location.lng,
+                message:
+                        "<div ng-click='go(landmarks["+index+"])'>" +
+                         landmark.name+
+                         "</div>",
+                getMessageScope: function(){return $scope},
+                focus: false,
+                icon: {
+                    iconUrl: "img/green-pin.png",
+                    iconSize:     [21, 30], // size of the icon
+                    iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                }
+            }
+        })
     }).catch(function(error){
         console.log(error)
     })
@@ -332,11 +353,13 @@ angular.module('literaryHalifax')
 
 
 
-}).controller('toursCtrl', function($scope, $state, $q, server, utils){
+}).controller('toursCtrl', function($scope, $state, $q, server, utils, lodash){
     
     var location = undefined
     
     $scope.loadingMsg = ''
+    
+    $scope.markers =[]
     
     // When the view is entered, try to get the user's location.
     // If successful, use it to get the tours from the server
@@ -372,13 +395,13 @@ angular.module('literaryHalifax')
 
     deferred.promise.then(function(result){
         $scope.loadingMsg=''
-        $scope.tours = result
+        $scope.tours = result        
     }).catch(function(error){
         console.log(error)
     })
     
     // Number of kilometers to display, rounded to two decimal points.
-    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
     $scope.displayDistance=function(tour){
         if(location && tour && tour.start){
