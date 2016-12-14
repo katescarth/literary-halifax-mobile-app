@@ -216,9 +216,6 @@ angular.module('literaryHalifax')
     $scope.media = mediaPlayer
 }).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash){
     
-    //random number
-    $scope.mapHandle=8183
-    
     $scope.numListItems = 5
     
     $scope.displayMore = function(){
@@ -228,11 +225,9 @@ angular.module('literaryHalifax')
     
     var location = undefined
     
-    
-    
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
-    // return undefinedliterary-halifax-mobile-app
+    // return undefined
     $scope.displayDistance=function(landmark){
         if(location && landmark && landmark.location){
             dist=utils.distance(location,landmark.location)
@@ -246,7 +241,7 @@ angular.module('literaryHalifax')
         
     $scope.loadingMsg = ''
     var attrs = ['id','name','location','description','images']
-    var deferred=$q.defer()
+    var fetchLandmarks=$q.defer()
     if(navigator.geolocation){
         $scope.loadingMsg = 'Getting your location...'
         navigator.geolocation.getCurrentPosition(
@@ -256,14 +251,14 @@ angular.module('literaryHalifax')
                     lat: currentPosition.coords.latitude,
                     lng:currentPosition.coords.longitude
                 }
-                deferred.resolve(
+                fetchLandmarks.resolve(
                     server.getLandmarks(attrs, location)
                 )
             },
             function(error){
                 console.log(error)
                 $scope.loadingMsg = 'Getting landmarks...'
-                deferred.resolve(server.getLandmarks(attrs))
+                fetchLandmarks.resolve(server.getLandmarks(attrs))
             },
             {
                 //we can accept an old result - stalling here shoud be avoided
@@ -274,10 +269,10 @@ angular.module('literaryHalifax')
         )
     } else {
         $scope.loadingMsg = 'Getting landmarks...'
-        deferred.resolve(server.getLandmarks(attrs))
+        fetchLandmarks.resolve(server.getLandmarks(attrs))
     }
 
-    deferred.promise.then(function(result){
+    fetchLandmarks.promise.then(function(result){
         $scope.loadingMsg = ''
         $scope.landmarks = result
         
@@ -288,9 +283,10 @@ angular.module('literaryHalifax')
                 lat: landmark.location.lat,
                 lng: landmark.location.lng,
                 message:
-                        "<div ng-click='go(landmarks["+index+"])'>" +
-                         landmark.name+
-                         "</div>",
+                    "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
+                        "<h6>"+landmark.name+"</h6>" +
+                        "<p>"+landmark.description[0]+"</p>"+
+                     "</div>",
                 getMessageScope: function(){return $scope},
                 focus: false,
                 icon: {
@@ -304,17 +300,6 @@ angular.module('literaryHalifax')
     }).catch(function(error){
         console.log(error)
     })
-    
-    
-    //display an info window.
-    handleLandmarkClicked = function (landmark) {
-        // make the currently selected place available to the info window
-        $scope.clickedLandmark = landmark
-        $scope.map.showInfoWindow('infoWindow', landmark.id)
-    }
-    $scope.markerClicked = function (element, landmark) {
-        handleLandmarkClicked(landmark)
-    }
 
     // display the map centered on citadel hill.
     // UX: The map is the first thing people see when opening the app.
@@ -462,6 +447,9 @@ angular.module('literaryHalifax')
     server.updateLandmark(
         $scope.landmark,['name','description','location','images','audio']              
     ).finally(function(){
+        
+        updateMarker()
+        
         //UX: On failure go back to previous page, plus an error toast?
         $scope.loadingMsg=''
     })
@@ -519,9 +507,37 @@ angular.module('literaryHalifax')
     };
     
     // Map tab
+    var marker = {}
+    $scope.markers = [marker]
     
-    $scope.mapHandle=943571
-
+    $scope.mapInfo = {
+        lat:0,
+        lng:0,
+        zoom:13
+    }
+    updateMarker=function(){
+        if(!marker.lat){
+            angular.extend(marker, 
+                {
+                    lat: $scope.landmark.location.lat,
+                    lng: $scope.landmark.location.lng,
+                    focus: false,
+                    clickable:false,
+                    icon: {
+                        iconUrl: "img/green-pin.png",
+                        iconSize:     [21, 30], // size of the icon
+                        iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                        popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                    }
+                }
+            )
+        } else {
+            marker.lat= $scope.landmark.location.lat
+            marker.lng= $scope.landmark.location.lng
+        }
+        $scope.mapInfo.lat=marker.lat
+        $scope.mapInfo.lng=marker.lng
+    }
 
 
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){

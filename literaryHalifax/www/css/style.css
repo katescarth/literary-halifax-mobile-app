@@ -23,7 +23,16 @@ ion-nav-view {
 .info-window {
     width: 175px;
     max-width: 175px !important;
+    max-height: 75px;
     align-content: center;
+} 
+
+.info-window h6{
+    margin:2px !important;
+}
+
+.info-window p{
+    margin:2px !important;
 }
 
 .info-window-spinner {
