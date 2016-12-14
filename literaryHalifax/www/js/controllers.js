@@ -304,12 +304,6 @@ angular.module('literaryHalifax')
     }).catch(function(error){
         console.log(error)
     })
-
-//    NgMap.getMap($scope.mapHandle).then(function (map) {
-//        $scope.map = map;
-//    }, function (error) {
-//        console.log(error)
-//    });
     
     
     //display an info window.
@@ -326,7 +320,8 @@ angular.module('literaryHalifax')
     // UX: The map is the first thing people see when opening the app.
     //     What will they want to see? Where they are, or where the landmarks are?
     $scope.mapInfo = {
-        center:"44.6474,-63.5806",
+        lat:44.6474,
+        lng:-63.5806,
         zoom: 15
     }
     
@@ -345,6 +340,20 @@ angular.module('literaryHalifax')
         return landmark.name.toLowerCase().indexOf(
             $scope.filter.text.toLowerCase()
         )>=0
+    }
+    
+    $scope.applyFilter = function(){
+        lodash.times($scope.markers.length,function(index){
+            var marker = $scope.markers[index]
+            var landmark = $scope.landmarks[index]
+            if($scope.showLandmark(landmark)){
+                marker.opacity=1
+            } else {
+                marker.opacity=0
+                marker.focus=false
+            }
+            
+        })
     }
     
     $scope.go=function(landmark){

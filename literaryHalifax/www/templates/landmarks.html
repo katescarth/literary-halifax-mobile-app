@@ -3,14 +3,14 @@
 
     <ion-content>
         <div class="display-card">
-            <marker-map map-handle="mapHandle" map-center="mapInfo" map-markers="markers">
+            <marker-map map-handle="mapHandle" map-info="mapInfo" map-markers="markers">
                 
           </marker-map>
         </div>
         <div class="display-card">
             
             <div class="item item-input filter-bar">
-                <input type="text" placeholder="Filter by title..." ng-model="filter.text">
+                <input type="text" placeholder="Filter by title..." ng-model="filter.text" ng-change="applyFilter()">
                 <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
                    ng-click="filter.text=''"></i>
             </div>
