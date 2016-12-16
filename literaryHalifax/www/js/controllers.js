@@ -230,7 +230,9 @@ angular.module('literaryHalifax')
         )
     
     inval = function(){
-        map.invalidateSize()
+        if(map){
+            map.invalidateSize()
+        }
     }
     
     $scope.$on('$ionicView.afterEnter',function(){

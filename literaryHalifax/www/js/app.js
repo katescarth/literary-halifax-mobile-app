@@ -39,7 +39,6 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
     .state('app.landmarks', {
         url: '/landmarks',
         title:'Landmarks',
-        sticky:true,
         views: {
             'mainContent': {
                 templateUrl: 'templates/landmarks.html',
@@ -89,7 +88,6 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
         }
     }).state('app.tourView', {
         url: '/tour/:tourID',
-        sticky:true,
         views: {
             'mainContent': {
                 templateUrl: 'templates/tour.html',
