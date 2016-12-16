@@ -23,7 +23,7 @@ ion-nav-view {
 .info-window {
     width: 175px;
     max-width: 175px !important;
-    max-height: 75px;
+    max-height: 60px;
     align-content: center;
 } 
 

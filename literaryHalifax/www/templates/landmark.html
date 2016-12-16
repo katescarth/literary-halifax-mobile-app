@@ -23,9 +23,8 @@
                 </button>
                   <div style="description-title">{{landmark.name}}</div>
               </h3>
-              <p ng-repeat="paragraph in landmark.description">
-                {{paragraph}}<br />
-              </p>
+                
+                <div ng-bind-html="landmark.description"></div>
             </div>
           </overscroll-pane>
         </ion-tab>

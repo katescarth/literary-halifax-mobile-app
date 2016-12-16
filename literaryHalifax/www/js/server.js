@@ -447,6 +447,7 @@ angular.module('literaryHalifax')
 
 
     convertLandmark = function(landmarkJson){
+        
         var landmark = {
             id:landmarkJson.id,
             images:[]
@@ -473,7 +474,7 @@ angular.module('literaryHalifax')
                     zoom:location.data.zoom
                 }
                 if(!landmark.streetAddress){
-                    landmark.streetAddress=location.address
+                    landmark.streetAddress=location.data.address
                 }
             })
         )
@@ -497,10 +498,6 @@ angular.module('literaryHalifax')
                 default:
                     console.log('No rule found for '+text.element.name)
             }
-        }
-        
-        if(!landmark.description){
-            landmark.description = "BABU BABU BABU"
         }
         
         return $q.all(promises)
@@ -532,30 +529,29 @@ angular.module('literaryHalifax')
             }, function(error){
                 console.log(error)
             }).then(function(){
-                console.log(landmarks)
+                
+                if(nearPoint){
+                    dist = function(landmark){
+                        return utils.distance(nearPoint,landmark.location)
+                    }
+                    landmarks = lodash.sortBy(landmarks,dist)
+                }
+                
                 return $q.when(landmarks)
             })
 
         },
         
         
-        landmarkInfo:function(id, attributes){
-            var result = {}
-            var i=0
-            var j=0
-            for(i=0;i<landmarks.length;i++){
-
-                if(landmarks[i].id==id){
-                    var j=0
-                    for(j=0;j<attributes.length;j++){
-                        result[attributes[j]] =landmarks[i][attributes[j]]
-                    }
-
-                    return $timeout(function(){
-                        return result
-                    }, LARGE_DELAY)
-                }
-            }
+        landmarkInfo:function(id){
+            
+            return $http.get('http://192.168.2.14:8100/api/items/'+id)
+            .then(function(result){
+                return convertLandmark(result.data)
+            }).then(function(result){
+                console.log(result)
+                return result
+            })
         },
         
         getTours:function(nearPoint){
@@ -603,32 +599,6 @@ angular.module('literaryHalifax')
                         return result
                     }, SMALL_DELAY)
                 }
-            }
-        },
-        
-        
-        
-        // Helper method for updating a landmark object without requesting 
-        // extra info. This is not fixture code, it belongs in the final product.
-        updateLandmark:function(landmark, attributes){
-            if(!landmark.id){
-                return $q.reject("attempted to update a landmark with no id")
-            }
-            var i=0
-            newAttrs = []
-            for(i=0;i<attributes.length;i++){
-                if(!landmark[attributes[i]]){
-                   newAttrs.push(attributes[i])
-                }
-            }
-            if(newAttrs.length>0){
-                return server.landmarkInfo(landmark.id,newAttrs)
-                .then(function(newLandmark){
-                    angular.extend(landmark,newLandmark)
-                    return landmark
-                })
-            }  else {
-                return $q.when(landmark)
             }
         },
         // Helper method for updating a tour object without requesting 

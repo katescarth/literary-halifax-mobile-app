@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
 .controller('menuCtrl', function($scope, $ionicHistory, $ionicPopup,
-                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval) {
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData) {
     // items for the side menu
     $scope.menuItems =[
         {
@@ -214,9 +214,28 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash){
+}).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash,leafletData){
     
     $scope.numListItems = 5
+    
+    var map
+    
+    leafletData.getMap()
+        .then(
+            function(result){
+                map=result
+            },function(error){
+                console.log(error)
+            }
+        )
+    
+    inval = function(){
+        map.invalidateSize()
+    }
+    
+    $scope.$on('$ionicView.afterEnter',function(){
+        inval()
+    })
     
     $scope.displayMore = function(){
         $scope.numListItems+=5
@@ -285,7 +304,7 @@ angular.module('literaryHalifax')
                 message:
                     "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
                         "<h6>"+landmark.name+"</h6>" +
-                        "<p>"+landmark.description[0]+"</p>"+
+                        "<p>"+landmark.description+"</p>"+
                      "</div>",
                 getMessageScope: function(){return $scope},
                 focus: false,
@@ -435,21 +454,18 @@ angular.module('literaryHalifax')
 
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
-    $scope.landmark = {
-        id:$stateParams.landmarkID
-    }
     
     // expose the track name to the view
     $scope.media = mediaPlayer
     
     $scope.loadingMsg='Getting landmark info...'
     
-    server.updateLandmark(
-        $scope.landmark,['name','description','location','images','audio']              
-    ).finally(function(){
-        
+    server.landmarkInfo($stateParams.landmarkID)
+    .then(function(landmark){
+        $scope.landmark=landmark
+    })              
+    .finally(function(){
         updateMarker()
-        
         //UX: On failure go back to previous page, plus an error toast?
         $scope.loadingMsg=''
     })
