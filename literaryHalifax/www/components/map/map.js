@@ -76,4 +76,5 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             }
 
         }
+        
     })
