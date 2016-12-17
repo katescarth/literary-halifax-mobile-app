@@ -1,7 +1,7 @@
 angular.module('literaryHalifax')
 
 .controller('menuCtrl', function($scope, $ionicHistory, $ionicPopup,
-                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval) {
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData) {
     // items for the side menu
     $scope.menuItems =[
         {
@@ -214,18 +214,41 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, NgMap, $q, utils){
+}).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash,leafletData){
     
-    //random number
-    $scope.mapHandle=8183
+    $scope.numListItems = 5
+    
+    var map
+    
+    leafletData.getMap()
+        .then(
+            function(result){
+                map=result
+            },function(error){
+                console.log(error)
+            }
+        )
+    
+    inval = function(){
+        if(map){
+            map.invalidateSize()
+        }
+    }
+    
+    $scope.$on('$ionicView.afterEnter',function(){
+        inval()
+    })
+    
+    $scope.displayMore = function(){
+        $scope.numListItems+=5
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+    }
     
     var location = undefined
     
-    
-    
     // Number of kilometers to display, rounded to two decimal points.
-    // If this cannot be calculated ()e.g. one of the locations is missing)
-    // return undefinedliterary-halifax-mobile-app
+    // If this cannot be calculated (e.g. one of the locations is missing)
+    // return undefined
     $scope.displayDistance=function(landmark){
         if(location && landmark && landmark.location){
             dist=utils.distance(location,landmark.location)
@@ -239,7 +262,7 @@ angular.module('literaryHalifax')
         
     $scope.loadingMsg = ''
     var attrs = ['id','name','location','description','images']
-    var deferred=$q.defer()
+    var fetchLandmarks=$q.defer()
     if(navigator.geolocation){
         $scope.loadingMsg = 'Getting your location...'
         navigator.geolocation.getCurrentPosition(
@@ -249,14 +272,14 @@ angular.module('literaryHalifax')
                     lat: currentPosition.coords.latitude,
                     lng:currentPosition.coords.longitude
                 }
-                deferred.resolve(
-                    server.getLandmarks(attrs, location)
+                fetchLandmarks.resolve(
+                    server.getLandmarks(location)
                 )
             },
             function(error){
                 console.log(error)
                 $scope.loadingMsg = 'Getting landmarks...'
-                deferred.resolve(server.getLandmarks(attrs))
+                fetchLandmarks.resolve(server.getLandmarks())
             },
             {
                 //we can accept an old result - stalling here shoud be avoided
@@ -267,38 +290,44 @@ angular.module('literaryHalifax')
         )
     } else {
         $scope.loadingMsg = 'Getting landmarks...'
-        deferred.resolve(server.getLandmarks(attrs))
+        fetchLandmarks.resolve(server.getLandmarks())
     }
 
-    deferred.promise.then(function(result){
+    fetchLandmarks.promise.then(function(result){
         $scope.loadingMsg = ''
         $scope.landmarks = result
+        
+        $scope.markers = lodash.times(result.length, function(index){
+            
+            var landmark=result[index]
+            return {
+                lat: landmark.location.lat,
+                lng: landmark.location.lng,
+                message:
+                    "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
+                        "<h6>"+landmark.name+"</h6>" +
+                        "<p>"+landmark.description+"</p>"+
+                     "</div>",
+                getMessageScope: function(){return $scope},
+                focus: false,
+                icon: {
+                    iconUrl: "img/green-pin.png",
+                    iconSize:     [21, 30], // size of the icon
+                    iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                }
+            }
+        })
     }).catch(function(error){
         console.log(error)
     })
-
-    NgMap.getMap($scope.mapHandle).then(function (map) {
-        $scope.map = map;
-    }, function (error) {
-        console.log(error)
-    });
-    
-    
-    //display an info window.
-    handleLandmarkClicked = function (landmark) {
-        // make the currently selected place available to the info window
-        $scope.clickedLandmark = landmark
-        $scope.map.showInfoWindow('infoWindow', landmark.id)
-    }
-    $scope.markerClicked = function (element, landmark) {
-        handleLandmarkClicked(landmark)
-    }
 
     // display the map centered on citadel hill.
     // UX: The map is the first thing people see when opening the app.
     //     What will they want to see? Where they are, or where the landmarks are?
     $scope.mapInfo = {
-        center:"44.6474,-63.5806",
+        lat:44.6474,
+        lng:-63.5806,
         zoom: 15
     }
     
@@ -319,59 +348,87 @@ angular.module('literaryHalifax')
         )>=0
     }
     
+    $scope.applyFilter = function(){
+        lodash.times($scope.markers.length,function(index){
+            var marker = $scope.markers[index]
+            var landmark = $scope.landmarks[index]
+            if($scope.showLandmark(landmark)){
+                marker.opacity=1
+            } else {
+                marker.opacity=0
+                marker.focus=false
+            }
+            
+        })
+    }
+    
+$scope.clearFilter = function(){
+    $scope.filter.text=''
+    $scope.applyFilter()
+}
+    
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
 
 
 
-}).controller('toursCtrl', function($scope, $state, $q, server, utils){
+}).controller('toursCtrl', function($scope, $state, $q, server, utils, lodash){
     
     var location = undefined
     
     $scope.loadingMsg = ''
     
+    $scope.markers =[]
+    
     // When the view is entered, try to get the user's location.
     // If successful, use it to get the tours from the server
     // in order of nearness. Otherwise, get the tours in arbitrary order
         
-    var deferred=$q.defer()
-    if(navigator.geolocation){
-        $scope.loadingMsg='getting your location...'
-        navigator.geolocation.getCurrentPosition(
-            function(currentPosition){
-                location={
-                    lat: currentPosition.coords.latitude,
-                    lng:currentPosition.coords.longitude
+    
+    $scope.loadResults=function(){
+        var deferred=$q.defer()
+        if(navigator.geolocation){
+            $scope.loadingMsg='getting your location...'
+            $scope.errorMsg=''
+            navigator.geolocation.getCurrentPosition(
+                function(currentPosition){
+                    location={
+                        lat: currentPosition.coords.latitude,
+                        lng:currentPosition.coords.longitude
+                    }
+                    $scope.loadingMsg='getting tours...'
+                    deferred.resolve(server.getTours(location))
+                },
+                function(error){
+                    $scope.loadingMsg='getting tours...'
+                    deferred.resolve(server.getTours())
+                },
+                {
+                    //we can accept an old result - stalling here shoud be avoided
+                    maximumAge: 60000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
                 }
-                $scope.loadingMsg='getting tours...'
-                deferred.resolve(server.getTours(location))
-            },
-            function(error){
-                $scope.loadingMsg='getting tours...'
-                deferred.resolve(server.getTours())
-            },
-            {
-                //we can accept an old result - stalling here shoud be avoided
-                maximumAge: 60000, 
-                timeout: 5000, 
-                enableHighAccuracy: true 
-            }
-        )
-    } else {
-        $scope.loadingMsg='getting tours...'
-        deferred.resolve(server.getTours())
-    }
+            )
+        } else {
+            $scope.loadingMsg='getting tours...'
+            deferred.resolve(server.getTours())
+        }
 
-    deferred.promise.then(function(result){
-        $scope.loadingMsg=''
-        $scope.tours = result
-    }).catch(function(error){
-        console.log(error)
-    })
+        deferred.promise.then(function(result){
+            $scope.loadingMsg=''
+            $scope.tours = result        
+        }).catch(function(error){
+            $scope.loadingMsg=''
+            $scope.errorMsg=error
+        })
+    }
+    
+    $scope.loadResults()
     
     // Number of kilometers to display, rounded to two decimal points.
-    // If this cannot be calculated ()e.g. one of the locations is missing)
+    // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
     $scope.displayDistance=function(tour){
         if(location && tour && tour.start){
@@ -411,25 +468,20 @@ angular.module('literaryHalifax')
 
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
-    $scope.landmark = {
-        id:$stateParams.landmarkID
-    }
     
     // expose the track name to the view
     $scope.media = mediaPlayer
     
-    $scope.loading=true
+    $scope.loadingMsg='Getting landmark info...'
     
-    server.updateLandmark(
-        $scope.landmark,['name','description','location','images','audio']              
-    )
-    .then(function(){
-        $timeout(function () {
-            $ionicTabsDelegate.$getByHandle('landmark-tabs-delegate').select(0)
-        }, 0);
-    }).finally(function(){
-        //UX: Go back to previous page, plus an error toast?
-        $scope.loading=false
+    server.landmarkInfo($stateParams.landmarkID)
+    .then(function(landmark){
+        $scope.landmark=landmark
+    })              
+    .finally(function(){
+        updateMarker()
+        //UX: On failure go back to previous page, plus an error toast?
+        $scope.loadingMsg=''
     })
     
     
@@ -460,6 +512,18 @@ angular.module('literaryHalifax')
         // let the class register to avoid flicker
         $timeout().then(openModal)
     }
+    
+    $scope.doubleTap = function(event){
+        delegate = $ionicScrollDelegate.$getByHandle('zoom-pane')
+        if(delegate){
+            if(delegate.getScrollPosition().zoom==1){
+                delegate.zoomBy(2,true)
+            } else {
+                delegate.zoomTo(1,true)
+            }
+        }
+    }
+    
     $scope.closeModal = function() {
         $scope.imageAnimation="fade-disappear"
         $scope.backgroundAnimation="frost-disappear"
@@ -473,28 +537,147 @@ angular.module('literaryHalifax')
     };
     
     // Map tab
+    var marker = {}
+    $scope.markers = [marker]
     
-    $scope.mapHandle=943571
+    $scope.mapInfo = {
+        lat:0,
+        lng:0,
+        zoom:13
+    }
+    updateMarker=function(){
+        if(!marker.lat){
+            angular.extend(marker, 
+                {
+                    lat: $scope.landmark.location.lat,
+                    lng: $scope.landmark.location.lng,
+                    focus: false,
+                    clickable:false,
+                    icon: {
+                        iconUrl: "img/green-pin.png",
+                        iconSize:     [21, 30], // size of the icon
+                        iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                        popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                    }
+                }
+            )
+        } else {
+            marker.lat= $scope.landmark.location.lat
+            marker.lng= $scope.landmark.location.lng
+        }
+        $scope.mapInfo.lat=marker.lat
+        $scope.mapInfo.lng=marker.lng
+    }
 
 
-
-}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q){
-
+}).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){
     
+    iconFor = function(index){
+        var url
+        if (index<$scope.currentLandmark) {
+            url = "img/grey-pin.png"
+        } else if (index==$scope.currentLandmark) {
+            url = "img/green-pin.png"
+        } else {
+            url = "img/blue-pin.png"
+        }
+        
+        return url
+    }
+    
+    updateIcon = function(index){
+        $scope.markers[index].icon.iconUrl = iconFor(index)
+    }
+    
+    $scope.markers =[]
+    
+    $scope.mapInfo = {
+            lat:44.6474,
+            lng:-63.5806,
+            zoom: 15
+        }
+    // index of the current landmark (the one user will visit next)
+    $scope.currentLandmark=0
+    
+    $scope.upNextClicked = function(){
+        $scope.go($scope.tour.landmarks[$scope.currentLandmark])
+        // When the user returns, they will automatically be advanced
+        // Whether this is correct or not is a UX question
+        $scope.toNext()
+    }
+
+    $scope.focus=function(event, landmarkIndex){
+        event.stopPropagation()
+        for(i=0;i<$scope.markers.length;i++){
+            $scope.markers[i].focus=(i==landmarkIndex)
+        }
+        $scope.mapInfo.lat=$scope.markers[landmarkIndex].lat
+        $scope.mapInfo.lng=$scope.markers[landmarkIndex].lng
+    }
+
+    $scope.goTo=function(destIndex){
+
+        $scope.currentLandmark = destIndex
+        for(i=0;i<$scope.markers.length;i++){
+            updateIcon(i)
+        }
+        $scope.upNextClicked()        
+    }
+    
+    
+    $scope.toNext = function(){
+        if($scope.currentLandmark < $scope.tour.landmarks.length - 1){
+            $scope.currentLandmark+=1
+            updateIcon($scope.currentLandmark)
+            updateIcon($scope.currentLandmark-1)
+        }
+    }
+    
+    $scope.toPrev = function(){
+        if($scope.currentLandmark > 0){
+            $scope.currentLandmark-=1
+            updateIcon($scope.currentLandmark+1)
+            updateIcon($scope.currentLandmark)
+        }
+    }
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
+    
     server.tourInfo(
-        $stateParams.tourID,['name','landmarks','description']              
+        $stateParams.tourID,['name','landmarks','description','start']              
     ).then(function(tour){
+        //TODO pan to the start of the tour
+        
         $scope.tour=tour
         $scope.loadingMsg='Getting landmarks'
         var promises = []
         for(i=0;i<$scope.tour.landmarks.length;i++){
-            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description']))
+            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description','location']))
         }
-        return $q.all(promises)
+        
+        return $q.all(promises).then(function(){
+            for(i=0;i<$scope.tour.landmarks.length;i++){
+                $scope.markers[i] =
+                    {
+                        lat: $scope.tour.landmarks[i].location.lat,
+                        lng: $scope.tour.landmarks[i].location.lng,
+                        message:
+                                "<span ng-click='goTo("+i+")'>" +
+                                 $scope.tour.landmarks[i].name+
+                                 "</span>",
+                        getMessageScope: function(){return $scope},
+                        focus: false,
+                        icon: {
+                            iconUrl: iconFor(i),
+                            iconSize:     [21, 30], // size of the icon
+                            iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                            popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                        },
+                    }
+            }
+        })
     })
     .finally(function(){
         //UX: Go back to previous page, plus an error toast?

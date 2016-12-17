@@ -1,3 +1,166 @@
+
+// id's of element types defined by omeka
+const TEXT=1
+const INTERVIEWER=2
+const INTERVIEWEE=3
+const LOCATION=4//The location of an interview
+const TRANSCRIPTION=5
+const LOCAL_URL=6
+const ORIGINAL_FORMAT=7
+const PHYSICAL_DIMENSIONS=10
+const DURATION=11
+const COMPRESSION=12
+const PRODUCER=13
+const DIRECTOR=14
+const BIT_RATE=15
+const TIME_SUMMARY=16
+const EMAIL_BODY=17
+const SUBJECT_LINE=18
+const FROM=19
+const TO=20
+const CC=21
+const BCC=22
+const NUMBER_OF_ATTACHMENTS=23
+const STANDARDS=24
+const OBJECTIVES=25
+const MATERIALS=26
+const LESSON_PLAN_TEXT=27
+const URL=28
+const EVENT_TYPE=29
+const PARTICIPANTS=30
+const BIRTH_DATE=31
+const BIRTH_PLACE=32
+const DEATH_DATE=33
+const OCCUPATION=34
+const BIOGRAPHICAL_TEXT=35
+const BIBLIOGRAPHY=36
+
+//id's of Dublin Core element types
+const CONTRIBUTOR=37
+const COVERAGE=38
+const CREATOR=39
+const DATE=40
+const DESCRIPTION=41
+const FORMAT=42
+const IDENTIFIER=43
+const LANGUAGE=44
+const PUBLISHER=45
+const REALTION=46//a related resource (not a database relation)
+const RIGHTS=47
+const SOURCE=48
+const TOPIC=49
+const TITLE=50
+const TYPE=51
+
+
+
+
+//id's of elements defined by Curatescape
+const SUBTITLE=52
+const LEDE=53
+const STORY=54
+const SPONSOR=55
+const FACTOID=56
+const RELATED_RESOURCES=57
+const OFFICIAL_WEBSITE=58
+const STREET_ADDRESS=59
+const ACCESS_INFORMATION=60
+
+//id's of item types
+
+// const TEXT=1 Text is both an item type and an element. Fortunately, both the ID's are 1.
+// I see no way this could go wrong
+const MOVING_IMAGE=3
+const ORAL_HISTORY=4
+const SOUND=5
+const STILL_IMAGE=6
+const WEBSITE=7
+const EVENT=8
+const EMAIL=9
+const LESSON_PLAN=10
+const HYPERLINK=11
+const PERSON=12
+const INTERACTIVE_RESOURCE=13
+const DATASET=14
+const PHYSICAL_OBJECT=15
+const SERVICE=16
+const SOFTWARE=17
+const CURATESCAPE_STORY=18
+
+var tours = [
+    {
+        name:"Prime numbered lights",
+        description:"Only the prime numbered ids",
+        landmarks:[
+            {id:"christmas-id-2"},
+            {id:"christmas-id-3"},
+            {id:"christmas-id-5"},
+            {id:"christmas-id-7"},
+            {id:"christmas-id-11"},
+            {id:"christmas-id-13"},
+            {id:"christmas-id-17"},
+            {id:"christmas-id-23"},
+            {id:"christmas-id-29"},
+            {id:"christmas-id-31"}
+        ],
+        id:"tour-id-1"
+    },
+    {
+        name:"Someone messed up",
+        description:"This tour is just here to showcase someone putting the pin in the middle of the ocean. You're going to need a solid wetsuit to complete this one.",
+        landmarks:[
+            {id:"christmas-id-27"}
+        ],
+        id:"tour-id-2"
+    },
+    {
+        name:"Central Halifax",
+        description:"All the lights in the city",
+        landmarks:[
+            {id:"christmas-id-15"},//connaught
+            {id:"christmas-id-29"},
+            {id:"christmas-id-18"},//Wright
+            {id:"christmas-id-31"}//Thief
+        ],
+        id:"tour-id-3"
+    },
+    {
+        name:"The full Monty",
+        description:"All the lights in the system in more or less random order. Hang on to my hat, I'm going in!",
+        landmarks:[
+            {id:"christmas-id-8"},
+            {id:"christmas-id-12"},
+            {id:"christmas-id-17"},
+            {id:"christmas-id-22"},
+            {id:"christmas-id-10"},
+            {id:"christmas-id-18"},
+            {id:"christmas-id-7"},
+            {id:"christmas-id-21"},
+            {id:"christmas-id-25"},
+            {id:"christmas-id-14"},
+            {id:"christmas-id-27"},
+            {id:"christmas-id-1"},
+            {id:"christmas-id-28"},
+            {id:"christmas-id-30"},
+            {id:"christmas-id-3"},
+            {id:"christmas-id-6"},
+            {id:"christmas-id-24"},
+            {id:"christmas-id-5"},
+            {id:"christmas-id-25"},
+            {id:"christmas-id-11"},
+            {id:"christmas-id-20"},
+            {id:"christmas-id-31"},
+            {id:"christmas-id-15"},
+            {id:"christmas-id-13"},
+            {id:"christmas-id-26"},
+            {id:"christmas-id-23"},
+            {id:"christmas-id-29"},
+            {id:"christmas-id-4"},
+            {id:"christmas-id-16"}
+        ],
+        id:"tour-id-4"
+    }
+]
 angular.module('literaryHalifax')
 
 /*
@@ -8,9 +171,10 @@ angular.module('literaryHalifax')
  * Spec for landmark:
  *  id: a unique identifier (str)
  *  name: The name of the landmark (str)
- *  location: the lat,lng of the landmark (str) TODO update to numerical data
+ *  location: the lat,lng of the landmark (str)
  *  description: text description of the landmark (array[str]. Each element is a
                  paragraph)
+ *  subtit;e: A short 'hook' for the landmark (str)
  *  images: a list of images associated with the landmark. The first image is the
             thumbnail/main image (array[image])
  *  audio:  an audio reading of the stroy's description
@@ -25,235 +189,143 @@ angular.module('literaryHalifax')
                               for these properties are copied from the landmark
                               matching id
  */
-.factory('server', function($timeout,$q,utils,lodash){
+.factory('server', function($timeout,$q,$http,utils,lodash,$ionicPlatform){
     var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
+     var api = "http://206.167.183.207/api"
 
-    var tours = [
-        {
-            name:"Central Halifax",
-            description:"A tour of the Landmarks in central halifax",
-            landmarks:[
-                {id:"landmark-id-1"},
-                {id:"landmark-id-2"},
-                {id:"landmark-id-4"}
-            ],
-            id:"tour-id-1"
-        },
-        {
-            name:"The Full Monty",
-            description:"Every landmark in the system, in the best order. There is no better tour in the system",
-            landmarks:[
-                {id:"landmark-id-4"},
-                {id:"landmark-id-1"},
-                {id:"landmark-id-2"},
-                {id:"landmark-id-3"}
-            ],
-            id:"tour-id-2"
+
+        $ionicPlatform.ready(function(){
+            if(!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())){
+                // David's ionic serve address
+                // Gods of development forgive me
+                api="http://192.168.2.14:8100/api"
+            }
+        })
+    
+    
+
+    convertLandmark = function(landmarkJson){
+        
+        var landmark = {
+            id:landmarkJson.id,
+            images:[]
         }
-    ]
-
-    var landmarks = [
-        {
-            name:"Halifax Central Library",
-            location:{lat:44.6431,lng:-63.5752},
-            description:[
-                "The Halifax Central Library is a public library in \
-                Halifax, Nova Scotia on the corner of Spring Garden Road \
-                and Queen Street. It serves as the flagship library of the \
-                Halifax Public Libraries, replacing the Spring Garden Road \
-                Memorial Library.",
-
-                "A new central library was discussed by library \
-                administrators for several decades and approved by the \
-                regional council in 2008. The architects, a joint venture \
-                between local firm Fowler Bauld and Mitchell and Schmidt \
-                Hammer Lassen of Denmark, were chosen in 2010 through an \
-                international design competition. Construction began later \
-                that year on a prominent downtown site that had been a \
-                parking lot for half a century.",
-
-                "The new library opened in December 2014 and has become a \
-                highly popular gathering place. In addition to a book \
-                collection significantly larger than that of the former \
-                library, the new building houses a wide range of amenities \
-                including cafés, an auditorium, and community rooms. The \
-                striking architecture is characterised by the fifth floor's \
-                cantilever over the entrance plaza, a central atrium \
-                criss-crossed by staircases, and the building's \
-                transparency and relationship to the urban context. The \
-                library won a Lieutenant Governor’s Design Award in \
-                Architecture for 2014."
-            ],
-            id: "landmark-id-1",
-            images:["img/HCL1.jpg"],
-            audio:"/android_asset/www/audio/library.mp3"
-        },
-        {
-            name:"Public Gardens",
-            location:{lat:44.6428,lng:-63.5821},
-            description:[
-                "The Halifax Public Gardens are Victorian era public \
-                gardens formally established in 1867, the year of Canadian \
-                Confederation. The gardens are located in the Halifax \
-                Regional Municipality, Nova Scotia on the Halifax \
-                Peninsula near the popular shopping district of Spring \
-                Garden Road and opposite Victoria Park. The gardens were \
-                designated a National Historic Site of Canada in 1984."
-            ],
-            id: "landmark-id-2",
-            images:["img/PBG1.jpg"],
-            audio:"/android_asset/www/audio/static.mp3"
-        },
-        {
-            name:"The Dingle",
-            location:{lat:44.6304,lng:-63.6028},
-            description:[
-                "Sandford Fleming Park is a 95-acre (38 ha) Canadian urban \
-                park located in the community of Jollimore in Halifax \
-                Regional Municipality. It is also known as Dingle Park \
-                which means wooded valley. The park was donated to the \
-                people of Halifax by Sir Sandford Fleming. The centrepiece \
-                of the park is an impressive tower that commemorates Nova \
-                Scotia's achievement of representative government in 1758. \
-                Completed between 1908 and 1912, the Memorial Tower was \
-                erected during the same period of building other \
-                commemorative towers in the British Commonwealth, notably \
-                Cabot Tower in Bristol, England (1898) and Cabot Tower \
-                in St. John's (1900)"
-            ],
-            id: "landmark-id-3",
-            images:["img/DNG1.jpg"],
-            audio:"/android_asset/www/audio/tower.mp3"
-        },
-        {
-            name:"Old Burying Ground",
-            location:{lat:44.6437,lng:-63.5728},
-            description:[
-                "The Old Burying Ground was founded in 1749, the same year \
-                as the settlement, as the town's first burial ground. It \
-                was originally non-denominational and for several decades \
-                was the only burial place for all Haligonians. (The burial \
-                ground was also used by St. Matthew's United Church \
-                (Halifax).) In 1793 it was turned over to the Anglican \
-                St. Paul's Church. The cemetery was closed in 1844 and \
-                the Camp Hill Cemetery established for subsequent \
-                burials. The site steadily declined until the 1980s when \
-                it was restored and refurbished by the Old Burying \
-                Ground Foundation, which now maintains the site and \
-                employ tour guides to interpret the site in the summer. \
-                Ongoing restoration of the rare 18th century grave \
-                markers continues.",
-
-                "Over the decades some 12,000 people were interred in \
-                the Old Burial Ground. Today there are only some 1,200 \
-                headstones, some having been lost and many others being \
-                buried with no headstone. Many notable residents are \
-                buried in the cemetery, including British Major General \
-                Robert Ross, who led the successful Washington Raid of \
-                1814 and burned the White House before being killed in \
-                battle at Baltimore a few days later.",
-
-                "The most prominent structure is the Welsford-Parker \
-                Monument, a Triumphal arch standing at the entrance to \
-                the cemetery commemorating British victory in the \
-                Crimean War. This is the second oldest war monument in \
-                Canada and the only monument to the Crimean War in North \
-                America. The arch was built in 1860, 16 years after the \
-                cemetery had officially closed. The arch was built by \
-                George Lang and is named after two Haligonians, Major \
-                Augustus Frederick Welsford and Captain William Buck \
-                Carthew Augustus Parker. Both Nova Scotians died in the \
-                Battle of the Great Redan during the Siege of Sevastopol \
-                (1854–1855). This monument was the last grave marker in \
-                the cemetery.",
-
-                "The Old Burying Ground was designated a National \
-                Historic Site of Canada in 1991. It had earlier been \
-                designated a Provincially Registered Property in 1988 \
-                under Nova Scotia's Heritage Property Act."
-            ],
-            id: "landmark-id-4",
-            images: [
-                "img/OBG1.png",
-                "img/OBG2.png"
-            ],
-            audio:"/android_asset/www/audio/cemetary.ogg"
+        var promises = []
+        
+        promises.push(
+            $http.get(api+'/files?item=' + landmarkJson.id)
+            .then(function(files){
+                lodash.forEach(files.data,function(file){
+                    if(file.metadata.mime_type.startsWith('image')){
+                        landmark.images.push(
+                            {
+                                full:file.file_urls.fullsize,
+                                squareThumb:file.file_urls.square_thumbnail,
+                                thumb:file.file_urls.thumbnail
+                            }
+                        )
+                    }   
+                })
+            })
+        )
+        promises.push(
+            $http.get(api+'/geolocations/' + 
+                      landmarkJson.extended_resources.geolocations.id)
+            .then(function(location){
+                landmark.location={
+                    lat:location.data.latitude,
+                    lng:location.data.longitude,
+                    zoom:location.data.zoom
+                }
+                if(!landmark.streetAddress){
+                    landmark.streetAddress=location.data.address
+                }
+            })
+        )
+        
+        
+        for(var i = 0, len = landmarkJson.element_texts.length; i < len; i++){
+            var text = landmarkJson.element_texts[i]
+            switch(text.element.id){
+                case TITLE:
+                    landmark.name=text.text
+                    break;
+                case SUBTITLE:
+                    landmark.subtitle=text.text
+                    break;
+                case STORY:
+                    landmark.description=text.text
+                    break;
+                case STREET_ADDRESS:
+                    landmark.streetAddress=text.text
+                    break;
+                default:
+                    console.log('No rule found for '+text.element.name)
+            }
         }
-    ]
-
-
+        
+        return $q.all(promises)
+        .then(function(){
+            return $q.when(landmark)
+        }, function(error){
+            console.log(error)
+        })
+        
+    }
 
     server = {
-        getLandmarks:function(attrs, nearPoint){
+        getLandmarks:function(nearPoint){
 
-            var result = []
-            var i=0
-
-            for(i=0;i<landmarks.length;i++){
-                result.push(angular.extend({},landmarks[i]))
-            }
-            
-            if(nearPoint && lodash.includes(attrs,'location')){
-                result=lodash.sortBy(result,
-                    function(landmark){
+            var landmarks = []
+            return $http.get(api+'/items')
+            .then(
+            function(result){
+                var promises = []
+                lodash.forEach(result.data,function(landmark){
+                    promises.push(
+                        convertLandmark(landmark)
+                        .then(function(newLandmark){
+                            landmarks.push(newLandmark)
+                        })
+                    )
+                })
+                return $q.all(promises)
+            }, function(error){
+                console.log(error)
+            }).then(function(){
+                
+                if(nearPoint){
+                    dist = function(landmark){
                         return utils.distance(nearPoint,landmark.location)
                     }
-                )
-            }
-
-            return $timeout(function(){
-                return result
-            }, SMALL_DELAY)
+                    landmarks = lodash.sortBy(landmarks,dist)
+                }
+                
+                return $q.when(landmarks)
+            })
 
         },
-        landmarkInfo:function(id, attributes){
-            var result = {}
-            var i=0
-            var j=0
-            for(i=0;i<landmarks.length;i++){
-
-                if(landmarks[i].id==id){
-                    var j=0
-                    for(j=0;j<attributes.length;j++){
-                        result[attributes[j]] =landmarks[i][attributes[j]]
-                    }
-
-                    return $timeout(function(){
-                        return result
-                    }, LARGE_DELAY)
-                }
-            }
+        
+        
+        landmarkInfo:function(id){
+            
+            return $http.get(api+'/items/'+id)
+            .then(function(result){
+                return convertLandmark(result.data)
+            }).then(function(result){
+                console.log(result)
+                return result
+            })
         },
         
         getTours:function(nearPoint){
-            var result = []
-            var i=0
-            var j=0
-            for(i=0;i<tours.length;i++){
-                result.push(angular.extend({},tours[i]))
-            }
-            
-            
-            // the start of a tour is the location of its first landmark
-            for(i=0;i<result.length;i++){
-                for(j=0;j<landmarks.length;j++){
-                    if(landmarks[j].id==result[i].landmarks[0].id){
-                        result[i].start=landmarks[j].location
-                    }
-                }
-            }
-            
-            if(nearPoint){
-                result=lodash.sortBy(result, function(tour){
-                    return utils.distance(nearPoint,tour.start)
-                })
-            }
-
-            return $timeout(function(){
-                return result
-            }, SMALL_DELAY)
+            return $timeout(3000).then(function(){
+                return $q.reject("There are not tours on the server yet")
+            })
         },
+        
+        
         tourInfo:function(id,attributes){
             var result = {}
             var i=0
@@ -269,53 +341,6 @@ angular.module('literaryHalifax')
                         return result
                     }, SMALL_DELAY)
                 }
-            }
-        },
-        // Helper method for updating a landmark object without requesting 
-        // extra info. This is not fixture code, it belongs in the final product.
-        updateLandmark:function(landmark, attributes){
-            if(!landmark.id){
-                return $q.reject("attempted to update a landmark with no id")
-            }
-            var i=0
-            newAttrs = []
-            for(i=0;i<attributes.length;i++){
-                if(!landmark[attributes[i]]){
-                   newAttrs.push(attributes[i])
-                }
-            }
-            if(newAttrs.length>0){
-                return server.landmarkInfo(landmark.id,newAttrs)
-                .then(function(newLandmark){
-                    angular.extend(landmark,newLandmark)
-                    return landmark
-                })
-            }  else {
-                return $q.when(landmark)
-            }
-        },
-        // Helper method for updating a tour object without requesting 
-        // extra info. This is not fixture code, it belongs in the final product.
-        updateTour:function(tour, attributes){
-            if(!tour.id){
-                return $q.reject("attempted to update a tour with no id")
-            }
-            var i=0
-            var newAttrs = []
-            for(i=0;i<attributes.length;i++){
-                if(!tour[attributes[i]]){
-                   newAttrs.push(attributes[i])
-                }
-            }
-            if(newAttrs.length>0){
-                console.log(newAttrs)
-                return server.tourInfo(tour.id,newAttrs)
-                .then(function(newTour){
-                    angular.extend(tour,newTour)
-                    return tour
-                })
-            }  else {
-                return $q.when(tour)
             }
         }
     }

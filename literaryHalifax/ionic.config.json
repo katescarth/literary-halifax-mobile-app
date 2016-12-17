@@ -1,4 +1,10 @@
 {
   "name": "literaryHalifax",
-  "app_id": ""
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://206.167.183.207/api"
+    }
+  ]
 }

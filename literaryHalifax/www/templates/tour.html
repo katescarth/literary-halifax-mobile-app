@@ -1,7 +1,40 @@
 <ion-view view-title="Tour">
     <ion-content>
         <div class="display-card">
-            <h1 class="title">{{tour.name}}</h1>
+            
+            
+            <marker-map map-markers="markers" map-info="mapInfo">
+          </marker-map>
+            
+            
+            <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
+                
+                    <div class="list-item-div clearfix" ng-click="upNextClicked()" style="padding-top:5px">
+                        <img class="pin-image" src="img/green-pin.png" align="right"
+                             ng-click="focus($event,currentLandmark)">
+                        <div class="list-item-title">
+                            {{tour.landmarks[currentLandmark].name}}
+                        </div>
+                        <div class="list-item-subtitle">
+                            {{tour.landmarks[currentLandmark].description[0]}}
+                        </div>
+                    </div>
+                    <div class="list-item-div up-next-button-row" style="text-align:center;">
+                        <span style="float:left" ng-click="toPrev()">
+                            <i class="ion-chevron-left"></i>
+                            Back
+                        </span>
+                        <span style="float:right" ng-click="toNext()">
+                            Next
+                            <i class="ion-chevron-right"> </i>
+                        </span>
+
+                        <span>{{currentLandmark+1}}/{{tour.landmarks.length}} </span>
+
+                    </div>
+            </div>
+            
+            <h3 class="title">{{tour.name}}</h3>
             <p>{{tour.description}}</p>
             <div class="list">
                 

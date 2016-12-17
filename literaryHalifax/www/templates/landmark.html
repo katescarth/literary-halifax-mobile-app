@@ -3,17 +3,19 @@
       
 <!--      Image displayed behind the tab contents-->
     <ion-content class="has-header has-tabs-top">
-      <img ng-src="{{landmark.images[0]}}" width="100%"/>
+      <img ng-src="{{landmark.images[0].full}}" width="100%"/>
     </ion-content>
 
       <ion-tabs class="tabs-balanced tabs-icon-top" delegate-handle="landmark-tabs-delegate">
 
-        <ion-spinner class="spinner-stable" icon="spiral" ng-if="loading"></ion-spinner>
-
-
-        <ion-tab title="Description" icon="ion-android-list" ng-if="landmark.description">
+        <ion-tab title="Description" icon="ion-android-list" disabled="loadingMsg">
           <overscroll-pane>
-            <div class="display-card">
+<!--              This is the default tab, so we put the loading message here.-->
+            <div class="display-card" ng-if="loadingMsg"> 
+                <list-loader loading-msg="loadingMsg"></list-loader>
+            </div>
+              
+            <div class="display-card" ng-show="!loadingMsg"> 
 
               <h3 class="title">
                 <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-off':'ion-android-volume-up'"
@@ -21,37 +23,38 @@
                 </button>
                   <div style="description-title">{{landmark.name}}</div>
               </h3>
-              <p ng-repeat="paragraph in landmark.description">
-                {{paragraph}}<br />
-              </p>
+                
+                <div ng-bind-html="landmark.description"></div>
             </div>
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Images" icon="ion-android-image" ng-if="landmark.images">
+        <ion-tab title="Images" icon="ion-android-image" disabled="loadingMsg">
           <overscroll-pane>
-            <div class="display-card">
+            <div class="display-card" ng-show="!loadingMsg">
 
-              <div class="row" ng-repeat="image in landmark.images" ng-if="$index % 2 === 0">
-                <div class="col col-50" ng-if="$index < landmark.images.length">
-                    <img ng-src="{{landmark.images[$index]}}" width="100%"
-                    ng-click="display(landmark.images[$index])"/>
+              <div class="row" ng-repeat="image in landmark.images" ng-if="$index % 3 === 0">
+                <div class="col col-33" ng-if="$index < landmark.images.length">
+                    <img ng-src="{{landmark.images[$index].thumb}}" class="gallery-thumb"
+                    ng-click="display(landmark.images[$index].full)"/>
                 </div>
-                <div class="col col-50" ng-if="$index + 1 < landmark.images.length">
-                    <img ng-src="{{landmark.images[$index + 1]}}" width="100%"
-                    ng-click="display(landmark.images[$index +1])"/>
+                <div class="col col-33" ng-if="$index + 1 < landmark.images.length">
+                    <img ng-src="{{landmark.images[$index + 1].thumb}}" class="gallery-thumb"
+                    ng-click="display(landmark.images[$index +1].full)"/>
+                </div>
+                <div class="col col-33" ng-if="$index + 2 < landmark.images.length">
+                    <img ng-src="{{landmark.images[$index + 2].thumb}}" class="gallery-thumb"
+                    ng-click="display(landmark.images[$index +2].full)"/>
                 </div>
               </div>
             </div>
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Map" icon="ion-android-pin" ng-if="landmark.location">
+        <ion-tab title="Map" icon="ion-android-pin" disabled="loadingMsg">
           <overscroll-pane>
-            <div class="display-card">                
-                <marker-map map-handle="mapHandle" zoom="mapInfo.zoom">
-                    <marker position="{{[landmark.location.lat,landmark.location.lng]}}" clickable="false" centered="true"> </marker>
-                    <user-location-marker></user-location-marker>
+            <div class="display-card" ng-show="!loadingMsg">                
+                <marker-map map-info="mapInfo" map-markers="markers">
 
                 </marker-map>
             </div>

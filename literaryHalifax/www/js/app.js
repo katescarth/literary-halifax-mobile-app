@@ -1,4 +1,4 @@
-angular.module('literaryHalifax', ['ionic','ngMap','ngLodash'])
+angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -88,7 +88,6 @@ angular.module('literaryHalifax', ['ionic','ngMap','ngLodash'])
         }
     }).state('app.tourView', {
         url: '/tour/:tourID',
-        cache:false,
         views: {
             'mainContent': {
                 templateUrl: 'templates/tour.html',

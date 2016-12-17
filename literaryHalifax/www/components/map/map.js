@@ -3,88 +3,57 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             restrict: 'E',
             transclude: true,
             scope: {
-                // a location (lat/lng, address...)
-                center: '='
-                , // an integer which represents how far in the map should be zoomed
-                // 0 is the lowest zoom level
-                zoom: '='
+                // An object with alt, lng, and zoom properties that determines the initial state
+                mapInfo: '='
                 , //a unique identifier to be applied to the map. Must be a number.
                   // use NgMap.getMap(mapHandle) to find the map (e.g. to show an info window)
-                mapHandle:'='
+                mapHandle:'=',
+                //A list of markers to display on the map
+                mapMarkers:'='
+                
+            },
+            link: function ($scope, $elm, $attr) {
+
             },
             templateUrl: 'components/map/map.html'
         };
-    }).directive('userLocationMarker', function () {
-        return {
-            retrict:'E',
-            scope: {},
-            controllerAs:'ctrl',
-            controller:function($scope,$element, $attrs, $transclude){
-                if(navigator.geolocation){
-                    navigator.geolocation.watchPosition(
-                        function(result){
-                            $scope.userLocation = {
-                                lat:result.coords.latitude,
-                                lng:result.coords.longitude
-                            }
-                        }, function(error){
-                            console.log(error)
-                        }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
-                    )
-                } else {
-                    console.log('no navigator!')
-                }
-                
-            },
-            templateUrl: 'components/map/userLocationMarker.html'
-        };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $interval, NgMap) {
-        // see https://developers.google.com/maps/documentation/javascript/style-reference#style-elements
-        $scope.styles=[
-            {
-                featureType: "poi", // points of interest. In general, we don't want their labels diplayed
-                elementType: "labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "poi.park",// parks, however, should be displayed
-                elementType: "labels",
-                stylers: [
-                    { visibility: "on" }
-                ]
-            },
-            {
-                featureType: "administrative",//countries, cities, etc. Not of interest
-                elementType: "labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "administrative.neighborhood",// South end, North end...
-                elementType: "labels",
-                stylers: [
-                    { 
-                        visibility:"on"
-                    }
-                ]
-            },
-            {
-                featureType: "transit", // bus stops and the like. Remove labels AND map elements
-                stylers: [
-                    { visibility: "off" }
-                ]
-            },
-            {
-                featureType: "road.highway", // large roads, don't need to display the name
-                elementType:"labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate) {
+    
+        $scope.userLocationMarker = {
+            focus: false,
+            clickable: false,
+            lat:0,
+            lng:0,
+            opacity:0,//not visible until location is set
+            icon: {
+                iconUrl: "img/Air.png",
+                iconSize:     [10,10],
+                iconAnchor:   [5,5]
             }
-        ]
+        }
+        
+        $scope.$watch("mapMarkers", function (newValue, oldValue) {
+                    $scope.markers = [$scope.userLocationMarker].concat(newValue)
+                }, true);
+        
+        if(navigator.geolocation){
+            navigator.geolocation.watchPosition(
+                function(result){
+                    angular.extend($scope.userLocationMarker,
+                        {
+                            lat:result.coords.latitude,
+                            lng:result.coords.longitude,
+                            opacity:1
+                        }
+                    )
+                    
+                }, function(error){
+                    console.log(error)
+                }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
+            )
+        } else {
+            console.log('no navigator!')
+        }
         
         //prevent scrolling when touching the map
         $scope.fingerDown = function () {
@@ -93,4 +62,19 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         $scope.fingerUp = function () {
             $ionicScrollDelegate.freezeAllScrolls(false)
         }
+        
+        
+        
+        $scope.tiles ={
+//            name: 'OpenStreetMap',
+            url: 'https://api.mapbox.com/v4/{mapID}/{z}/{x}/{y}.png?access_token={apikey}',
+//            type: 'xyz',
+            options: {
+                // TODO: This is David Walker's key, get our own for production
+                apikey: 'pk.eyJ1IjoiZHdhbGtlcmhhbGlmYXgiLCJhIjoiY2l3bzVieDNoMDAxdDJ6bXJzODg2cHF5OCJ9.AyPfYz71uJidlIqouYDNPA',
+                mapID: 'mapbox.light'
+            }
+
+        }
+        
     })
