@@ -25,6 +25,7 @@ ion-nav-view {
     max-width: 175px !important;
     max-height: 60px;
     align-content: center;
+    overflow:hidden;
 } 
 
 .info-window h6{
@@ -127,7 +128,8 @@ overscroll-pane {
 }
 
 .list-item-title {
-    font-size: 14px;
+    margin-top:4px;
+    font-size: 12px;
     color: #222;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -137,6 +139,8 @@ overscroll-pane {
 .list-item-subtitle {
     font-size: 10px;
     line-height: 13px;
+    max-height:44px;
+    margin-top:3px;
     color: grey;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -151,9 +155,15 @@ overscroll-pane {
 
 .list-item-thumb {
     object-fit: cover;
-    width: 75px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     margin: 4px 4px 4px 0px;
+}
+
+.gallery-thumb {
+    object-fit: cover;
+    width: 80px;
+    margin: 4px 4px 4px 4px;
 }
 
 .up-next-button-row {

@@ -362,6 +362,11 @@ angular.module('literaryHalifax')
         })
     }
     
+$scope.clearFilter = function(){
+    $scope.filter.text=''
+    $scope.applyFilter()
+}
+    
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }

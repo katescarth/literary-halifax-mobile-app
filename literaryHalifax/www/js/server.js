@@ -161,258 +161,6 @@ var tours = [
         id:"tour-id-4"
     }
 ]
-
-var landmarks = [
-    {
-        name:"156 Brook Street",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6881948,lat:44.6556228},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-1"
-    },
-    {
-        name:"27 Chinook Ct",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5706411,lat:44.6901274},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-2"
-    },
-    {
-        name:"21 Castleton Crescent",
-        description:["Tons and Tons of white lights! (If you like white lights)","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5421538,lat:44.7050374},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-3"
-    },
-    {
-        name:"104 Cavalier Dr",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6610852,lat:44.7693574},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-4"
-    },
-    {
-        name:"Louisbourg Lane and Skeena Street",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5331048,lat:44.6796417},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-5"
-    },
-    {
-        name:"5 Bianca Ct",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.70995740000001,lat:44.7849131},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-6"
-    },
-    {
-        name:"33 Wilson Lake Dr",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.7182899,lat:44.7973234},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-7"
-    },
-    {
-        name:"Flamingo Dr & Meadowlark Crescent",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.755867,lat:44.5443017},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-8"
-    },
-    {
-        name:"Waynewood Dr",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5194517,lat:44.6478798},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-9"
-    },
-    {
-        name:"Louisburg Lane",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5277243,lat:44.6774217},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-10"
-    },
-    {
-        name:"Corner of This Street and That Street",
-        description:["amazing lights and free candycanes","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.3052397,lat:44.7382136},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-11"
-    },
-    {
-        name:"599 E Chezzetcook Rd",
-        description:["A colorful mix of everything!","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.2381178,lat:44.7280959},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-12"
-    },
-    {
-        name:"35 Circle Dr",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.61517040000001,lat:44.6215399},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-13"
-    },
-    {
-        name:"6 Cherry Drive",
-        description:["Stop by this place for Christmas cheer. So many great lights & things to see.","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5756063,lat:44.6751572},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-14"
-    },
-    {
-        name:"Connaught and Norwood House",
-        description:["Apparently a local doctor, house it always done really well","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5930035,lat:44.6435478},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-15"
-    },
-    {
-        name:"38 Canary Crescent",
-        description:["These people put out a ton of lights and inflatables each year. My kids always love this house!","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6539267,lat:44.6689088},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-16"
-    },
-    {
-        name:"Middle Sackville",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.7267894,lat:44.808074},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-17"
-    },
-    {
-        name:"1273 Wright Ave",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5765956,lat:44.6397625},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-18"
-    },
-    {
-        name:"Point 21",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6324477,lat:44.6456052},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-19"
-    },
-    {
-        name:"Lobster trap tree",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.4849262,lat:44.6064489},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-20"
-    },
-    {
-        name:"211 Taranaki Dr",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.4949014,lat:44.6934844},
-        audio:"/android_asset/www/audio/JBR.mp3",
-        id:"christmas-id-21"
-    },
-    {
-        name:"corner of Flamingo Drive and Meadowlark",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6552465,lat:44.6692289},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-22"
-    },
-    {
-        name:"206 Westwood Boulevard",
-        description:["Over 16 thousand lights on this property","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.866272,lat:44.7086822},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-23"
-    },
-    {
-        name:"31 Canary Crescent",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6539267,lat:44.6689088},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-24"
-    },
-    {
-        name:"11 Faders Rd",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.80943079999997,lat:44.52697339999999},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-25"
-    },
-    {
-        name:"5010 Nova Scotia Trunk 7",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.2951946,lat:44.7477201},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-26"
-    },
-    {
-        name:"Lakeshire Crescent",
-        description:["Two houses right across from school lit up really really well. One even plays xmas music!","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-61.9948733,lat:44.7106418},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-27"
-    },
-    {
-        name:"55 appian way",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.5464668,lat:44.7011941},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-28"
-    },
-    {
-        name:"Point 29",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.6043221,lat:44.6431854},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-29"
-    },
-    {
-        name:"181 Old Beaver Bank Rd",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.69096810000002,lat:44.7773517},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-30"
-    },
-    {
-        name:"The Bicycle Thief",
-        description:["Someone suggested that these were cool-looking christmas lights. Why don't you go check them out?","Christmas lights (also known informally as fairy lights) are lights used for decoration in preparation for Christmas and for display throughout Christmastide. The custom goes back to the use of candles to decorate the Christmas tree in Christian homes in early modern Germany. Christmas trees displayed publicly and illuminated with electric lights became popular in the early 20th century. By the mid-20th century, it became customary to display strings of electric lights as along streets and on buildings Christmas decorations detached from the Christmas tree itself. In the United States, it became popular to outline private homes with such Christmas lights in tract housing beginning in the 1960s. By the late 20th century, the custom had also been adopted in non-western countries / regions, notably in Japan and Hong Kong.","If you like these lights, consider taking a picture and emailing them to me"],
-        images:["img/lights1.png", "img/lights2.png", "img/lights3.png"],
-        location:{lng:-63.568435799999975,lat:44.643625},
-        audio:"/android_asset/www/audio/SBS.mp3",
-        id:"christmas-id-31"
-    }
-]
-
 angular.module('literaryHalifax')
 
 /*
@@ -441,10 +189,21 @@ angular.module('literaryHalifax')
                               for these properties are copied from the landmark
                               matching id
  */
-.factory('server', function($timeout,$q,$http,utils,lodash){
+.factory('server', function($timeout,$q,$http,utils,lodash,$ionicPlatform){
     var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
+     var api = "http://206.167.183.207/api"
 
+
+        $ionicPlatform.ready(function(){
+            if(!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())){
+                // David's ionic serve address
+                // Gods of development forgive me
+                api="http://192.168.2.14:8100/api"
+            }
+        })
+    
+    
 
     convertLandmark = function(landmarkJson){
         
@@ -455,17 +214,23 @@ angular.module('literaryHalifax')
         var promises = []
         
         promises.push(
-            $http.get('http://192.168.2.14:8100/api/files?item=' + landmarkJson.id)
+            $http.get(api+'/files?item=' + landmarkJson.id)
             .then(function(files){
                 lodash.forEach(files.data,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
-                        landmark.images.push(file.file_urls.original)
+                        landmark.images.push(
+                            {
+                                full:file.file_urls.fullsize,
+                                squareThumb:file.file_urls.square_thumbnail,
+                                thumb:file.file_urls.thumbnail
+                            }
+                        )
                     }   
                 })
             })
         )
         promises.push(
-            $http.get('http://192.168.2.14:8100/api/geolocations/' + 
+            $http.get(api+'/geolocations/' + 
                       landmarkJson.extended_resources.geolocations.id)
             .then(function(location){
                 landmark.location={
@@ -513,7 +278,7 @@ angular.module('literaryHalifax')
         getLandmarks:function(attrs, nearPoint){
 
             var landmarks = []
-            return $http.get('http://192.168.2.14:8100/api/items')
+            return $http.get(api+'/items')
             .then(
             function(result){
                 var promises = []
@@ -545,7 +310,7 @@ angular.module('literaryHalifax')
         
         landmarkInfo:function(id){
             
-            return $http.get('http://192.168.2.14:8100/api/items/'+id)
+            return $http.get(api+'/items/'+id)
             .then(function(result){
                 return convertLandmark(result.data)
             }).then(function(result){

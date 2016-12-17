@@ -12,7 +12,7 @@
             <div class="item item-input filter-bar">
                 <input type="text" placeholder="Filter by title..." ng-model="filter.text" ng-change="applyFilter()">
                 <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
-                   ng-click="filter.text=''"></i>
+                   ng-click="clearFilter()"></i>
             </div>
             
             <div class="list">
@@ -21,7 +21,7 @@
                 
                 <div class="list-item-div clearfix"  ng-repeat="landmark in landmarks"
                   ng-click="go(landmark)" ng-if="showLandmark(landmark)&&$index<numListItems">
-                    <img class="list-item-thumb "ng-src="{{landmark.images[0]}}" align="left">
+                    <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
                     <div>
                         <div class="list-item-distance" ng-if="displayDistance(landmark)">
                             {{displayDistance(landmark)}}km
@@ -31,7 +31,7 @@
                             {{landmark.name}}
                         </div>
                     </div>
-                    <div class="list-item-subtitle" style="max-height:30px;margin-top:5px;" dotdotdot>
+                    <div class="list-item-subtitle" dotdotdot>
                             {{landmark.description}}
                     </div>
                 </div>
