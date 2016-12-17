@@ -8,7 +8,8 @@ angular.module('literaryHalifax')
     return {
         scope: {
             loadingMsg: '=',
-            errorMsg: '='
+            errorMsg: '=',
+            refresh:'='
         }
         , templateUrl: 'components/listLoader/listLoader.html'
     }

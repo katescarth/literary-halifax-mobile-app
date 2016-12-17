@@ -275,7 +275,7 @@ angular.module('literaryHalifax')
     }
 
     server = {
-        getLandmarks:function(attrs, nearPoint){
+        getLandmarks:function(nearPoint){
 
             var landmarks = []
             return $http.get(api+'/items')
@@ -320,32 +320,9 @@ angular.module('literaryHalifax')
         },
         
         getTours:function(nearPoint){
-            var result = []
-            var i=0
-            var j=0
-            for(i=0;i<tours.length;i++){
-                result.push(angular.extend({},tours[i]))
-            }
-            
-            
-            // the start of a tour is the location of its first landmark
-            for(i=0;i<result.length;i++){
-                for(j=0;j<landmarks.length;j++){
-                    if(landmarks[j].id==result[i].landmarks[0].id){
-                        result[i].start=landmarks[j].location
-                    }
-                }
-            }
-            
-            if(nearPoint){
-                result=lodash.sortBy(result, function(tour){
-                    return utils.distance(nearPoint,tour.start)
-                })
-            }
-
-            return $timeout(function(){
-                return result
-            }, SMALL_DELAY)
+            return $timeout(3000).then(function(){
+                return $q.reject("There are not tours on the server yet")
+            })
         },
         
         
@@ -364,30 +341,6 @@ angular.module('literaryHalifax')
                         return result
                     }, SMALL_DELAY)
                 }
-            }
-        },
-        // Helper method for updating a tour object without requesting 
-        // extra info. This is not fixture code, it belongs in the final product.
-        updateTour:function(tour, attributes){
-            if(!tour.id){
-                return $q.reject("attempted to update a tour with no id")
-            }
-            var i=0
-            var newAttrs = []
-            for(i=0;i<attributes.length;i++){
-                if(!tour[attributes[i]]){
-                   newAttrs.push(attributes[i])
-                }
-            }
-            if(newAttrs.length>0){
-                console.log(newAttrs)
-                return server.tourInfo(tour.id,newAttrs)
-                .then(function(newTour){
-                    angular.extend(tour,newTour)
-                    return tour
-                })
-            }  else {
-                return $q.when(tour)
             }
         }
     }

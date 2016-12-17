@@ -117,6 +117,11 @@ overscroll-pane {
     text-align: center;
 }
 
+.error-icon {
+    color:firebrick;
+    font-size: 32px;
+}
+
 .filter-icon {
     padding-left: 6px;
     padding-right: 6px;
@@ -163,6 +168,7 @@ overscroll-pane {
 .gallery-thumb {
     object-fit: cover;
     width: 80px;
+    max-height: 60px;
     margin: 4px 4px 4px 4px;
 }
 

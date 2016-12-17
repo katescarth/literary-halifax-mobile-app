@@ -273,13 +273,13 @@ angular.module('literaryHalifax')
                     lng:currentPosition.coords.longitude
                 }
                 fetchLandmarks.resolve(
-                    server.getLandmarks(attrs, location)
+                    server.getLandmarks(location)
                 )
             },
             function(error){
                 console.log(error)
                 $scope.loadingMsg = 'Getting landmarks...'
-                fetchLandmarks.resolve(server.getLandmarks(attrs))
+                fetchLandmarks.resolve(server.getLandmarks())
             },
             {
                 //we can accept an old result - stalling here shoud be avoided
@@ -290,7 +290,7 @@ angular.module('literaryHalifax')
         )
     } else {
         $scope.loadingMsg = 'Getting landmarks...'
-        fetchLandmarks.resolve(server.getLandmarks(attrs))
+        fetchLandmarks.resolve(server.getLandmarks())
     }
 
     fetchLandmarks.promise.then(function(result){
@@ -385,40 +385,47 @@ $scope.clearFilter = function(){
     // If successful, use it to get the tours from the server
     // in order of nearness. Otherwise, get the tours in arbitrary order
         
-    var deferred=$q.defer()
-    if(navigator.geolocation){
-        $scope.loadingMsg='getting your location...'
-        navigator.geolocation.getCurrentPosition(
-            function(currentPosition){
-                location={
-                    lat: currentPosition.coords.latitude,
-                    lng:currentPosition.coords.longitude
+    
+    $scope.loadResults=function(){
+        var deferred=$q.defer()
+        if(navigator.geolocation){
+            $scope.loadingMsg='getting your location...'
+            $scope.errorMsg=''
+            navigator.geolocation.getCurrentPosition(
+                function(currentPosition){
+                    location={
+                        lat: currentPosition.coords.latitude,
+                        lng:currentPosition.coords.longitude
+                    }
+                    $scope.loadingMsg='getting tours...'
+                    deferred.resolve(server.getTours(location))
+                },
+                function(error){
+                    $scope.loadingMsg='getting tours...'
+                    deferred.resolve(server.getTours())
+                },
+                {
+                    //we can accept an old result - stalling here shoud be avoided
+                    maximumAge: 60000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
                 }
-                $scope.loadingMsg='getting tours...'
-                deferred.resolve(server.getTours(location))
-            },
-            function(error){
-                $scope.loadingMsg='getting tours...'
-                deferred.resolve(server.getTours())
-            },
-            {
-                //we can accept an old result - stalling here shoud be avoided
-                maximumAge: 60000, 
-                timeout: 5000, 
-                enableHighAccuracy: true 
-            }
-        )
-    } else {
-        $scope.loadingMsg='getting tours...'
-        deferred.resolve(server.getTours())
-    }
+            )
+        } else {
+            $scope.loadingMsg='getting tours...'
+            deferred.resolve(server.getTours())
+        }
 
-    deferred.promise.then(function(result){
-        $scope.loadingMsg=''
-        $scope.tours = result        
-    }).catch(function(error){
-        console.log(error)
-    })
+        deferred.promise.then(function(result){
+            $scope.loadingMsg=''
+            $scope.tours = result        
+        }).catch(function(error){
+            $scope.loadingMsg=''
+            $scope.errorMsg=error
+        })
+    }
+    
+    $scope.loadResults()
     
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
