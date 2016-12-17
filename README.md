@@ -11,6 +11,8 @@ npm install -g cordova ionic
 
 navigate the 'literaryHalifax' folder
 
+in www/js/server.js, change '192.168.2.14' to your localhost IP address
+
 ionic serve
 
 This will launch the app in a browser, but some parts of the app (specifically audio) won't work. To run the full version of the app on android, download and install the latest apk from [here](https://www.dropbox.com/sh/an112jsdms3pnfd/AACK8klx-eQ-c4R47w_VM6qpa?dl=0).
