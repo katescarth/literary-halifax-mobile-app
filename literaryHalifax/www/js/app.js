@@ -23,12 +23,14 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
     /*
      * Note that some states have a 'title' attribute. This is the text displayed
      * in the header bar. If a state has a tite, the menu button will appear in
-     * the header bar. Otherwise, the back button will.
+     * the header bar. Otherwise, the back button will, and the title will remain from the
+     * previous state
      */
 
 
     $stateProvider
 
+    // parent state for entire app. Responsible for menus, navigation, etc.
     .state('app', {
         url: '/app',
         abstract: true,
@@ -36,6 +38,7 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
         controller: 'menuCtrl'
     })
 
+    // shows the user a list of landmarks and a map with their locations.
     .state('app.landmarks', {
         url: '/landmarks',
         title:'Landmarks',
@@ -46,6 +49,8 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
             }
         }
     })
+    
+    // shows the user a list of tours
     .state('app.tours', {
         url: '/tours',
         title:'Tours',
@@ -56,6 +61,9 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
             }
         }
     })
+    
+    // allows the user to manage preloading files (audio or images)
+    // currently unimplemented
     .state('app.cacheControl', {
         url: '/cacheControl',
         title: 'Cache Control',
@@ -66,6 +74,8 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
             }
         }
     })
+    
+    // Displays information about the app.
     .state('app.about', {
         url: '/about',
         title:'About',
@@ -76,6 +86,8 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
             }
         }
     })
+    
+    // Shows information about a specific landmark - its description, location, and images
     .state('app.landmarkView', {
         url: '/landmark/:landmarkID',
         cache:false,
@@ -86,6 +98,9 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
                 
             }
         }
+    
+    // Shows the user information about a tour - the order of landmarks and a map with 
+    // their locations. Also keeps track of which landmark the user is 'currently on'
     }).state('app.tourView', {
         url: '/tour/:tourID',
         views: {

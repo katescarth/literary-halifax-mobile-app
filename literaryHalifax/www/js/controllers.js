@@ -32,37 +32,40 @@ angular.module('literaryHalifax')
         }
     }
     
-    // track whether or not the menu is open
+    // tracks whether or not the menu is open
     var menuOpen = false
-    // track the menu's location. CHANGING THIS VARIABLE DOES NOTHING
+    // tracks the menu's location. CHANGING THIS VARIABLE DOES NOTHING
     var menuPosition = -275
     updateMenuPosition = function(newPosition){
+        // reposition the menu
         menuPosition=newPosition
-        
-        var shadowLength= newPosition/27.5
-        
         $scope.menuStyle={'left':newPosition+'px'}
                          
+        // the shadow appears on the left side of the menu as it slides out
+        var shadowLength= newPosition/27.5
         $scope.listStyle={'box-shadow':shadowLength+'px 0px 10px #111111'}
     }
     
+    // 60 fps
     var frameLength=1000/60.0
-    var maxSteps=(250/frameLength)
+    // a full open or close takes 250 seconds
+    var maxFrames=(250/frameLength)
+    // the interval promise which is currently animating the side menu
     var animationPromise = undefined
     smoothScroll = function(from,to){
         if(animationPromise){
             $interval.cancel(animationPromise)
         }
-        var stepCount=Math.round(maxSteps*Math.abs(from-to)/275)
-        if(!stepCount){
-            stepCount=1
+        var frameCount=Math.round(maxFrames*Math.abs(from-to)/275)
+        if(!frameCount){
+            frameCount=1
         }
-        var stepSize = (to-from)/stepCount
+        var stepSize = (to-from)/frameCount
         var count = 0
         animationPromise=$interval(function(){
             count++
             updateMenuPosition(from+stepSize*count)
-        },frameLength,stepCount)
+        },frameLength,frameCount)
     }
     
     slideTo = function(position){
@@ -87,12 +90,17 @@ angular.module('literaryHalifax')
         }
     }
     
+    // handle a gesture (the user dragging the menu to the left or right)
     
-    var dragBase =0.0
-    var dragPrev =0.0
-    var dragVelocity =0.0
+    // the horizontal position where the drag started
+    var dragBase = 0.0
     
-    // at smaller values, more recent movements matter more.
+    // the last known horizontal position of the drag
+    var dragPrev = 0.0
+    
+    // Track how fast the drag is moving and in what direction.
+    // See onDrag for the calculation
+    var dragVelocity = 0.0
     var decayConstant = 0.8
     $scope.onDragStart = function(event){
         dragBase = menuPosition
@@ -115,14 +123,16 @@ angular.module('literaryHalifax')
     $scope.onDragEnd = function(event){
         
         var threshold = 4*4
-        
+        //if the user swiped quickly, send the menu to the diresction they swiped
         if(dragVelocity*dragVelocity>threshold){
             if(dragVelocity>0){
                 openMenu()
             } else {
                 closeMenu()
             }
-        } else {
+        }
+        // if they did not, send the menu to where it was before
+        else {
             if(menuOpen){
                 openMenu()
             } else {
@@ -182,8 +192,8 @@ angular.module('literaryHalifax')
                 title: 'Leave app?',
                 template: '',
                 okType: 'button-balanced'
-            }).then(function(res) {
-                if (res) {
+            }).then(function(shouldLeave) {
+                if (shouldLeave) {
                     ionic.Platform.exitApp();
                 }
             })
@@ -192,7 +202,7 @@ angular.module('literaryHalifax')
         }
     }, 100);
     
-    // the popover which controls audio that is being played
+    // the panel which controls audio that is being played
     var mediaController = undefined
     
     
@@ -216,8 +226,11 @@ angular.module('literaryHalifax')
     $scope.media = mediaPlayer
 }).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash,leafletData){
     
+    
+    // number of items to show in the list. Increased as user scrolls down
     $scope.numListItems = 5
     
+    // the map. Needed this so we can invalidate its size if it gets in a bad state.
     var map
     
     leafletData.getMap()
@@ -246,8 +259,8 @@ angular.module('literaryHalifax')
     
     var location = undefined
     
-    // Number of kilometers to display, rounded to two decimal points.
-    // If this cannot be calculated (e.g. one of the locations is missing)
+    // Number of kilometers to display, rounded to two Significant figures.
+    // If this cannot be calculated (e.g. one of the locations is missing),
     // return undefined
     $scope.displayDistance=function(landmark){
         if(location && landmark && landmark.location){
@@ -261,7 +274,7 @@ angular.module('literaryHalifax')
         
         
     $scope.loadingMsg = ''
-    var attrs = ['id','name','location','description','images']
+    // Represents the landmarks request, whatever it is
     var fetchLandmarks=$q.defer()
     if(navigator.geolocation){
         $scope.loadingMsg = 'Getting your location...'
@@ -347,7 +360,8 @@ angular.module('literaryHalifax')
             $scope.filter.text.toLowerCase()
         )>=0
     }
-    
+    // show or hide markers according to whether or not their corresponding
+    // landmarks should be filtered out
     $scope.applyFilter = function(){
         lodash.times($scope.markers.length,function(index){
             var marker = $scope.markers[index]
@@ -362,10 +376,10 @@ angular.module('literaryHalifax')
         })
     }
     
-$scope.clearFilter = function(){
-    $scope.filter.text=''
-    $scope.applyFilter()
-}
+    $scope.clearFilter = function(){
+        $scope.filter.text=''
+        $scope.applyFilter()
+    }
     
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
@@ -375,11 +389,10 @@ $scope.clearFilter = function(){
 
 }).controller('toursCtrl', function($scope, $state, $q, server, utils, lodash){
     
+    
     var location = undefined
     
     $scope.loadingMsg = ''
-    
-    $scope.markers =[]
     
     // When the view is entered, try to get the user's location.
     // If successful, use it to get the tours from the server
@@ -418,7 +431,7 @@ $scope.clearFilter = function(){
 
         deferred.promise.then(function(result){
             $scope.loadingMsg=''
-            $scope.tours = result        
+            $scope.tours = result
         }).catch(function(error){
             $scope.loadingMsg=''
             $scope.errorMsg=error
@@ -572,6 +585,8 @@ $scope.clearFilter = function(){
 
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){
     
+    
+    // If a landmark is the current landmark, green. If it's a previous one, grey. If it's ahead, blue
     iconFor = function(index){
         var url
         if (index<$scope.currentLandmark) {
@@ -606,15 +621,19 @@ $scope.clearFilter = function(){
         $scope.toNext()
     }
 
+    // show the info window for a landmark (addressed with an index)
     $scope.focus=function(event, landmarkIndex){
         event.stopPropagation()
         for(i=0;i<$scope.markers.length;i++){
+            // unfocus all the other ones
             $scope.markers[i].focus=(i==landmarkIndex)
         }
         $scope.mapInfo.lat=$scope.markers[landmarkIndex].lat
         $scope.mapInfo.lng=$scope.markers[landmarkIndex].lng
     }
 
+    // utility method for going to a landmark and moving the position in 
+    // the tour appropriately
     $scope.goTo=function(destIndex){
 
         $scope.currentLandmark = destIndex
@@ -624,7 +643,7 @@ $scope.clearFilter = function(){
         $scope.upNextClicked()        
     }
     
-    
+    // advancing the current landmark (but not navigating to it)
     $scope.toNext = function(){
         if($scope.currentLandmark < $scope.tour.landmarks.length - 1){
             $scope.currentLandmark+=1
@@ -633,6 +652,7 @@ $scope.clearFilter = function(){
         }
     }
     
+    // retracting the current landmark (but not navigating to it)
     $scope.toPrev = function(){
         if($scope.currentLandmark > 0){
             $scope.currentLandmark-=1
@@ -646,7 +666,7 @@ $scope.clearFilter = function(){
     }
     
     server.tourInfo(
-        $stateParams.tourID,['name','landmarks','description','start']              
+        $stateParams.tourID            
     ).then(function(tour){
         //TODO pan to the start of the tour
         
@@ -654,7 +674,15 @@ $scope.clearFilter = function(){
         $scope.loadingMsg='Getting landmarks'
         var promises = []
         for(i=0;i<$scope.tour.landmarks.length;i++){
-            promises.push(server.updateLandmark($scope.tour.landmarks[i],['name','description','location']))
+            // Use a closure to give the promises access to index
+            (function(index){
+                promises.push(
+                    server.landmarkInfo($scope.tour.landmarks[index].id)
+                    .then(function(landmark){
+                        angular.extend($scope.tour.landmarks[index], landmark)
+                    })
+                )
+            })(i)
         }
         
         return $q.all(promises).then(function(){

@@ -1,6 +1,7 @@
 angular.module('literaryHalifax')
 
 /*
+ * This file is a dumping ground for reused code.
  */
 .factory('utils', function(){
     
@@ -23,7 +24,7 @@ angular.module('literaryHalifax')
     return utils
 })
 
-
+// an element with the dotdotdot attribute will truncate text with ellipses
 .directive('dotdotdot', function() {
         return {
             restrict: 'A',
