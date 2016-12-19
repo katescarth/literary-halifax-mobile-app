@@ -1,7 +1,6 @@
 angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             restrict: 'E',
-            transclude: true,
             scope: {
                 // An object with alt, lng, and zoom properties that determines the initial state
                 mapInfo: '='
@@ -11,9 +10,6 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 //A list of markers to display on the map
                 mapMarkers:'='
                 
-            },
-            link: function ($scope, $elm, $attr) {
-
             },
             templateUrl: 'components/map/map.html'
         };
@@ -31,7 +27,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 iconAnchor:   [5,5]
             }
         }
-        
+        // display the union of passed-in markers and the user loocation marker
         $scope.$watch("mapMarkers", function (newValue, oldValue) {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);

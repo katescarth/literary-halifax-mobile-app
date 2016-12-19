@@ -4,6 +4,9 @@ a {
     /* no underline */
 }
 
+
+/*before the background image loads, this is visible*/
+
 ion-nav-view {
     background-color: white;
 }
@@ -25,15 +28,15 @@ ion-nav-view {
     max-width: 175px !important;
     max-height: 60px;
     align-content: center;
-    overflow:hidden;
-} 
-
-.info-window h6{
-    margin:2px !important;
+    overflow: hidden;
 }
 
-.info-window p{
-    margin:2px !important;
+.info-window h6 {
+    margin: 2px !important;
+}
+
+.info-window p {
+    margin: 2px !important;
 }
 
 .info-window-spinner {
@@ -118,7 +121,7 @@ overscroll-pane {
 }
 
 .error-icon {
-    color:firebrick;
+    color: firebrick;
     font-size: 32px;
 }
 
@@ -133,7 +136,7 @@ overscroll-pane {
 }
 
 .list-item-title {
-    margin-top:4px;
+    margin-top: 4px;
     font-size: 12px;
     color: #222;
     text-overflow: ellipsis;
@@ -144,8 +147,8 @@ overscroll-pane {
 .list-item-subtitle {
     font-size: 10px;
     line-height: 13px;
-    max-height:44px;
-    margin-top:3px;
+    max-height: 44px;
+    margin-top: 3px;
     color: grey;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -175,13 +178,13 @@ overscroll-pane {
 .up-next-button-row {
     font-size: 12px;
     color: grey;
-    padding-top:4px;
+    padding-top: 4px;
 }
 
 .pin-image {
-    padding-right:6px;
-    padding-top:4px;
-    height:32px;
+    padding-right: 6px;
+    padding-top: 4px;
+    height: 32px;
 }
 
 .audio-button {
@@ -226,17 +229,15 @@ overscroll-pane {
 
 .image-modal-text {
     color: darkgray;
-    position:absolute;
-    bottom:0;
+    position: absolute;
+    bottom: 0;
 }
 
 .image-modal-text .image-title {
     font-size: 14px;
-    
 }
 
-.image-modal-text .image-description{
+.image-modal-text .image-description {
     font-size: 10px;
     line-height: 13px;
-    
 }

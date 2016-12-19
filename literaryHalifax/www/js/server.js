@@ -87,112 +87,58 @@ const SERVICE=16
 const SOFTWARE=17
 const CURATESCAPE_STORY=18
 
-var tours = [
-    {
-        name:"Prime numbered lights",
-        description:"Only the prime numbered ids",
-        landmarks:[
-            {id:"christmas-id-2"},
-            {id:"christmas-id-3"},
-            {id:"christmas-id-5"},
-            {id:"christmas-id-7"},
-            {id:"christmas-id-11"},
-            {id:"christmas-id-13"},
-            {id:"christmas-id-17"},
-            {id:"christmas-id-23"},
-            {id:"christmas-id-29"},
-            {id:"christmas-id-31"}
-        ],
-        id:"tour-id-1"
-    },
-    {
-        name:"Someone messed up",
-        description:"This tour is just here to showcase someone putting the pin in the middle of the ocean. You're going to need a solid wetsuit to complete this one.",
-        landmarks:[
-            {id:"christmas-id-27"}
-        ],
-        id:"tour-id-2"
-    },
-    {
-        name:"Central Halifax",
-        description:"All the lights in the city",
-        landmarks:[
-            {id:"christmas-id-15"},//connaught
-            {id:"christmas-id-29"},
-            {id:"christmas-id-18"},//Wright
-            {id:"christmas-id-31"}//Thief
-        ],
-        id:"tour-id-3"
-    },
-    {
-        name:"The full Monty",
-        description:"All the lights in the system in more or less random order. Hang on to my hat, I'm going in!",
-        landmarks:[
-            {id:"christmas-id-8"},
-            {id:"christmas-id-12"},
-            {id:"christmas-id-17"},
-            {id:"christmas-id-22"},
-            {id:"christmas-id-10"},
-            {id:"christmas-id-18"},
-            {id:"christmas-id-7"},
-            {id:"christmas-id-21"},
-            {id:"christmas-id-25"},
-            {id:"christmas-id-14"},
-            {id:"christmas-id-27"},
-            {id:"christmas-id-1"},
-            {id:"christmas-id-28"},
-            {id:"christmas-id-30"},
-            {id:"christmas-id-3"},
-            {id:"christmas-id-6"},
-            {id:"christmas-id-24"},
-            {id:"christmas-id-5"},
-            {id:"christmas-id-25"},
-            {id:"christmas-id-11"},
-            {id:"christmas-id-20"},
-            {id:"christmas-id-31"},
-            {id:"christmas-id-15"},
-            {id:"christmas-id-13"},
-            {id:"christmas-id-26"},
-            {id:"christmas-id-23"},
-            {id:"christmas-id-29"},
-            {id:"christmas-id-4"},
-            {id:"christmas-id-16"}
-        ],
-        id:"tour-id-4"
-    }
-]
+var fixtureTour = {
+    name:"The Secret Tour",
+    description:"This tour isn't on the server, but you kept asking so I guess you can have it.",
+    landmarks:[
+        {id:"6"},
+        {id:"7"},
+        {id:"9"}
+    ],
+    id:"tour-id-1"
+}
 angular.module('literaryHalifax')
 
 /*
- * Right now, this is all fixture data. The purpose of this code is to separate
- * the rest of the app from the server (this is the only part of the code that
- * knows there's not actually a server)
 
  * Spec for landmark:
  *  id: a unique identifier (str)
  *  name: The name of the landmark (str)
- *  location: the lat,lng of the landmark (str)
+ *  location: the lat,lng of the landmark (object with lat,lng attributes)
+ *  streetAddress: the landmark's street address (str)
  *  description: text description of the landmark (array[str]. Each element is a
                  paragraph)
- *  subtit;e: A short 'hook' for the landmark (str)
- *  images: a list of images associated with the landmark. The first image is the
-            thumbnail/main image (array[image])
- *  audio:  an audio reading of the stroy's description
+ *  subtitle: A short 'hook' for the landmark (str)
+ *  images: a list of images associated with the landmark. (array[image])
+ *  audio:  an audio reading of the landmark's description (url)
  *
+ 
+ 
+ * Spec for image:
+ *  full: url of the image at full resolution
+ *  squareThumb: url of a square thumbnail of the image
+ *  thumb: url of a thumbnail of the image
+ 
+ * Spec for tour:
+ *  id: a unique identifier (str)
+ *  name: the name of the tour (str)
+ *  description: a description of the tour (str)
+ *  landmarks: the landmarks in the tour, in order (array of objects with 'id' attributes)
+ *  start: the location of the first landmark in the tour (object with lat, lng attributes)
+ 
  
  *Spec for server: 
 
- * getLandmarks(attrs): resolves to a list of landmarks with the specified attributes 
-                      filled in
- * landmarkInfo(id, attributes): resolves to an object with all of the properties
-                              listed in attributes (a string array). The values
-                              for these properties are copied from the landmark
-                              matching id
+ * getLandmarks(nearPoint): resolves to a list of all landmarks on the server. If a nearPoint
+                            is provided, the tours are ordered by their nearness to that point
+ * landmarkInfo(id): resolves to an object representing the landmark with the given id
+ * getTours(): resolves to a list of all tours on the server
+ * tourInfo(id): resolves to an object representing the tour with the given id
  */
 .factory('server', function($timeout,$q,$http,utils,lodash,$ionicPlatform){
     var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
-     var api = "http://206.167.183.207/api"
+    var api = "http://206.167.183.207/api"
 
 
         $ionicPlatform.ready(function(){
@@ -203,18 +149,22 @@ angular.module('literaryHalifax')
             }
         })
     
-    
+    var tourRequestCount = 0
 
-    convertLandmark = function(landmarkJson){
+    
+    // converts a landmark from the server to one that matches our spec. 
+    // This includes making requests for files and location.
+    convertLandmark = function(serverRecord){
         
         var landmark = {
-            id:landmarkJson.id,
-            images:[]
+            id:serverRecord.id,
+            images:[],
+            audio:"/android_asset/www/audio/TEST_AUDIO.wav"
         }
         var promises = []
         
         promises.push(
-            $http.get(api+'/files?item=' + landmarkJson.id)
+            $http.get(api+'/files?item=' + serverRecord.id)
             .then(function(files){
                 lodash.forEach(files.data,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
@@ -231,7 +181,7 @@ angular.module('literaryHalifax')
         )
         promises.push(
             $http.get(api+'/geolocations/' + 
-                      landmarkJson.extended_resources.geolocations.id)
+                      serverRecord.extended_resources.geolocations.id)
             .then(function(location){
                 landmark.location={
                     lat:location.data.latitude,
@@ -245,23 +195,23 @@ angular.module('literaryHalifax')
         )
         
         
-        for(var i = 0, len = landmarkJson.element_texts.length; i < len; i++){
-            var text = landmarkJson.element_texts[i]
-            switch(text.element.id){
+        for(var i = 0, len = serverRecord.element_texts.length; i < len; i++){
+            var resource = serverRecord.element_texts[i]
+            switch(resource.element.id){
                 case TITLE:
-                    landmark.name=text.text
+                    landmark.name=resource.text
                     break;
                 case SUBTITLE:
-                    landmark.subtitle=text.text
+                    landmark.subtitle=resource.text
                     break;
                 case STORY:
-                    landmark.description=text.text
+                    landmark.description=resource.text
                     break;
                 case STREET_ADDRESS:
-                    landmark.streetAddress=text.text
+                    landmark.streetAddress=resource.text
                     break;
                 default:
-                    console.log('No rule found for '+text.element.name)
+                    console.log('No rule found for '+resource.element.name)
             }
         }
         
@@ -270,11 +220,21 @@ angular.module('literaryHalifax')
             return $q.when(landmark)
         }, function(error){
             console.log(error)
+            return $q.reject(error)
         })
         
     }
 
-    server = {
+    server = {        
+        landmarkInfo:function(id){
+            
+            return $http.get(api+'/items/'+id)
+            .then(function(result){
+                return convertLandmark(result.data)
+            }).then(function(result){
+                return result
+            })
+        },
         getLandmarks:function(nearPoint){
 
             var landmarks = []
@@ -307,41 +267,32 @@ angular.module('literaryHalifax')
 
         },
         
-        
-        landmarkInfo:function(id){
-            
-            return $http.get(api+'/items/'+id)
-            .then(function(result){
-                return convertLandmark(result.data)
-            }).then(function(result){
-                console.log(result)
-                return result
-            })
+        tourInfo:function(id){
+            var result = {}
+            if(id==fixtureTour.id){
+                angular.extend(result,fixtureTour)
+                return server.landmarkInfo(result.landmarks[0].id)
+                    .then(function(landmark){
+                        result.start = landmark.location
+                        return result
+                    })
+            }
         },
         
         getTours:function(nearPoint){
-            return $timeout(3000).then(function(){
-                return $q.reject("There are not tours on the server yet")
-            })
-        },
-        
-        
-        tourInfo:function(id,attributes){
-            var result = {}
-            var i=0
-            for(i=0;i<tours.length;i++){
-
-                if(tours[i].id==id){
-                    var j=0
-                    for(j=0;j<attributes.length;j++){
-                        result[attributes[j]] =tours[i][attributes[j]]
-                    }
-
-                    return $timeout(function(){
-                        return result
-                    }, SMALL_DELAY)
-                }
+            
+            if(++tourRequestCount%3){
+                return $timeout(3000).then(function(){
+                    return $q.reject("There are not tours on the server yet")
+                })
+            } else {
+                // They asked a bunch of times, maybe this will make them go away
+                return server.tourInfo(fixtureTour.id)
+                .then(function(result){
+                  return [result]  
+                })
             }
+            
         }
     }
 
