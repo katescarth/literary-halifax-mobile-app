@@ -158,7 +158,8 @@ angular.module('literaryHalifax')
         
         var landmark = {
             id:serverRecord.id,
-            images:[]
+            images:[],
+            audio:"/android_asset/www/audio/TEST_AUDIO.wav"
         }
         var promises = []
         
@@ -196,7 +197,7 @@ angular.module('literaryHalifax')
         
         for(var i = 0, len = serverRecord.element_texts.length; i < len; i++){
             var resource = serverRecord.element_texts[i]
-            switch(text.element.id){
+            switch(resource.element.id){
                 case TITLE:
                     landmark.name=resource.text
                     break;
