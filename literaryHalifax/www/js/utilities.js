@@ -3,7 +3,7 @@ angular.module('literaryHalifax')
 /*
  * This file is a dumping ground for reused code.
  */
-.factory('utils', function(){
+.factory('utils', function($q){
     
     
     
@@ -17,6 +17,26 @@ angular.module('literaryHalifax')
             dLng = from.lng-to.lng
             squarekms = Math.pow((dLat*111.1),2) + Math.pow((dLng*79.3),2)
             return Math.sqrt(squarekms)
+        },
+        getPosition:function(options){
+            var deferred = $q.defer()
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(
+                    function(currentPosition){
+                        deferred.resolve({
+                            lat: currentPosition.coords.latitude,
+                            lng:currentPosition.coords.longitude
+                        })
+                    },
+                    function(error){
+                        deferred.reject(error)
+                    },
+                    options
+                )
+            } else {
+                deferred.reject(error)                
+            }
+            return deferred.promise
         }
     }
     

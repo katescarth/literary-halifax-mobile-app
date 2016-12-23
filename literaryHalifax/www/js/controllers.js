@@ -273,67 +273,73 @@ angular.module('literaryHalifax')
     }
         
         
-    $scope.loadingMsg = ''
-    // Represents the landmarks request, whatever it is
-    var fetchLandmarks=$q.defer()
-    if(navigator.geolocation){
+    
+    $scope.refresh=function(){
+        
+        $scope.landmarks = []
+        $scope.markers = []
+        
+        // Represents the landmarks request, whatever it is
+        var fetchLandmarks
+
+        $scope.errorMessage = ''
         $scope.loadingMsg = 'Getting your location...'
-        navigator.geolocation.getCurrentPosition(
-            function(currentPosition){
-                $scope.loadingMsg = 'Getting landmarks...'
-                location ={
-                    lat: currentPosition.coords.latitude,
-                    lng:currentPosition.coords.longitude
-                }
-                fetchLandmarks.resolve(
-                    server.getLandmarks(location)
-                )
+        //try to get our position
+        utils.getPosition({
+                    //we can accept an old result - stalling here shoud be avoided
+                    maximumAge: 60000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
+                })
+        .then(
+            function(result){
+                $scope.loadingMsg = 'Getting Landmarks...'
+                location = result
+                return server.getLandmarks(location)
             },
             function(error){
+                //if we can't get our position, just carry on without it.
                 console.log(error)
-                $scope.loadingMsg = 'Getting landmarks...'
-                fetchLandmarks.resolve(server.getLandmarks())
-            },
-            {
-                //we can accept an old result - stalling here shoud be avoided
-                maximumAge: 60000, 
-                timeout: 5000, 
-                enableHighAccuracy: true 
+                $scope.loadingMsg = 'Getting Landmarks...'
+                return server.getLandmarks()
             }
         )
-    } else {
-        $scope.loadingMsg = 'Getting landmarks...'
-        fetchLandmarks.resolve(server.getLandmarks())
-    }
+        .then(function(result){
+            $scope.landmarks = result
+            $scope.loadingMsg=''
 
-    fetchLandmarks.promise.then(function(result){
-        $scope.loadingMsg = ''
-        $scope.landmarks = result
-        
-        $scope.markers = lodash.times(result.length, function(index){
-            
-            var landmark=result[index]
-            return {
-                lat: landmark.location.lat,
-                lng: landmark.location.lng,
-                message:
-                    "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
-                        "<h6>"+landmark.name+"</h6>" +
-                        "<p>"+landmark.description+"</p>"+
-                     "</div>",
-                getMessageScope: function(){return $scope},
-                focus: false,
-                icon: {
-                    iconUrl: "img/green-pin.png",
-                    iconSize:     [21, 30], // size of the icon
-                    iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
-                    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+            $scope.markers = lodash.times(result.length, function(index){
+
+                var landmark=result[index]
+                return {
+                    lat: landmark.location.lat,
+                    lng: landmark.location.lng,
+                    message:
+                        "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
+                            "<h6>"+landmark.name+"</h6>" +
+                            "<p>"+landmark.description+"</p>"+
+                         "</div>",
+                    getMessageScope: function(){return $scope},
+                    focus: false,
+                    icon: {
+                        iconUrl: "img/green-pin.png",
+                        iconSize:     [21, 30], // size of the icon
+                        iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                        popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                    }
                 }
-            }
+            })
+        }).catch(function(error){
+            $scope.loadingMsg=''
+            $sccope.errorMessage = error
         })
-    }).catch(function(error){
-        console.log(error)
-    })
+        
+    }
+    
+    $scope.refresh()
+    
+    
+    
 
     // display the map centered on citadel hill.
     // UX: The map is the first thing people see when opening the app.
@@ -400,42 +406,39 @@ angular.module('literaryHalifax')
         
     
     $scope.loadResults=function(){
-        var deferred=$q.defer()
-        if(navigator.geolocation){
-            $scope.loadingMsg='getting your location...'
-            $scope.errorMsg=''
-            navigator.geolocation.getCurrentPosition(
-                function(currentPosition){
-                    location={
-                        lat: currentPosition.coords.latitude,
-                        lng:currentPosition.coords.longitude
-                    }
-                    $scope.loadingMsg='getting tours...'
-                    deferred.resolve(server.getTours(location))
-                },
-                function(error){
-                    $scope.loadingMsg='getting tours...'
-                    deferred.resolve(server.getTours())
-                },
-                {
-                    //we can accept an old result - stalling here shoud be avoided
-                    maximumAge: 60000, 
-                    timeout: 5000, 
-                    enableHighAccuracy: true 
-                }
-            )
-        } else {
-            $scope.loadingMsg='getting tours...'
-            deferred.resolve(server.getTours())
-        }
+        location = undefined
+        $scope.tours = []
+        $scope.loadingMsg='getting your location...'
+        $scope.errorMsg=''
+        utils.getPosition({
+                //we can accept an old result - stalling here shoud be avoided
+                maximumAge: 60000, 
+                timeout: 5000, 
+                enableHighAccuracy: true 
+            })
+        .then(
+            function(result){
 
-        deferred.promise.then(function(result){
-            $scope.loadingMsg=''
-            $scope.tours = result
-        }).catch(function(error){
-            $scope.loadingMsg=''
-            $scope.errorMsg=error
-        })
+                location=result
+                $scope.loadingMsg='getting tours...'
+                return server.getTours(location)
+
+            },
+            function(error){
+                console.log(error)
+                $scope.loadingMsg='getting tours...'
+                return server.getTours()
+            })
+        .then(
+            function(result){
+                $scope.loadingMsg=''
+                $scope.tours = result
+            },
+            function(error){
+                $scope.loadingMsg=''
+                $scope.errorMsg=error
+            }
+        )
     }
     
     $scope.loadResults()
