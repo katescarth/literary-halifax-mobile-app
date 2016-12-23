@@ -2,10 +2,11 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         return {
             restrict: 'E',
             scope: {
-                // An object with alt, lng, and zoom properties that determines the initial state
-                mapInfo: '='
-                , //a unique identifier to be applied to the map. Must be a number.
-                  // use NgMap.getMap(mapHandle) to find the map (e.g. to show an info window)
+                // An object with lat, lng, and zoom properties. The view window of the map
+                // will always reflect these properties. Note that this means the user scrolling
+                // on the map willl update the properties
+                mapInfo: '=',
+                // a unique identifier to be applied to the map. Must be a number.
                 mapHandle:'=',
                 //A list of markers to display on the map
                 mapMarkers:'='
@@ -31,6 +32,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         $scope.$watch("mapMarkers", function (newValue, oldValue) {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);
+    
+        // regularly update the user location marker's position 
         $ionicPlatform.ready(function(){
             if(navigator.geolocation){
                 navigator.geolocation.watchPosition(
@@ -61,11 +64,13 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         }
         
         
+//      The tileset used by Curatescape  
+//      url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+        
+        
         
         $scope.tiles ={
-//            name: 'OpenStreetMap',
             url: 'https://api.mapbox.com/v4/{mapID}/{z}/{x}/{y}.png?access_token={apikey}',
-//            type: 'xyz',
             options: {
                 // TODO: This is David Walker's key, get our own for production
                 apikey: 'pk.eyJ1IjoiZHdhbGtlcmhhbGlmYXgiLCJhIjoiY2l3bzVieDNoMDAxdDJ6bXJzODg2cHF5OCJ9.AyPfYz71uJidlIqouYDNPA',

@@ -86,6 +86,8 @@ angular.module('literaryHalifax')
         title:undefined,
         progress:0
     }
+    
+    // keep the progress variable updated
     $interval(function(){
         if(media){
             media.getCurrentPosition(function(pos){

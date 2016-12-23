@@ -168,6 +168,7 @@ angular.module('literaryHalifax')
             .then(function(files){
                 lodash.forEach(files.data,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
+                        // TODO this doesn't guarantee the order of the images
                         landmark.images.push(
                             {
                                 full:file.file_urls.fullsize,
@@ -175,7 +176,8 @@ angular.module('literaryHalifax')
                                 thumb:file.file_urls.thumbnail
                             }
                         )
-                    }   
+                    }
+                    // TODO add audio handler
                 })
             })
         )

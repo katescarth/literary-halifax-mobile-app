@@ -32,17 +32,20 @@ angular.module('literaryHalifax')
         }
     }
     
+    var menuWidth = 275
     // tracks whether or not the menu is open
     var menuOpen = false
-    // tracks the menu's location. CHANGING THIS VARIABLE DOES NOTHING
-    var menuPosition = -275
+    // tracks the menu's location. CHANGING THIS VARIABLE DOES NOT
+    // MOVE THE MENU
+    
+    var menuPosition = -menuWidth
     updateMenuPosition = function(newPosition){
         // reposition the menu
         menuPosition=newPosition
         $scope.menuStyle={'left':newPosition+'px'}
                          
         // the shadow appears on the left side of the menu as it slides out
-        var shadowLength= newPosition/27.5
+        var shadowLength= 10.0 * newPosition / menuWidth
         $scope.listStyle={'box-shadow':shadowLength+'px 0px 10px #111111'}
     }
     
@@ -52,14 +55,24 @@ angular.module('literaryHalifax')
     var maxFrames=(250/frameLength)
     // the interval promise which is currently animating the side menu
     var animationPromise = undefined
+    
+    //  animate a scroll from the first position to the second
+    //  For short distances (like when dragging), this is ineffecient.
+    //  Use updateMenuPosition instead
     smoothScroll = function(from,to){
+        
+        //  only run one animation at once
         if(animationPromise){
             $interval.cancel(animationPromise)
         }
-        var frameCount=Math.round(maxFrames*Math.abs(from-to)/275)
+        
+        //  number of frames in this animation
+        var frameCount=Math.round(maxFrames*Math.abs(from-to)/menuWidth)
         if(!frameCount){
             frameCount=1
         }
+        
+        //  distance the menu shifts each frame
         var stepSize = (to-from)/frameCount
         var count = 0
         animationPromise=$interval(function(){
@@ -68,6 +81,7 @@ angular.module('literaryHalifax')
         },frameLength,frameCount)
     }
     
+    //  convenience funtion. Slide to the given position from the current
     slideTo = function(position){
         smoothScroll(menuPosition, position)
     }
@@ -78,7 +92,7 @@ angular.module('literaryHalifax')
     }
     
     closeMenu=function(){
-        slideTo(-275)
+        slideTo(-menuWidth)
         menuOpen=false
     }
     
@@ -101,7 +115,7 @@ angular.module('literaryHalifax')
     // Track how fast the drag is moving and in what direction.
     // See onDrag for the calculation
     var dragVelocity = 0.0
-    var decayConstant = 0.8
+    var decayConstant = 0.5
     $scope.onDragStart = function(event){
         dragBase = menuPosition
     }
@@ -112,8 +126,8 @@ angular.module('literaryHalifax')
         dragVelocity += (newPosition - dragPrev)
         dragPrev = newPosition
         
-        if(newPosition<-275){
-            newPosition=-275
+        if(newPosition<-menuWidth){
+            newPosition=-menuWidth
         } else if(newPosition>0){
             newPosition=0
         }
@@ -153,10 +167,11 @@ angular.module('literaryHalifax')
         });
         $state.go(item.state)
         if(menuOpen){
-            toggleMenu()
+            closeMenu()
         }
     }
 
+    //  Handle this ourselves, since we are using a custom back button
     goBack = function(){
         $ionicHistory.goBack()
     }
@@ -181,7 +196,10 @@ angular.module('literaryHalifax')
     $scope.menuMode=true
     $scope.navBarTitle = "Landmarks"
 
-    // take control of back button when it tries to navigate back
+    var BACK_NAV_CODE = 100
+    
+    // take control of the PHYSICAL back button on android
+    // when it tries to navigate back
     // (not when it closes popups, etc.)
     $ionicPlatform.registerBackButtonAction(function(event) {
         
@@ -200,7 +218,7 @@ angular.module('literaryHalifax')
         } else {
             goBack()
         }
-    }, 100);
+    }, BACK_NAV_CODE);
     
     // the panel which controls audio that is being played
     var mediaController = undefined
@@ -231,7 +249,7 @@ angular.module('literaryHalifax')
     $scope.numListItems = 5
     
     // the map. Needed this so we can invalidate its size if it gets in a bad state.
-    var map
+    var map = undefined
     
     leafletData.getMap()
         .then(
@@ -242,12 +260,15 @@ angular.module('literaryHalifax')
             }
         )
     
-    inval = function(){
+    var inval = function(){
         if(map){
             map.invalidateSize()
         }
     }
     
+    //  When navigating back to a map, the tiles will sometimes
+    //  only render in the top left corner. Making the map resize
+    //  inself fixes the issue
     $scope.$on('$ionicView.afterEnter',function(){
         inval()
     })
@@ -257,6 +278,7 @@ angular.module('literaryHalifax')
         $scope.$broadcast('scroll.infiniteScrollComplete');
     }
     
+    // the user's location
     var location = undefined
     
     // Number of kilometers to display, rounded to two Significant figures.
@@ -278,13 +300,9 @@ angular.module('literaryHalifax')
         
         $scope.landmarks = []
         $scope.markers = []
-        
-        // Represents the landmarks request, whatever it is
-        var fetchLandmarks
-
         $scope.errorMessage = ''
         $scope.loadingMsg = 'Getting your location...'
-        //try to get our position
+        //try to get the user's position
         utils.getPosition({
                     //we can accept an old result - stalling here shoud be avoided
                     maximumAge: 60000, 
@@ -298,7 +316,7 @@ angular.module('literaryHalifax')
                 return server.getLandmarks(location)
             },
             function(error){
-                //if we can't get our position, just carry on without it.
+                //if we can't get the position, just carry on without it.
                 console.log(error)
                 $scope.loadingMsg = 'Getting Landmarks...'
                 return server.getLandmarks()
@@ -350,12 +368,10 @@ angular.module('literaryHalifax')
         zoom: 15
     }
     
-    //ngModel doesn't work without a dot
+    //ngModel doesn't work without a dot. Represents the text entered into the filter bar
     $scope.filter={
         text:''
     }
-    
-    $scope.landmarks = []
     
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark=function(landmark){
@@ -387,6 +403,7 @@ angular.module('literaryHalifax')
         $scope.applyFilter()
     }
     
+    //  Go to landmark view for the given landmark
     $scope.go=function(landmark){
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
@@ -462,8 +479,6 @@ angular.module('literaryHalifax')
         text:''
     }
     
-    $scope.tours = []
-    
     $scope.go=function(tour){
         $state.go('app.tourView',{tourID:tour.id})
     }
@@ -521,8 +536,9 @@ angular.module('literaryHalifax')
         modal.show()
     }
     
-    $scope.display = function(img){
-        $scope.imageSrc = img
+    // display an image in the image modal
+    $scope.display = function(url){
+        $scope.imageSrc = url
         $scope.imageAnimation="fade-appear"
         $scope.backgroundAnimation="frost-appear"
         // let the class register to avoid flicker
@@ -624,7 +640,9 @@ angular.module('literaryHalifax')
         $scope.toNext()
     }
 
-    // show the info window for a landmark (addressed with an index)
+    //  show an info window for a landmark (specified by index)
+    //  and make sure that no other windows are displayed.
+    //  Also center the map on the marker
     $scope.focus=function(event, landmarkIndex){
         event.stopPropagation()
         for(i=0;i<$scope.markers.length;i++){

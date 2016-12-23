@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="list-item-div centered-list-item" ng-if="errorMsg">
+<div class="list-item-div centered-list-item" ng-if="errorMsg&&!loadingMsg">
     <i class="icon ion-close-round error-icon" ng-click="refresh()"></i>
     <div class="list-item-subtitle">
         {{errorMsg}}
