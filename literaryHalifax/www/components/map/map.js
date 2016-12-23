@@ -13,7 +13,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             },
             templateUrl: 'components/map/map.html'
         };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform) {
     
         $scope.userLocationMarker = {
             focus: false,
@@ -31,25 +31,26 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         $scope.$watch("mapMarkers", function (newValue, oldValue) {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);
-        
-        if(navigator.geolocation){
-            navigator.geolocation.watchPosition(
-                function(result){
-                    angular.extend($scope.userLocationMarker,
-                        {
-                            lat:result.coords.latitude,
-                            lng:result.coords.longitude,
-                            opacity:1
-                        }
-                    )
-                    
-                }, function(error){
-                    console.log(error)
-                }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
-            )
-        } else {
-            console.log('no navigator!')
-        }
+        $ionicPlatform.ready(function(){
+            if(navigator.geolocation){
+                navigator.geolocation.watchPosition(
+                    function(result){
+                        angular.extend($scope.userLocationMarker,
+                            {
+                                lat:result.coords.latitude,
+                                lng:result.coords.longitude,
+                                opacity:1
+                            }
+                        )
+
+                    }, function(error){
+                        console.log(error)
+                    }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
+                )
+            } else {
+                console.log('no navigator!')
+            }
+        })
         
         //prevent scrolling when touching the map
         $scope.fingerDown = function () {
