@@ -349,7 +349,7 @@ angular.module('literaryHalifax')
             })
         }).catch(function(error){
             $scope.loadingMsg=''
-            $sccope.errorMessage = error
+            $scope.errorMessage = error
         })
         
     }

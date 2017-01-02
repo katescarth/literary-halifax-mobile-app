@@ -19,8 +19,8 @@
                 
                 <list-loader loading-msg="loadingMsg"></list-loader>
                 
-                <div class="list-item-div clearfix"  ng-repeat="landmark in landmarks"
-                  ng-click="go(landmark)" ng-if="showLandmark(landmark)&&$index<numListItems">
+                <div class="list-item-div clearfix"  ng-repeat="landmark in landmarks track by $index"
+                  ng-click="go(landmark)" ng-show="showLandmark(landmark)&&$index<numListItems">
                     <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
                     <div>
                         <div class="list-item-distance" ng-if="displayDistance(landmark)">

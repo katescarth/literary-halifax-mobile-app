@@ -263,7 +263,6 @@ angular.module('literaryHalifax')
                     }
                     landmarks = lodash.sortBy(landmarks,dist)
                 }
-                
                 return $q.when(landmarks)
             })
 
