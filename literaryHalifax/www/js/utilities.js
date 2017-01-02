@@ -3,9 +3,26 @@ angular.module('literaryHalifax')
 /*
  * This file is a dumping ground for reused code.
  */
-.factory('utils', function($q, $ionicPlatform){
+.factory('utils', function($q, $ionicPlatform, $timeout){
     
-    
+    var timeoutWrapper = function(promise,millis){
+        var deferred = $q.defer()
+        promise.then(
+            function(result){
+                deferred.resolve(result)
+            },
+            function(error){
+                deferred.reject(error)
+            }
+        )
+        
+        $timeout(millis).then(function(){
+            deferred.reject('timed out!')
+        })
+        
+        return deferred.promise
+        
+    }
     
     var utils={
         // returns the distance between two lat/lng objects, in kilometers.
@@ -47,7 +64,7 @@ angular.module('literaryHalifax')
                 }
             })
             
-            return deferred.promise
+            return timeoutWrapper(deferred.promise,options.timeout)
         }
     }
     
