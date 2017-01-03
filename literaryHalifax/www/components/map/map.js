@@ -14,7 +14,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             },
             templateUrl: 'components/map/map.html'
         };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils) {
     
         $scope.userLocationMarker = {
             focus: false,
@@ -33,27 +33,29 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);
     
-        // regularly update the user location marker's position 
-        $ionicPlatform.ready(function(){
-            if(navigator.geolocation){
-                navigator.geolocation.watchPosition(
-                    function(result){
-                        angular.extend($scope.userLocationMarker,
-                            {
-                                lat:result.coords.latitude,
-                                lng:result.coords.longitude,
-                                opacity:1
-                            }
-                        )
-
-                    }, function(error){
-                        console.log(error)
-                    }, {maximumAge:3000, timeout: 5000, enableHighAccuracy:true}
+    
+        utils.watchPosition(
+            function(result){
+                angular.extend($scope.userLocationMarker,
+                    {
+                        lat:result.coords.latitude,
+                        lng:result.coords.longitude,
+                        opacity:1
+                    }
                 )
-            } else {
-                console.log('no navigator!')
+
+            },
+            function(error){
+                console.log(error)
+            },
+            {
+                maximumAge:3000,
+                timeout: 5000,
+                enableHighAccuracy:true
             }
-        })
+        )
+    
+        // regularly update the user location marker's position 
         
         //prevent scrolling when touching the map
         $scope.fingerDown = function () {

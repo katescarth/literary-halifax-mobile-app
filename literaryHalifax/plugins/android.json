@@ -13,9 +13,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
-        },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
@@ -32,6 +29,9 @@
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         },
         "cordova-plugin-android-permissions": {
+            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         }
     },

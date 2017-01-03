@@ -317,7 +317,7 @@ angular.module('literaryHalifax')
             },
             function(error){
                 //if we can't get the position, just carry on without it.
-                console.log(error)
+                window.alert(error.message)
                 $scope.loadingMsg = 'Getting Landmarks...'
                 return server.getLandmarks()
             }
