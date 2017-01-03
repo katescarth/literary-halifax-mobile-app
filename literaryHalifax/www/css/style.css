@@ -4,6 +4,10 @@ a {
     /* no underline */
 }
 
+.cloak{
+    display: none !important;
+    opacity: 0;
+}
 
 /*before the background image loads, this is visible*/
 

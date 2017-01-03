@@ -5,10 +5,10 @@
     </button>
   <h1 class="title">{{navBarTitle}}</h1>
   <!-- TODO share button -->
-    <button ng-show="media.hasTrack" class="button button-icon button-clear ion-volume-high"
-            ng-class="media.isPlaying?'pulse':'pulse-idle'"
-          ng-click="audioButtonClick($event)" ng-cloak>
-    </button>
+        <button  class="button button-icon button-clear ion-volume-high"
+                ng-class="media.hasTrack?(media.isPlaying?'pulse':'pulse-idle'):'cloak'"
+              ng-click="audioButtonClick($event)">
+        </button>
 </ion-header-bar>
 <ion-nav-view name="mainContent"></ion-nav-view>
 
