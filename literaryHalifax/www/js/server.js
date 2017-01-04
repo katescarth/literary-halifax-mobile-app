@@ -282,10 +282,11 @@ angular.module('literaryHalifax')
             }).then(function(){
                 
                 if(nearPoint){
-                    dist = function(landmark){
-                        return utils.distance(nearPoint,landmark.location)
-                    }
-                    landmarks = lodash.sortBy(landmarks,dist)
+                    landmarks = lodash.sortBy(landmarks,
+                        function(landmark){
+                            return utils.distance(nearPoint,landmark.location)
+                        }   
+                    )
                 }
                 return $q.when(landmarks)
             })
@@ -311,7 +312,13 @@ angular.module('literaryHalifax')
             }, function(error){
                 console.log(error)
             }).then(function(){
-                return $q.when(tours)
+                
+                if(nearPoint){
+                    tours = lodash.sortBy(tours,function(tour){
+                        return utils.distance(nearPoint,tour.start)
+                    })
+                }
+                return tours
             })
 
         },
