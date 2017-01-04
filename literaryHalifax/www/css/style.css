@@ -153,7 +153,7 @@ overscroll-pane {
     line-height: 13px;
     max-height: 44px;
     margin-top: 3px;
-    color: grey;
+    color: #626262;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -161,7 +161,7 @@ overscroll-pane {
 
 .list-item-distance {
     font-size: 10px;
-    color: grey;
+    color: #626262;
     float: right;
 }
 
@@ -181,7 +181,7 @@ overscroll-pane {
 
 .up-next-button-row {
     font-size: 12px;
-    color: grey;
+    color: #626262;
     padding-top: 4px;
 }
 
