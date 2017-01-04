@@ -36,7 +36,7 @@ angular.module('literaryHalifax')
                 permissionsDeferred.resolve()
             },
             function(error){
-                console.log('Something went wrong getting permimssions. Trust in the heart of the cards')
+                console.log('Something went wrong getting permissions. Trust in the heart of the cards')
                 permissionsDeferred.resolve()
             },
             {

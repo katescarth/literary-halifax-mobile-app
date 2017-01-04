@@ -87,16 +87,6 @@ const SERVICE=16
 const SOFTWARE=17
 const CURATESCAPE_STORY=18
 
-var fixtureTour = {
-    name:"The Secret Tour",
-    description:"This tour isn't on the server, but you kept asking so I guess you can have it.",
-    landmarks:[
-        {id:"6"},
-        {id:"7"},
-        {id:"9"}
-    ],
-    id:"tour-id-1"
-}
 angular.module('literaryHalifax')
 
 /*
@@ -149,7 +139,6 @@ angular.module('literaryHalifax')
             }
         })
     
-    var tourRequestCount = 0
 
     
     // converts a landmark from the server to one that matches our spec. 
@@ -226,6 +215,41 @@ angular.module('literaryHalifax')
         })
         
     }
+    
+    // converts a tour from the server to one that matches our spec. 
+    convertTour = function(serverRecord){
+        var tour = {
+            id:serverRecord.id,
+        }
+        var promise =$http.get(api+'/geolocations?item_id=' + 
+                      serverRecord.items[0].id)
+            .then(function(locations){
+                tour.start={
+                    lat:locations.data[0].latitude,
+                    lng:locations.data[0].longitude,
+                    zoom:locations.data[0].zoom
+                }
+            })
+        
+        tour.landmarks = _.map(serverRecord.items,
+            function(record) {
+                return {
+                    id: record.id
+                }
+            }
+        )
+        tour.name = serverRecord.title
+        tour.description = serverRecord.description
+        
+        return promise
+        .then(function(){
+            return $q.when(tour)
+        }, function(error){
+            console.log(error)
+            return $q.reject(error)
+        })
+        
+    }
 
     server = {        
         landmarkInfo:function(id){
@@ -268,32 +292,39 @@ angular.module('literaryHalifax')
 
         },
         
-        tourInfo:function(id){
-            var result = {}
-            if(id==fixtureTour.id){
-                angular.extend(result,fixtureTour)
-                return server.landmarkInfo(result.landmarks[0].id)
-                    .then(function(landmark){
-                        result.start = landmark.location
-                        return result
-                    })
-            }
+        getTours:function(nearPoint){
+
+            var tours = []
+            return $http.get(api+'/tours')
+            .then(
+            function(result){
+                var promises = []
+                lodash.forEach(result.data,function(tour){
+                    promises.push(
+                        convertTour(tour)
+                        .then(function(newTour){
+                            tours.push(newTour)
+                        })
+                    )
+                })
+                return $q.all(promises)
+            }, function(error){
+                console.log(error)
+            }).then(function(){
+                return $q.when(tours)
+            })
+
         },
         
-        getTours:function(nearPoint){
+        tourInfo:function(id){
             
-            if(++tourRequestCount%3){
-                return $timeout(3000).then(function(){
-                    return $q.reject("There are not tours on the server yet")
-                })
-            } else {
-                // They asked a bunch of times, maybe this will make them go away
-                return server.tourInfo(fixtureTour.id)
-                .then(function(result){
-                  return [result]  
-                })
-            }
-            
+            return $http.get(api+'/tours/'+id)
+            .then(function(result){
+                return convertTour(result.data)
+            }).then(function(result){
+             
+                return result
+            })
         }
     }
 
