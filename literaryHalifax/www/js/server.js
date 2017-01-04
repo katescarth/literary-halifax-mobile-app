@@ -221,15 +221,12 @@ angular.module('literaryHalifax')
         var tour = {
             id:serverRecord.id,
         }
-        var promise =$http.get(api+'/geolocations?item_id=' + 
-                      serverRecord.items[0].id)
-            .then(function(locations){
-                tour.start={
-                    lat:locations.data[0].latitude,
-                    lng:locations.data[0].longitude,
-                    zoom:locations.data[0].zoom
-                }
-            })
+        
+        tour.start={
+            lat:serverRecord.start.latitude,
+            lng:serverRecord.start.longitude,
+            zoom:serverRecord.start.zoom
+        }
         
         tour.landmarks = _.map(serverRecord.items,
             function(record) {
@@ -241,14 +238,7 @@ angular.module('literaryHalifax')
         tour.name = serverRecord.title
         tour.description = serverRecord.description
         
-        return promise
-        .then(function(){
-            return $q.when(tour)
-        }, function(error){
-            console.log(error)
-            return $q.reject(error)
-        })
-        
+        return tour
     }
 
     server = {        
@@ -299,19 +289,9 @@ angular.module('literaryHalifax')
             return $http.get(api+'/tours')
             .then(
             function(result){
-                var promises = []
                 lodash.forEach(result.data,function(tour){
-                    promises.push(
-                        convertTour(tour)
-                        .then(function(newTour){
-                            tours.push(newTour)
-                        })
-                    )
-                })
-                return $q.all(promises)
-            }, function(error){
-                console.log(error)
-            }).then(function(){
+                    tours.push(convertTour(tour))
+                })            
                 
                 if(nearPoint){
                     tours = lodash.sortBy(tours,function(tour){
