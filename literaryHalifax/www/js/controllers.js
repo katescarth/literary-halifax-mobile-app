@@ -199,7 +199,7 @@ angular.module('literaryHalifax')
     $scope.$root.$on('$stateChangeSuccess',
     function(event, toState, toParams, fromState, fromParams){
         if(toState.title){
-            $scope.navBarTitle = toState.title
+            $scope.navBarTitle = toState.title=='Page'?toParams.page.title:toState.title
             $scope.menuMode=true
         } else {
             $scope.menuMode=false
@@ -263,8 +263,6 @@ angular.module('literaryHalifax')
 })
 
 .controller('pageCtrl', function($scope, $stateParams){
-    
-    console.log($stateParams)
     $scope.page = $stateParams.page
 })
 
