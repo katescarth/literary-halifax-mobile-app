@@ -241,7 +241,21 @@ angular.module('literaryHalifax')
         return tour
     }
 
-    server = {        
+    server = {   
+        
+        getPages:function(){
+            return $http.get(api+'/simple_pages/')
+            .then(function(pages){
+                return lodash.map(pages.data,function(serverRecord){
+                    return{
+                        title: serverRecord.title,
+                        rawHtml: serverRecord.text
+                    }
+                })
+            }, function(error){
+                console.log(error)
+            })
+        },
         landmarkInfo:function(id){
             
             return $http.get(api+'/items/'+id)

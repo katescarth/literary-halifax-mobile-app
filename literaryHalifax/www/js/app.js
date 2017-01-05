@@ -76,13 +76,14 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet']
     })
     
     // Displays information about the app.
-    .state('app.about', {
-        url: '/about',
-        title:'About',
+    .state('app.page', {
+        url: '/page',
+        params:{page:null},
+        title:'Page',
         views: {
             'mainContent': {
-                templateUrl: 'templates/about.html'
-
+                templateUrl: 'templates/page.html',
+                controller: 'pageCtrl'
             }
         }
     })

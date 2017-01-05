@@ -1,27 +1,45 @@
 angular.module('literaryHalifax')
 
 .controller('menuCtrl', function($scope, $ionicHistory, $ionicPopup,
-                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData) {
+                                 $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData, server, lodash) {
     // items for the side menu
     $scope.menuItems =[
         {
             displayName:'Landmarks',
-            state:'app.landmarks'
+            onClick:function(){
+                $state.go('app.landmarks')
+            }
         },
         {
             displayName:'Tours',
-            state:'app.tours'
+            onClick:function(){
+                $state.go('app.tours')
+            }
         },
         {
             displayName:'Cache Control',
-            state:'app.cacheControl'
-        },
-        {
-            displayName:'About',
-            state:'app.about'
+            onClick:function(){
+                $state.go('app.cacheControl')
+            }
         }
     ]
 
+    
+    server.getPages()
+        .then(function(pages){
+        console.log(pages)
+        menuItems = lodash.forEach(pages, function(page){
+            $scope.menuItems.push(
+                {
+                    displayName:page.title,
+                    onClick:function(){
+                        $state.go('app.page',{page:page})
+                    }
+                }
+            )
+        })        
+    })
+    
     //the nav button is either a menu button or a back button
     $scope.navButtonClick=function(){
         if($scope.menuMode){
@@ -165,7 +183,7 @@ angular.module('literaryHalifax')
         $ionicHistory.nextViewOptions({
             disableAnimate: true
         });
-        $state.go(item.state)
+        item.onClick()
         if(menuOpen){
             closeMenu()
         }
@@ -242,7 +260,15 @@ angular.module('literaryHalifax')
     
     //expose this to the popover
     $scope.media = mediaPlayer
-}).controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash,leafletData){
+})
+
+.controller('pageCtrl', function($scope, $stateParams){
+    
+    console.log($stateParams)
+    $scope.page = $stateParams.page
+})
+
+.controller('landmarksCtrl', function($scope, $state, server, $q, utils, lodash,leafletData){
     
     
     // number of items to show in the list. Increased as user scrolls down
