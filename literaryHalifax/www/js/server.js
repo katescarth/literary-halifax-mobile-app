@@ -144,7 +144,6 @@ angular.module('literaryHalifax')
     // converts a landmark from the server to one that matches our spec. 
     // This includes making requests for files and location.
     convertLandmark = function(serverRecord){
-        
         var landmark = {
             id:serverRecord.id,
             images:[],
@@ -155,6 +154,7 @@ angular.module('literaryHalifax')
         promises.push(
             $http.get(api+'/files?item=' + serverRecord.id)
             .then(function(files){
+                console.log(files)
                 lodash.forEach(files.data,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
                         // TODO this doesn't guarantee the order of the images
@@ -269,8 +269,7 @@ angular.module('literaryHalifax')
 
             var landmarks = []
             return $http.get(api+'/items')
-            .then(
-            function(result){
+            .then(function(result){
                 var promises = []
                 lodash.forEach(result.data,function(landmark){
                     promises.push(

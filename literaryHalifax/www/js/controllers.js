@@ -27,7 +27,6 @@ angular.module('literaryHalifax')
     
     server.getPages()
         .then(function(pages){
-        console.log(pages)
         menuItems = lodash.forEach(pages, function(page){
             $scope.menuItems.push(
                 {
