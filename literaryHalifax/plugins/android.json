@@ -33,13 +33,16 @@
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
-        },
-        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ionicframework.literaryhalifax790845"
         }
     }

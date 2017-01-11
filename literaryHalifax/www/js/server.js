@@ -125,7 +125,7 @@ angular.module('literaryHalifax')
  * getTours(): resolves to a list of all tours on the server
  * tourInfo(id): resolves to an object representing the tour with the given id
  */
-.factory('server', function($timeout,$q,$http,utils,lodash,$ionicPlatform){
+.factory('server', function($timeout,$q,cacheLayer,utils,lodash,$ionicPlatform){
     var SMALL_DELAY = 400
     var LARGE_DELAY = 2000
     var api = "http://206.167.183.207/api"
@@ -152,9 +152,8 @@ angular.module('literaryHalifax')
         var promises = []
         
         promises.push(
-            $http.get(api+'/files?item=' + serverRecord.id)
+            cacheLayer.request(api+'/files?item=' + serverRecord.id)
             .then(function(files){
-                console.log(files)
                 lodash.forEach(files.data,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
                         // TODO this doesn't guarantee the order of the images
@@ -171,7 +170,7 @@ angular.module('literaryHalifax')
             })
         )
         promises.push(
-            $http.get(api+'/geolocations/' + 
+            cacheLayer.request(api+'/geolocations/' + 
                       serverRecord.extended_resources.geolocations.id)
             .then(function(location){
                 landmark.location={
@@ -244,7 +243,7 @@ angular.module('literaryHalifax')
     server = {   
         
         getPages:function(){
-            return $http.get(api+'/simple_pages/')
+            return cacheLayer.request(api+'/simple_pages/')
             .then(function(pages){
                 return lodash.map(pages.data,function(serverRecord){
                     return{
@@ -258,7 +257,7 @@ angular.module('literaryHalifax')
         },
         landmarkInfo:function(id){
             
-            return $http.get(api+'/items/'+id)
+            return cacheLayer.request(api+'/items/'+id)
             .then(function(result){
                 return convertLandmark(result.data)
             }).then(function(result){
@@ -268,7 +267,7 @@ angular.module('literaryHalifax')
         getLandmarks:function(nearPoint){
 
             var landmarks = []
-            return $http.get(api+'/items')
+            return cacheLayer.request(api+'/items')
             .then(function(result){
                 var promises = []
                 lodash.forEach(result.data,function(landmark){
@@ -299,7 +298,7 @@ angular.module('literaryHalifax')
         getTours:function(nearPoint){
 
             var tours = []
-            return $http.get(api+'/tours')
+            return cacheLayer.request(api+'/tours')
             .then(
             function(result){
                 lodash.forEach(result.data,function(tour){
@@ -318,7 +317,7 @@ angular.module('literaryHalifax')
         
         tourInfo:function(id){
             
-            return $http.get(api+'/tours/'+id)
+            return cacheLayer.request(api+'/tours/'+id)
             .then(function(result){
                 return convertTour(result.data)
             }).then(function(result){

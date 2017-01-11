@@ -5,6 +5,10 @@
     {
       "path": "/api",
       "proxyUrl": "http://206.167.183.207/api"
+    },
+    {
+      "path": "/files",
+      "proxyUrl": "http://206.167.183.207/files"
     }
   ]
 }
