@@ -7,6 +7,8 @@ angular.module('literaryHalifax')
 .factory('cacheLayer', function($q, $http, lodash, $cordovaFileTransfer, $cordovaFile){
     
     
+    
+    
     // cache for the results of GET requests
     // hash url->object
     var itemCache = {}
@@ -21,15 +23,9 @@ angular.module('literaryHalifax')
     // 
     var fileCache = {}
     
-    var download = function(url, force){
-        var filename = cordova.file.dataDirectory+'/'+url.split("/").pop();
-        return $cordovaFileTransfer
-            .download(url, filename)
-            .then(function(success){
-                return filename
-            })
-
-    }    
+    
+    var rootDir = cordova.file.dataDirectory
+    
     
     // performs a restricted deep search through the given object for
     // an object called 'file_urls'. When it finds it, it replaces any
@@ -52,10 +48,19 @@ angular.module('literaryHalifax')
                 // we've found the files. Check for cached versions
                 for(attr in thing.file_urls){
                     (function(attribute){
+                        var newUrl = thing.file_urls[attribute].split("/").pop()
                         promises.push(
-                            download(thing.file_urls[attribute])
-                            .then(function(newUrl){
-                                thing.file_urls[attribute] = newUrl
+                            // check if the file is cached
+                            $cordovaFile.checkFile(rootDir, newUrl)
+                            .then(function(){
+                                // if it is cached, replace the url
+                                thing.file_urls[attribute]=rootDir+'/'+newUrl
+                                return rootDir+'/'+newUrl
+                            }).catch(function(){
+                                // otherwise, use the real url
+                                // TODO: if we implement airplane mode, replace it with
+                                // a placeholder image instead
+                                return thing.file_urls[attribute]
                             })
                         )
 
@@ -70,6 +75,8 @@ angular.module('literaryHalifax')
     }
     
     var layer = {}
+    
+    layer.files = fileCache
 
     layer.request = function(url){
         var promise
@@ -91,6 +98,42 @@ angular.module('literaryHalifax')
         
         return promise.then(decorate)
     }
+    
+    layer.cacheUrl =function(url){
+        var filename = rootDir + "/"+url.split("/").pop()
+        return $cordovaFileTransfer
+            .download(url, filename)
+            .then(function(success){
+                fileCache[url]=filename
+                return filename
+            })
+    }
+    
+    layer.clearUrl = function(url){
+        var filename = url.split("/").pop()
+        return $cordovaFile.checkFile(rootDir,fileName)
+        .then(function(){
+            return $cordovaFile.removeFile(rootDir,fileName)
+        }).then(function(success){
+            delete fileCache[url]
+        })
+    }
+    // determines whether all files associated with the landmark are cached
+    // this must be done quickly, so it is imperfect (we can't actually look for the files)
+    layer.landmarkIsCached = function(landmark){
+        for(var i=0;i<landmark.images.length;i++){
+            if (!(
+                fileCache[landmark.images[i].full] &&
+                fileCache[landmark.images[i].squareThumb] &&
+                fileCache[landmark.images[i].thumb]
+            )){
+                return false
+            }
+        }
+        // TODO audio
+        return true
+    }
+    
     
     return layer
 })

@@ -260,7 +260,48 @@ angular.module('literaryHalifax')
     //expose this to the popover
     $scope.media = mediaPlayer
 })
-
+.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout){
+    $scope.settings={
+        cachingEnabled:false,
+        showTours:false,
+        showLandmarks:false        
+    } 
+    $scope.cachingToggled=function(){
+        if(!$scope.settings.cachingEnabled){
+            //caching is being switched off, so collapse the menus
+            $scope.settings.showLandmarks = false
+            $scope.settings.showTours = false
+        }
+    }
+    $scope.landmarkCached = cacheLayer.landmarkIsCached
+    $scope.tourCached = function(tour){
+        // TODO duh
+        return true
+    }
+    
+    $scope.ping=function(item){
+        console.log(item)
+    }
+    
+    $scope.refresh=function(){
+        
+        $scope.landmarks = []
+        server.getLandmarks()
+        .then(function(result){
+            $scope.landmarks = result
+        })
+        
+        $scope.tours = []
+        server.getTours()
+        .then(function(tours){
+            $scope.tours=tours
+        })
+        
+    }
+    $scope.refresh()
+    
+    
+})
 .controller('pageCtrl', function($scope, $stateParams){
     $scope.page = $stateParams.page
 })

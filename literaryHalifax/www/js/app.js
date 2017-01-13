@@ -69,13 +69,13 @@ angular.module('literaryHalifax', ['ionic','ngLodash','nemLogging','ui-leaflet',
         title: 'Cache Control',
         views: {
             'mainContent': {
-                templateUrl: 'templates/cacheControl.html'
-
+                templateUrl: 'templates/cacheControl.html',
+                controller: 'cacheCtrl'
             }
         }
     })
     
-    // Displays information about the app.
+    // Displays a simple page from the server.
     .state('app.page', {
         url: '/page',
         params:{page:null},
