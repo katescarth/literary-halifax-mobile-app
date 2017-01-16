@@ -260,7 +260,7 @@ angular.module('literaryHalifax')
     //expose this to the popover
     $scope.media = mediaPlayer
 })
-.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout){
+.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout, $q){
     $scope.settings={
         cachingEnabled:false,
         showTours:false,
@@ -279,8 +279,30 @@ angular.module('literaryHalifax')
         return true
     }
     
-    $scope.ping=function(item){
-        console.log(item)
+    $scope.cacheLandmark=function(LM){
+        // wrap this entire function in a closure so nothing goes wrong if
+        // it gets called many times at once
+        return (function(landmark){
+            var promises = []
+            for(var i=0;i<landmark.images.length;i++){
+                (function(images){
+                    promises.push(cacheLayer.cacheUrl(images.full)
+                    .then(function(newUrl){
+                        images.full = newUrl
+                    }))
+                    promises.push(cacheLayer.cacheUrl(images.squareThumb)
+                    .then(function(newUrl){
+                        images.squareThumb = newUrl
+                    }))
+                    promises.push(cacheLayer.cacheUrl(images.thumb)
+                    .then(function(newUrl){
+                        images.thumb = newUrl
+                    }))
+                })(landmark.images[i])
+            }
+            // TODO audio
+            return $q.all(promises)
+        })(LM)
     }
     
     $scope.refresh=function(){

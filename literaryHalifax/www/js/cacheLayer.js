@@ -4,7 +4,7 @@ angular.module('literaryHalifax')
  *
  *
  */
-.factory('cacheLayer', function($q, $http, lodash, $cordovaFileTransfer, $cordovaFile){
+.factory('cacheLayer', function($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile){
     
     
     
@@ -24,7 +24,19 @@ angular.module('literaryHalifax')
     var fileCache = {}
     
     
-    var rootDir = cordova.file.dataDirectory
+    var rootDir = ''
+    
+    $ionicPlatform.ready(function(){
+        rootDir = cordova.file.dataDirectory
+    })
+    
+    // convert a url into a file name. That file name will
+    // correspond to 
+    var hash = function(url){
+        var urlParts = url.split("/")
+        var tmp = urlParts.pop()
+        return (urlParts.pop()+'-'+tmp)
+    }
     
     
     // performs a restricted deep search through the given object for
@@ -48,7 +60,7 @@ angular.module('literaryHalifax')
                 // we've found the files. Check for cached versions
                 for(attr in thing.file_urls){
                     (function(attribute){
-                        var newUrl = thing.file_urls[attribute].split("/").pop()
+                        var newUrl = hash(thing.file_urls[attribute])
                         promises.push(
                             // check if the file is cached
                             $cordovaFile.checkFile(rootDir, newUrl)
@@ -99,18 +111,24 @@ angular.module('literaryHalifax')
         return promise.then(decorate)
     }
     
-    layer.cacheUrl =function(url){
-        var filename = rootDir + "/"+url.split("/").pop()
-        return $cordovaFileTransfer
-            .download(url, filename)
-            .then(function(success){
-                fileCache[url]=filename
-                return filename
-            })
+    layer.cacheUrl =function(u,f){
+        // closure for concurrence
+        return (function(url, force){
+            if(!force && isCachedUrl(url)){
+                return $q.when(url)
+            }
+            var filename = rootDir+"/"+hash(url)
+            return $cordovaFileTransfer
+                .download(url, filename)
+                .then(function(success){
+                    fileCache[url]=filename
+                    return filename
+                })
+        })(u,f)
     }
     
     layer.clearUrl = function(url){
-        var filename = url.split("/").pop()
+        var filename = hash(url)
         return $cordovaFile.checkFile(rootDir,fileName)
         .then(function(){
             return $cordovaFile.removeFile(rootDir,fileName)
@@ -118,14 +136,19 @@ angular.module('literaryHalifax')
             delete fileCache[url]
         })
     }
+    
+    var isCachedUrl = function(url){
+        return url.startsWith(rootDir)
+    }
+    
     // determines whether all files associated with the landmark are cached
     // this must be done quickly, so it is imperfect (we can't actually look for the files)
     layer.landmarkIsCached = function(landmark){
         for(var i=0;i<landmark.images.length;i++){
             if (!(
-                fileCache[landmark.images[i].full] &&
-                fileCache[landmark.images[i].squareThumb] &&
-                fileCache[landmark.images[i].thumb]
+                isCachedUrl(landmark.images[i].full) &&
+                isCachedUrl(landmark.images[i].squareThumb) &&
+                isCachedUrl(landmark.images[i].thumb)
             )){
                 return false
             }
