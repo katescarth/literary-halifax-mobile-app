@@ -206,6 +206,7 @@ angular.module('literaryHalifax')
     }
     
     layer.filesForItem = function(itemID){
+        var promise 
         if(itemCache && itemCache[api+'files']){
             var files = itemCache[api+'files']
             var filteredFiles = lodash.cloneDeep(
@@ -215,14 +216,15 @@ angular.module('literaryHalifax')
                     }
                 )
             )
-            return $q.when(filteredFiles)
+            promise = $q.when(filteredFiles)
         } else {
             window.alert('no dice, ask the web')
-            return $http.get(api+'files?item='+itemID)
+            promise = $http.get(api+'files?item='+itemID)
                     .then(function(result){
                         return result.data
                     })
         }
+        return promise.then(decorate)
     }
     
     // copy the contents of a cached index request
