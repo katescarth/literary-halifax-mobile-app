@@ -17,7 +17,7 @@
             
             <div class="list">
                 
-                <list-loader loading-msg="loadingMsg"></list-loader>
+                <list-loader loading-msg="loadingMsg" error-msg="errorMessage"></list-loader>
                 
                 <div class="list-item-div clearfix"  ng-repeat="landmark in landmarks track by $index"
                   ng-click="go(landmark)" ng-show="showLandmark(landmark)&&$index<numListItems">

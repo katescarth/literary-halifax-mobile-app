@@ -205,9 +205,9 @@ angular.module('literaryHalifax')
         })
     }
     
-    var filesForItem = function(itemID){
-        if(itemCache){
-            var files = itemCache[files]
+    layer.filesForItem = function(itemID){
+        if(itemCache && itemCache[api+'files']){
+            var files = itemCache[api+'files']
             var filteredFiles = lodash.cloneDeep(
                 lodash.filter(files,
                     function(file){
@@ -217,6 +217,7 @@ angular.module('literaryHalifax')
             )
             return $q.when(filteredFiles)
         } else {
+            window.alert('no dice, ask the web')
             return $http.get(api+'files?item='+itemID)
                     .then(function(result){
                         return result.data

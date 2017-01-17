@@ -152,7 +152,7 @@ angular.module('literaryHalifax')
         var promises = []
         
         promises.push(
-            cacheLayer.request(api+'/files?item=' + serverRecord.id)
+            cacheLayer.filesForItem(serverRecord.id)
             .then(function(files){
                 lodash.forEach(files,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
