@@ -154,7 +154,7 @@ angular.module('literaryHalifax')
         promises.push(
             cacheLayer.request(api+'/files?item=' + serverRecord.id)
             .then(function(files){
-                lodash.forEach(files.data,function(file){
+                lodash.forEach(files,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
                         // TODO this doesn't guarantee the order of the images
                         landmark.images.push(
@@ -174,12 +174,12 @@ angular.module('literaryHalifax')
                       serverRecord.extended_resources.geolocations.id)
             .then(function(location){
                 landmark.location={
-                    lat:location.data.latitude,
-                    lng:location.data.longitude,
-                    zoom:location.data.zoom
+                    lat:location.latitude,
+                    lng:location.longitude,
+                    zoom:location.zoom
                 }
                 if(!landmark.streetAddress){
-                    landmark.streetAddress=location.data.address
+                    landmark.streetAddress=location.address
                 }
             })
         )
@@ -245,7 +245,7 @@ angular.module('literaryHalifax')
         getPages:function(){
             return cacheLayer.request(api+'/simple_pages/')
             .then(function(pages){
-                return lodash.map(pages.data,function(serverRecord){
+                return lodash.map(pages,function(serverRecord){
                     return{
                         title: serverRecord.title,
                         rawHtml: serverRecord.text
@@ -258,9 +258,8 @@ angular.module('literaryHalifax')
         landmarkInfo:function(id){
             
             return cacheLayer.request(api+'/items/'+id)
-            .then(function(result){
-                return convertLandmark(result.data)
-            }).then(function(result){
+                .then(convertLandmark)
+                .then(function(result){
                 return result
             })
         },
@@ -270,7 +269,7 @@ angular.module('literaryHalifax')
             return cacheLayer.request(api+'/items')
             .then(function(result){
                 var promises = []
-                lodash.forEach(result.data,function(landmark){
+                lodash.forEach(result,function(landmark){
                     promises.push(
                         convertLandmark(landmark)
                         .then(function(newLandmark){
@@ -301,7 +300,7 @@ angular.module('literaryHalifax')
             return cacheLayer.request(api+'/tours')
             .then(
             function(result){
-                lodash.forEach(result.data,function(tour){
+                lodash.forEach(result,function(tour){
                     tours.push(convertTour(tour))
                 })            
                 
@@ -318,9 +317,7 @@ angular.module('literaryHalifax')
         tourInfo:function(id){
             
             return cacheLayer.request(api+'/tours/'+id)
-            .then(function(result){
-                return convertTour(result.data)
-            }).then(function(result){
+            .then(convertTour).then(function(result){
              
                 return result
             })

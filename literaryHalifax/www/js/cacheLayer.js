@@ -25,9 +25,17 @@ angular.module('literaryHalifax')
     
     
     var rootDir = ''
+    var itemCacheFile = ''
     
     $ionicPlatform.ready(function(){
         rootDir = cordova.file.dataDirectory
+        itemCacheFile = 'itemCache'
+        $cordovaFile.checkFile(rootDir, itemCacheFile)
+        .then(function(success){
+                recoverItemCache()
+            }, function(error){
+            // no cache, that's fine
+        })
     })
     
     // convert a url into a file name. That file name will
@@ -94,10 +102,15 @@ angular.module('literaryHalifax')
         var promise
         // always avoid making a request if possible. Nothing needs to
         // be refreshed in this app.
-        if(itemCache[url]){
+        if(itemCache&&itemCache[url]){
+            window.alert("hit: "+url)   
             promise = $q.when(itemCache[url])
         } else {
+            window.alert("miss: "+url)   
             promise = $http.get(url)
+                        .then(function(result){
+                            return result.data
+                        })
             if(cacheIncoming){
                 promise = promise.then(
                     function(result){
@@ -155,6 +168,90 @@ angular.module('literaryHalifax')
         }
         // TODO audio
         return true
+    }
+    //DRY in server
+    var api = "http://206.167.183.207/api/"
+    var downloadAndCache = function(itemType){
+        var url = api+itemType
+        return $http.get(url)
+            .then(function(result){
+                itemCache[url] = result.data
+                
+                for(var i=0;i<result.data.length;i++){
+                    itemCache[result.data[i].url] = result.data[i]
+                }
+                
+        })
+    }
+    
+    
+    // Dump the item cache to a file
+    var saveItemCache = function(){
+        var data = JSON.stringify(itemCache)
+        return $cordovaFile.writeFile(rootDir,itemCacheFile,data,true)
+    }
+    
+    var recoverItemCache = function(){
+        return $cordovaFile.readAsText(rootDir,itemCacheFile)
+                .then(function(result){
+                    itemCache=JSON.parse(result)
+        })
+    }
+    
+    var destroyItemCache = function(){
+        return $cordovaFile.removeFile(rootDir,itemCacheFile)
+                .then(function(){
+            itemCache=undefined
+        })
+    }
+    
+    var filesForItem = function(itemID){
+        if(itemCache){
+            var files = itemCache[files]
+            var filteredFiles = lodash.cloneDeep(
+                lodash.filter(files,
+                    function(file){
+                        return file.item.id==itemID
+                    }
+                )
+            )
+            return $q.when(filteredFiles)
+        } else {
+            return $http.get(api+'files?item='+itemID)
+                    .then(function(result){
+                        return result.data
+                    })
+        }
+    }
+    
+    // copy the contents of a cached index request
+    // into their own cache entries
+    var expandIndex = function(itemType){
+        
+        var index = itemCache[api+itemType]
+        
+        for(var i=0;i<result.data.length;i++){
+            itemCache[result.data[i].url] = result.data[i]
+        }
+    }
+    
+    layer.cacheMetadata = function(){
+        $q.all(
+            [
+                downloadAndCache('items'),
+                downloadAndCache('tours'),
+                downloadAndCache('files'),
+                downloadAndCache('simple_pages'),
+                downloadAndCache('geolocations')
+            ]
+        ).then(saveItemCache)
+        .then(function(){
+                expandIndex('items')
+                expandIndex('tours')
+                expandIndex('files')
+                expandIndex('simple_pages')
+                expandIndex('geolocations')            
+        })
     }
     
     

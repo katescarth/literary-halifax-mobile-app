@@ -267,7 +267,9 @@ angular.module('literaryHalifax')
         showLandmarks:false        
     } 
     $scope.cachingToggled=function(){
-        if(!$scope.settings.cachingEnabled){
+        if($scope.settings.cachingEnabled){
+            cacheLayer.cacheMetadata()
+        }else{
             //caching is being switched off, so collapse the menus
             $scope.settings.showLandmarks = false
             $scope.settings.showTours = false
