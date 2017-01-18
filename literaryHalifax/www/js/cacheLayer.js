@@ -19,8 +19,6 @@ angular.module('literaryHalifax')
     
     // cache for images and audio files
     // hash url->url
-    // Question: urls are unique, so we don't need a complicated hash. Why not
-    // 
     var fileCache = {}
     
     
@@ -38,8 +36,7 @@ angular.module('literaryHalifax')
         })
     })
     
-    // convert a url into a file name. That file name will
-    // correspond to 
+    // convert a url into a file name.
     var hash = function(url){
         var urlParts = url.split("/")
         var tmp = urlParts.pop()
@@ -50,37 +47,35 @@ angular.module('literaryHalifax')
     // performs a restricted deep search through the given object for
     // an object called 'file_urls'. When it finds it, it replaces any
     // urls inside it with the cached version of those files.
-    var decorate = function(decorable){
-        
-        
+    var decorate = function(r){
         // create a closure so that we can decorate everything in parallel
-        return (function(thing){
+        return (function(raw){
             var promises = []
-            if(thing.statusText=="OK"){
-                // thing is the response to a GET, decorate the data
-                promises = [decorate(thing.data)]
-            } else if(thing.constructor === Array){
-                // thing is a list, decorate each item
-                lodash.forEach(thing, function(item){
+            if(raw.statusText=="OK"){
+                // raw is the response to a GET, decorate the data
+                promises = [decorate(raw.data)]
+            } else if(raw.constructor === Array){
+                // raw is a list, decorate each item
+                lodash.forEach(raw, function(item){
                     promises.push(decorate(item))
                 })
-            } else if (thing.file_urls) {
+            } else if (raw.file_urls) {
                 // we've found the files. Check for cached versions
-                for(attr in thing.file_urls){
+                for(attr in raw.file_urls){
                     (function(attribute){
-                        var newUrl = hash(thing.file_urls[attribute])
+                        var newUrl = hash(raw.file_urls[attribute])
                         promises.push(
                             // check if the file is cached
                             $cordovaFile.checkFile(rootDir, newUrl)
                             .then(function(){
                                 // if it is cached, replace the url
-                                thing.file_urls[attribute]=rootDir+'/'+newUrl
+                                raw.file_urls[attribute]=rootDir+'/'+newUrl
                                 return rootDir+'/'+newUrl
                             }).catch(function(){
                                 // otherwise, use the real url
                                 // TODO: if we implement airplane mode, replace it with
                                 // a placeholder image instead
-                                return thing.file_urls[attribute]
+                                return raw.file_urls[attribute]
                             })
                         )
 
@@ -89,24 +84,26 @@ angular.module('literaryHalifax')
                 }
             }
             return $q.all(promises).then(function(){
-                return thing
+                return raw
             })
-        })(decorable)
+        })(r)
     }
     
+    // Expose functionality by adding it to this object
     var layer = {}
     
+    // I should have commented on this when I added it but now I don't know what it's for
     layer.files = fileCache
 
+    // access point for http requests. If the request is cached, return the cached result,
+    // otherwise make the request
     layer.request = function(url){
         var promise
         // always avoid making a request if possible. Nothing needs to
         // be refreshed in this app.
         if(itemCache&&itemCache[url]){
-            window.alert("hit: "+url)   
             promise = $q.when(itemCache[url])
         } else {
-            window.alert("miss: "+url)   
             promise = $http.get(url)
                         .then(function(result){
                             return result.data
@@ -124,6 +121,7 @@ angular.module('literaryHalifax')
         return promise.then(decorate)
     }
     
+    // download the given resource and cache it
     layer.cacheUrl =function(u,f){
         // closure for concurrence
         return (function(url, force){
@@ -140,6 +138,9 @@ angular.module('literaryHalifax')
         })(u,f)
     }
     
+    // uncache the given url
+    // Note - this has to be the original, remote url
+    // the cached url won't work
     layer.clearUrl = function(url){
         var filename = hash(url)
         return $cordovaFile.checkFile(rootDir,fileName)
@@ -186,11 +187,14 @@ angular.module('literaryHalifax')
     
     
     // Dump the item cache to a file
+    // Only the results of index requests are needed
+    // to recreate the entire cache
     var saveItemCache = function(){
         var data = JSON.stringify(itemCache)
         return $cordovaFile.writeFile(rootDir,itemCacheFile,data,true)
     }
     
+    // Read index results out of the file and store them in the item cache.
     var recoverItemCache = function(){
         return $cordovaFile.readAsText(rootDir,itemCacheFile)
                 .then(function(result){
@@ -198,6 +202,7 @@ angular.module('literaryHalifax')
         })
     }
     
+    // Delete the item cache
     var destroyItemCache = function(){
         return $cordovaFile.removeFile(rootDir,itemCacheFile)
                 .then(function(){
@@ -205,6 +210,38 @@ angular.module('literaryHalifax')
         })
     }
     
+    //Delete the file cache and every file
+    var destroyFileCache = function(){
+        var promises = []
+        for(attr in fileCache){
+            (function(url){
+                promises.push(
+                    $cordovaFile.removeFile(rootDir,hash(url))
+                    .then(function(){
+                        delete fileCache[url]
+                    })
+                )
+            })(attr)
+        }
+        
+        return $q.all(promises).then(function(){
+            fileCache = undefined
+        })
+        
+    }
+    
+    layer.destroyCache = function(){
+        return $q.all([
+            destroyFileCache(),
+            destroyItemCache()
+        ])
+    }
+    
+    // This is a bit out of place. We retrieve files from the
+    // server using api/files?item={id}. Rather than making
+    // and caching that request, if we have the file index
+    // cached, we look through it for files associated with 
+    // the correct item.
     layer.filesForItem = function(itemID){
         var promise 
         if(itemCache && itemCache[api+'files']){
@@ -218,7 +255,6 @@ angular.module('literaryHalifax')
             )
             promise = $q.when(filteredFiles)
         } else {
-            window.alert('no dice, ask the web')
             promise = $http.get(api+'files?item='+itemID)
                     .then(function(result){
                         return result.data

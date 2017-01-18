@@ -24,19 +24,20 @@ angular.module('literaryHalifax')
         }
     ]
 
-    
-    server.getPages()
-        .then(function(pages){
-        menuItems = lodash.forEach(pages, function(page){
-            $scope.menuItems.push(
-                {
-                    displayName:page.title,
-                    onClick:function(){
-                        $state.go('app.page',{page:page})
+    $ionicPlatform.ready(function(){
+        server.getPages()
+            .then(function(pages){
+            menuItems = lodash.forEach(pages, function(page){
+                $scope.menuItems.push(
+                    {
+                        displayName:page.title,
+                        onClick:function(){
+                            $state.go('app.page',{page:page})
+                        }
                     }
-                }
-            )
-        })        
+                )
+            })        
+        })
     })
     
     //the nav button is either a menu button or a back button
@@ -260,27 +261,50 @@ angular.module('literaryHalifax')
     //expose this to the popover
     $scope.media = mediaPlayer
 })
-.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout, $q){
+.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout, $q, $ionicPopup){
     $scope.settings={
         cachingEnabled:false,
         showTours:false,
         showLandmarks:false        
-    } 
+    }
+    
+    //fires when the toggle is touched.
     $scope.cachingToggled=function(){
         if($scope.settings.cachingEnabled){
+            // initialize the cache
             cacheLayer.cacheMetadata()
         }else{
-            //caching is being switched off, so collapse the menus
-            $scope.settings.showLandmarks = false
-            $scope.settings.showTours = false
+            // delay the update while we show a confirmation popup
+            // turning off caching deletes the cache, so we need to make 
+            $scope.settings.cachingEnabled = true
+            $ionicPopup.confirm({
+                title:"Turn caching off?",
+                template:"This will delete all of your cached data. You will have to download it again to use it.",
+                okType: 'button-balanced'
+            }).then(function(shouldDelete) {
+                if (shouldDelete) {
+                    //caching is being switched off, so collapse the menus
+                    $scope.settings.showLandmarks = false
+                    $scope.settings.showTours = false
+                    cacheLayer.destroyCache()
+                    $scope.settings.cachingEnabled = false
+                } else {
+                    $scope.settings.cachingEnabled = true
+                }
+            })
         }
     }
+    
+    // This is really a misnomer. landmarkIsCached checks if all the files
+    // in a landmark are cached
     $scope.landmarkCached = cacheLayer.landmarkIsCached
+    
     $scope.tourCached = function(tour){
         // TODO duh
         return true
     }
     
+    //cache every file associated with the given landmark
     $scope.cacheLandmark=function(LM){
         // wrap this entire function in a closure so nothing goes wrong if
         // it gets called many times at once
