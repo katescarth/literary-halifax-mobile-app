@@ -6,9 +6,6 @@ angular.module('literaryHalifax')
  */
 .factory('cacheLayer', function($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile){
     
-    
-    
-    
     // cache for the results of GET requests
     // hash url->object
     var itemCache = {}
@@ -20,7 +17,6 @@ angular.module('literaryHalifax')
     // cache for images and audio files
     // hash url->url
     var fileCache = {}
-    
     
     var rootDir = ''
     var itemCacheFile = ''
@@ -36,11 +32,22 @@ angular.module('literaryHalifax')
         })
     })
     
-    // convert a url into a file name.
+    
+    var api = "http://206.167.183.207/api/"
+    var files = "http://206.167.183.207/files/"
+    
+    // convert a url into a filename
     var hash = function(url){
         var urlParts = url.split("/")
         var tmp = urlParts.pop()
         return (urlParts.pop()+'-'+tmp)
+    }
+    
+    // convert a filename into a url
+    var unhash = function(filename){
+        var parts = filename.split('-')
+        var tmp = parts.pop()
+        return files + parts.pop()+'/'+tmp
     }
     
     
@@ -141,13 +148,15 @@ angular.module('literaryHalifax')
     // uncache the given url
     // Note - this has to be the original, remote url
     // the cached url won't work
-    layer.clearUrl = function(url){
-        var filename = hash(url)
-        return $cordovaFile.checkFile(rootDir,fileName)
+    layer.clearUrl = function(path){
+        var filename = path.split("/").pop()
+        var url = unhash(filename)        
+        return $cordovaFile.checkFile(rootDir,filename)
         .then(function(){
-            return $cordovaFile.removeFile(rootDir,fileName)
+            return $cordovaFile.removeFile(rootDir,filename)
         }).then(function(success){
             delete fileCache[url]
+            return url
         })
     }
     
@@ -171,7 +180,6 @@ angular.module('literaryHalifax')
         return true
     }
     //DRY in server
-    var api = "http://206.167.183.207/api/"
     var downloadAndCache = function(itemType){
         var url = api+itemType
         return $http.get(url)

@@ -331,6 +331,32 @@ angular.module('literaryHalifax')
         })(LM)
     }
     
+    $scope.clearLandmark = function(LM){
+        // wrap this entire function in a closure so nothing goes wrong if
+        // it gets called many times at once
+        return (function(landmark){
+            var promises = []
+            for(var i=0;i<landmark.images.length;i++){
+                (function(images){
+                    promises.push(cacheLayer.clearUrl(images.full)
+                    .then(function(newUrl){
+                        images.full = newUrl
+                    }))
+                    promises.push(cacheLayer.clearUrl(images.squareThumb)
+                    .then(function(newUrl){
+                        images.squareThumb = newUrl
+                    }))
+                    promises.push(cacheLayer.clearUrl(images.thumb)
+                    .then(function(newUrl){
+                        images.thumb = newUrl
+                    }))
+                })(landmark.images[i])
+            }
+            // TODO audio
+            return $q.all(promises)
+        })(LM)
+    }
+    
     $scope.refresh=function(){
         
         $scope.landmarks = []

@@ -20,7 +20,7 @@
                 </div>
                 <div class="list-item-div" ng-if="settings.showLandmarks" ng-repeat="landmark in landmarks track by $index">
                         <div class="list-item-title">
-                            <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="cacheLandmark(landmark)"></i>
+                            <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
                             {{landmark.name}}
                         </div>
                 </div>
