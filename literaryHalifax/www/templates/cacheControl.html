@@ -23,6 +23,7 @@
                             <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
                             {{landmark.name}}
                         </div>
+                    
                 </div>
                 <div class="list-item-div" ng-click="settings.showTours=settings.cachingEnabled && !settings.showTours" ng-class = "settings.cachingEnabled?'':'greyout'">
                     <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i>

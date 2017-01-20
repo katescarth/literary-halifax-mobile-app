@@ -20,13 +20,20 @@ angular.module('literaryHalifax')
     
     var rootDir = ''
     var itemCacheFile = ''
+    var fileCacheFile = ''
     
     $ionicPlatform.ready(function(){
         rootDir = cordova.file.dataDirectory
         itemCacheFile = 'itemCache'
+        fileCacheFile = 'fileCache'
         $cordovaFile.checkFile(rootDir, itemCacheFile)
         .then(function(success){
-                recoverItemCache()
+                recoverItemCache().then(
+                    function(){
+                        $cordovaFile.checkFile(rootDir, fileCacheFile)
+                        .then(recoverFileCache)
+                    }
+                )
             }, function(error){
             // no cache, that's fine
         })
@@ -145,9 +152,7 @@ angular.module('literaryHalifax')
         })(u,f)
     }
     
-    // uncache the given url
-    // Note - this has to be the original, remote url
-    // the cached url won't work
+    // uncache the given path
     layer.clearUrl = function(path){
         var filename = path.split("/").pop()
         var url = unhash(filename)        
@@ -179,7 +184,8 @@ angular.module('literaryHalifax')
         // TODO audio
         return true
     }
-    //DRY in server
+
+    
     var downloadAndCache = function(itemType){
         var url = api+itemType
         return $http.get(url)
@@ -210,11 +216,25 @@ angular.module('literaryHalifax')
         })
     }
     
-    // Delete the item cache
-    var destroyItemCache = function(){
-        return $cordovaFile.removeFile(rootDir,itemCacheFile)
+    // Delete the file cache
+    var destroyFileCache = function(){
+        return $cordovaFile.removeFile(rootDir,fileCacheFile)
                 .then(function(){
             itemCache=undefined
+        })
+    }    
+    
+    // Dump the file cache to a file
+    var saveFileCache = function(){
+        var data = JSON.stringify(fileCache)
+        return $cordovaFile.writeFile(rootDir,fileCacheFile,data,true)
+    }
+    
+    // recover the file cache from its saved location
+    var recoverFileCache = function(){
+        return $cordovaFile.readAsText(rootDir,fileCacheFile)
+                .then(function(result){
+                    fileCache=JSON.parse(result)
         })
     }
     
@@ -222,20 +242,17 @@ angular.module('literaryHalifax')
     var destroyFileCache = function(){
         var promises = []
         for(attr in fileCache){
-            (function(url){
+            (function(path){
                 promises.push(
-                    $cordovaFile.removeFile(rootDir,hash(url))
-                    .then(function(){
-                        delete fileCache[url]
-                    })
+                    layer.clearUrl(path)
                 )
-            })(attr)
+            })(fileCache[attr])
         }
         
         return $q.all(promises).then(function(){
-            fileCache = undefined
+            fileCache = {}
+            $cordovaFile.removeFile(rootDir,fileCacheFile)
         })
-        
     }
     
     layer.destroyCache = function(){
@@ -283,7 +300,7 @@ angular.module('literaryHalifax')
     }
     
     layer.cacheMetadata = function(){
-        $q.all(
+        return $q.all(
             [
                 downloadAndCache('items'),
                 downloadAndCache('tours'),

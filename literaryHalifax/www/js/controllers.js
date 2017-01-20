@@ -273,6 +273,7 @@ angular.module('literaryHalifax')
         if($scope.settings.cachingEnabled){
             // initialize the cache
             cacheLayer.cacheMetadata()
+            .then($scope.refresh)
         }else{
             // delay the update while we show a confirmation popup
             // turning off caching deletes the cache, so we need to make 
@@ -286,8 +287,8 @@ angular.module('literaryHalifax')
                     //caching is being switched off, so collapse the menus
                     $scope.settings.showLandmarks = false
                     $scope.settings.showTours = false
-                    cacheLayer.destroyCache()
                     $scope.settings.cachingEnabled = false
+                    return cacheLayer.destroyCache()
                 } else {
                     $scope.settings.cachingEnabled = true
                 }
