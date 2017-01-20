@@ -175,12 +175,7 @@ angular.module('literaryHalifax')
         var url = api+itemType
         return $http.get(url)
             .then(function(result){
-                itemCache[url] = result.data
-                
-                for(var i=0;i<result.data.length;i++){
-                    itemCache[result.data[i].url] = result.data[i]
-                }
-                
+                itemCache[url] = result.data                
         })
     }
     
@@ -209,21 +204,23 @@ angular.module('literaryHalifax')
     }
     
     layer.destroyCache = function(){
-        var promises = []
-        
         var filesIndex = itemCache[api+'files']
-        
-        lodash.each(filesIndex,function(file){
-            for(attr in file.file_urls){
-                if(isCachedUrl(file.file_urls[attr])){
-                    promises.push(
-                        layer.clearUrl(file.file_urls[attr])
-                    )
+
+        return decorate(filesIndex).then(function(){
+            var promises = []
+            lodash.each(filesIndex,function(file){
+                for(attr in file.file_urls){
+                    if(isCachedUrl(file.file_urls[attr])){
+                        promises.push(
+                            layer.clearUrl(file.file_urls[attr])
+                        )
+
+                    }
                 }
-            }
+            })
+
+            return $q.all(promises).then(destroyItemCache)
         })
-        
-        return $q.all(promises).then(destroyItemCache)
     }
     
     // This is a bit out of place. We retrieve files from the
@@ -255,12 +252,11 @@ angular.module('literaryHalifax')
     // copy the contents of a cached index request
     // into their own cache entries
     var expandIndex = function(itemType){
-        
         var index = itemCache[api+itemType]
-        
-        for(var i=0;i<result.data.length;i++){
-            itemCache[result.data[i].url] = result.data[i]
+        for(var i=0;i<index.length;i++){
+            itemCache[index[i].url] = index[i]
         }
+        
     }
     
     layer.cacheMetadata = function(){

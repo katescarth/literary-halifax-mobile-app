@@ -359,7 +359,6 @@ angular.module('literaryHalifax')
     }
     
     $scope.refresh=function(){
-        
         $scope.landmarks = []
         server.getLandmarks()
         .then(function(result){
@@ -456,7 +455,6 @@ angular.module('literaryHalifax')
             },
             function(error){
                 //if we can't get the position, just carry on without it.
-                window.alert(error.message)
                 $scope.loadingMsg = 'Getting Landmarks...'
                 return server.getLandmarks()
             }
