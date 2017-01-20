@@ -14,26 +14,16 @@ angular.module('literaryHalifax')
     // TODO this should be a persistent setting
     var cacheIncoming = false
     
-    // cache for images and audio files
-    // hash url->url
-    var fileCache = {}
-    
     var rootDir = ''
     var itemCacheFile = ''
-    var fileCacheFile = ''
     
     $ionicPlatform.ready(function(){
         rootDir = cordova.file.dataDirectory
         itemCacheFile = 'itemCache'
-        fileCacheFile = 'fileCache'
+        
         $cordovaFile.checkFile(rootDir, itemCacheFile)
         .then(function(success){
-                recoverItemCache().then(
-                    function(){
-                        $cordovaFile.checkFile(rootDir, fileCacheFile)
-                        .then(recoverFileCache)
-                    }
-                )
+                recoverItemCache()
             }, function(error){
             // no cache, that's fine
         })
@@ -105,9 +95,6 @@ angular.module('literaryHalifax')
     
     // Expose functionality by adding it to this object
     var layer = {}
-    
-    // I should have commented on this when I added it but now I don't know what it's for
-    layer.files = fileCache
 
     // access point for http requests. If the request is cached, return the cached result,
     // otherwise make the request
@@ -146,7 +133,6 @@ angular.module('literaryHalifax')
             return $cordovaFileTransfer
                 .download(url, filename)
                 .then(function(success){
-                    fileCache[url]=filename
                     return filename
                 })
         })(u,f)
@@ -160,7 +146,6 @@ angular.module('literaryHalifax')
         .then(function(){
             return $cordovaFile.removeFile(rootDir,filename)
         }).then(function(success){
-            delete fileCache[url]
             return url
         })
     }
@@ -216,50 +201,29 @@ angular.module('literaryHalifax')
         })
     }
     
-    // Delete the file cache
-    var destroyFileCache = function(){
-        return $cordovaFile.removeFile(rootDir,fileCacheFile)
-                .then(function(){
-            itemCache=undefined
-        })
-    }    
-    
-    // Dump the file cache to a file
-    var saveFileCache = function(){
-        var data = JSON.stringify(fileCache)
-        return $cordovaFile.writeFile(rootDir,fileCacheFile,data,true)
-    }
-    
-    // recover the file cache from its saved location
-    var recoverFileCache = function(){
-        return $cordovaFile.readAsText(rootDir,fileCacheFile)
-                .then(function(result){
-                    fileCache=JSON.parse(result)
-        })
-    }
-    
-    //Delete the file cache and every file
-    var destroyFileCache = function(){
-        var promises = []
-        for(attr in fileCache){
-            (function(path){
-                promises.push(
-                    layer.clearUrl(path)
-                )
-            })(fileCache[attr])
-        }
-        
-        return $q.all(promises).then(function(){
-            fileCache = {}
-            $cordovaFile.removeFile(rootDir,fileCacheFile)
-        })
+    var destroyItemCache = function(){
+        return $cordovaFile.removeFile(rootDir,itemCacheFile)
+            .then(function(success){
+                itemCache = {}
+            })
     }
     
     layer.destroyCache = function(){
-        return $q.all([
-            destroyFileCache(),
-            destroyItemCache()
-        ])
+        var promises = []
+        
+        var filesIndex = itemCache[api+'files']
+        
+        lodash.each(filesIndex,function(file){
+            for(attr in file.file_urls){
+                if(isCachedUrl(file.file_urls[attr])){
+                    promises.push(
+                        layer.clearUrl(file.file_urls[attr])
+                    )
+                }
+            }
+        })
+        
+        return $q.all(promises).then(destroyItemCache)
     }
     
     // This is a bit out of place. We retrieve files from the
@@ -270,9 +234,9 @@ angular.module('literaryHalifax')
     layer.filesForItem = function(itemID){
         var promise 
         if(itemCache && itemCache[api+'files']){
-            var files = itemCache[api+'files']
+            var filesIndex = itemCache[api+'files']
             var filteredFiles = lodash.cloneDeep(
-                lodash.filter(files,
+                lodash.filter(filesIndex,
                     function(file){
                         return file.item.id==itemID
                     }
