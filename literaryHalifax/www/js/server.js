@@ -146,8 +146,7 @@ angular.module('literaryHalifax')
     convertLandmark = function(serverRecord){
         var landmark = {
             id:serverRecord.id,
-            images:[],
-            audio:"/android_asset/www/audio/TEST_AUDIO.wav"
+            images:[]
         }
         var promises = []
         
@@ -164,8 +163,9 @@ angular.module('literaryHalifax')
                                 thumb:file.file_urls.thumbnail
                             }
                         )
+                    } else if(file.metadata.mime_type.startsWith('audio')){
+                        landmark.audio = file.file_urls.original
                     }
-                    // TODO add audio handler
                 })
             })
         )
@@ -181,6 +181,8 @@ angular.module('literaryHalifax')
                 if(!landmark.streetAddress){
                     landmark.streetAddress=location.address
                 }
+            },function(error){
+                window.alert("Conversion error:\n"+JSON.stringify(error))
             })
         )
         
@@ -264,7 +266,6 @@ angular.module('literaryHalifax')
             })
         },
         getLandmarks:function(nearPoint){
-
             var landmarks = []
             return cacheLayer.request(api+'/items')
             .then(function(result){
@@ -278,10 +279,7 @@ angular.module('literaryHalifax')
                     )
                 })
                 return $q.all(promises)
-            }, function(error){
-                console.log(error)
             }).then(function(){
-                
                 if(nearPoint){
                     landmarks = lodash.sortBy(landmarks,
                         function(landmark){

@@ -6,6 +6,8 @@ angular.module('literaryHalifax')
  */
 .factory('cacheLayer', function($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile){
     
+    var initDeferred = $q.defer()
+    var init = initDeferred.promise
     // cache for the results of GET requests
     // hash url->object
     var itemCache = {}
@@ -23,9 +25,11 @@ angular.module('literaryHalifax')
         
         $cordovaFile.checkFile(rootDir, itemCacheFile)
         .then(function(success){
-                recoverItemCache()
+                return recoverItemCache().then(expandIndices)
             }, function(error){
             // no cache, that's fine
+        }).then(function(){
+            initDeferred.resolve()
         })
     })
     
@@ -67,21 +71,23 @@ angular.module('literaryHalifax')
                 // we've found the files. Check for cached versions
                 for(attr in raw.file_urls){
                     (function(attribute){
-                        var newUrl = hash(raw.file_urls[attribute])
-                        promises.push(
-                            // check if the file is cached
-                            $cordovaFile.checkFile(rootDir, newUrl)
-                            .then(function(){
-                                // if it is cached, replace the url
-                                raw.file_urls[attribute]=rootDir+'/'+newUrl
-                                return rootDir+'/'+newUrl
-                            }).catch(function(){
-                                // otherwise, use the real url
-                                // TODO: if we implement airplane mode, replace it with
-                                // a placeholder image instead
-                                return raw.file_urls[attribute]
-                            })
-                        )
+                        if(raw.file_urls[attribute]){
+                            var newUrl = hash(raw.file_urls[attribute])
+                            promises.push(
+                                // check if the file is cached
+                                $cordovaFile.checkFile(rootDir, newUrl)
+                                .then(function(){
+                                    // if it is cached, replace the url
+                                    raw.file_urls[attribute]=rootDir+'/'+newUrl
+                                    return rootDir+'/'+newUrl
+                                }).catch(function(){
+                                    // otherwise, use the real url
+                                    // TODO: if we implement airplane mode, replace it with
+                                    // a placeholder image instead
+                                    return raw.file_urls[attribute]
+                                })
+                            )
+                        }
 
 
                     })(attr)
@@ -99,27 +105,31 @@ angular.module('literaryHalifax')
     // access point for http requests. If the request is cached, return the cached result,
     // otherwise make the request
     layer.request = function(url){
-        var promise
         // always avoid making a request if possible. Nothing needs to
         // be refreshed in this app.
-        if(itemCache&&itemCache[url]){
-            promise = $q.when(itemCache[url])
-        } else {
-            promise = $http.get(url)
-                        .then(function(result){
-                            return result.data
-                        })
-            if(cacheIncoming){
-                promise = promise.then(
-                    function(result){
-                        itemCache[url] = result
-                        return result
-                    }
-                )
-            }
-        }
         
-        return promise.then(decorate)
+        return init.then(function(){
+            var promise
+        
+            if(itemCache&&itemCache[url]){
+                promise = $q.when(itemCache[url])
+            } else {
+                promise = $http.get(url)
+                            .then(function(result){
+                                return result.data
+                            })
+                if(cacheIncoming){
+                    promise = promise.then(
+                        function(result){
+                            itemCache[url] = result
+                            return result
+                        }
+                    )
+                }
+            }
+
+            return promise.then(decorate)
+        })
     }
     
     // download the given resource and cache it
@@ -259,6 +269,14 @@ angular.module('literaryHalifax')
         
     }
     
+    var expandIndices = function(){
+        expandIndex('items')
+        expandIndex('tours')
+        expandIndex('files')
+        expandIndex('simple_pages')
+        expandIndex('geolocations')            
+    }
+    
     layer.cacheMetadata = function(){
         return $q.all(
             [
@@ -269,13 +287,7 @@ angular.module('literaryHalifax')
                 downloadAndCache('geolocations')
             ]
         ).then(saveItemCache)
-        .then(function(){
-                expandIndex('items')
-                expandIndex('tours')
-                expandIndex('files')
-                expandIndex('simple_pages')
-                expandIndex('geolocations')            
-        })
+        .then(expandIndices)
     }
     
     
