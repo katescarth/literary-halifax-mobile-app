@@ -136,6 +136,10 @@ angular.module('literaryHalifax')
     layer.cacheUrl =function(u,f){
         // closure for concurrence
         return (function(url, force){
+            if(!url){
+                console.log('tried to cache a non-existent url!')
+                return $q.when(url)
+            }
             if(!force && isCachedUrl(url)){
                 return $q.when(url)
             }
@@ -161,7 +165,7 @@ angular.module('literaryHalifax')
     }
     
     var isCachedUrl = function(url){
-        return url.startsWith(rootDir)
+        return !url || url.startsWith(rootDir)
     }
     
     // determines whether all files associated with the landmark are cached
@@ -171,7 +175,8 @@ angular.module('literaryHalifax')
             if (!(
                 isCachedUrl(landmark.images[i].full) &&
                 isCachedUrl(landmark.images[i].squareThumb) &&
-                isCachedUrl(landmark.images[i].thumb)
+                isCachedUrl(landmark.images[i].thumb) &&
+                isCachedUrl(landmark.audio)
             )){
                 return false
             }

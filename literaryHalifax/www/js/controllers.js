@@ -327,7 +327,10 @@ angular.module('literaryHalifax')
                     }))
                 })(landmark.images[i])
             }
-            // TODO audio
+            promises.push(cacheLayer.cacheUrl(landmark.audio)
+                    .then(function(newUrl){
+                        landmark.audio = newUrl
+                    }))
             return $q.all(promises)
         })(LM)
     }
