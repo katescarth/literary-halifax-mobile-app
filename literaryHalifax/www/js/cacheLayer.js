@@ -154,11 +154,19 @@ angular.module('literaryHalifax')
     
     // uncache the given path
     layer.clearUrl = function(path){
+        if(!path){
+            console.log("attempted to clear a null path")
+            return $q.when(path)
+        }
+        
         var filename = path.split("/").pop()
         var url = unhash(filename)        
         return $cordovaFile.checkFile(rootDir,filename)
         .then(function(){
             return $cordovaFile.removeFile(rootDir,filename)
+        }, function(error){
+            //the file already does not exist
+            return $q.when()
         }).then(function(success){
             return url
         })
@@ -171,12 +179,14 @@ angular.module('literaryHalifax')
     // determines whether all files associated with the landmark are cached
     // this must be done quickly, so it is imperfect (we can't actually look for the files)
     layer.landmarkIsCached = function(landmark){
+        if(!isCachedUrl(landmark.audio)){
+            return false
+        }
         for(var i=0;i<landmark.images.length;i++){
             if (!(
                 isCachedUrl(landmark.images[i].full) &&
                 isCachedUrl(landmark.images[i].squareThumb) &&
-                isCachedUrl(landmark.images[i].thumb) &&
-                isCachedUrl(landmark.audio)
+                isCachedUrl(landmark.images[i].thumb)
             )){
                 return false
             }
@@ -225,7 +235,7 @@ angular.module('literaryHalifax')
             var promises = []
             lodash.each(filesIndex,function(file){
                 for(attr in file.file_urls){
-                    if(isCachedUrl(file.file_urls[attr])){
+                    if(file.file_urls[attr]&&isCachedUrl(file.file_urls[attr])){
                         promises.push(
                             layer.clearUrl(file.file_urls[attr])
                         )
