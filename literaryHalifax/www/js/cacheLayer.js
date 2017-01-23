@@ -6,6 +6,7 @@ angular.module('literaryHalifax')
  */
 .factory('cacheLayer', function($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile){
     
+    // initialize the cache before handling any requests
     var initDeferred = $q.defer()
     var init = initDeferred.promise
     // cache for the results of GET requests
@@ -16,10 +17,13 @@ angular.module('literaryHalifax')
     // TODO this should be a persistent setting
     var cacheIncoming = false
     
+    // directory where we store all files
     var rootDir = ''
+    // filename of the JSON dump of the item cache
     var itemCacheFile = ''
     
     $ionicPlatform.ready(function(){
+        
         rootDir = cordova.file.dataDirectory
         itemCacheFile = 'itemCache'
         
@@ -28,12 +32,13 @@ angular.module('literaryHalifax')
                 return recoverItemCache().then(expandIndices)
             }, function(error){
             // no cache, that's fine
+            return $q.when()
         }).then(function(){
             initDeferred.resolve()
         })
     })
     
-    
+    // remote locations of files and items
     var api = "http://206.167.183.207/api/"
     var files = "http://206.167.183.207/files/"
     
@@ -55,6 +60,11 @@ angular.module('literaryHalifax')
     // performs a restricted deep search through the given object for
     // an object called 'file_urls'. When it finds it, it replaces any
     // urls inside it with the cached version of those files.
+    
+    // the search descends into
+    // * data fields for http results (things with status texts)
+    // * elements of an array
+    // * a "file_urls" property
     var decorate = function(r){
         // create a closure so that we can decorate everything in parallel
         return (function(raw){
@@ -102,12 +112,11 @@ angular.module('literaryHalifax')
     // Expose functionality by adding it to this object
     var layer = {}
 
-    // access point for http requests. If the request is cached, return the cached result,
-    // otherwise make the request
+    // access point for http requests. If the request is cached, resolve to the cached result,
+    // otherwise make the request and resolve to that result
     layer.request = function(url){
         // always avoid making a request if possible. Nothing needs to
-        // be refreshed in this app.
-        
+        // be refreshed in this app
         return init.then(function(){
             var promise
         
@@ -137,7 +146,7 @@ angular.module('literaryHalifax')
         // closure for concurrence
         return (function(url, force){
             if(!url){
-                console.log('tried to cache a non-existent url!')
+                console.log('tried to cache a non-existent url')
                 return $q.when(url)
             }
             if(!force && isCachedUrl(url)){
@@ -160,7 +169,7 @@ angular.module('literaryHalifax')
         }
         
         var filename = path.split("/").pop()
-        var url = unhash(filename)        
+        var url = unhash(filename)
         return $cordovaFile.checkFile(rootDir,filename)
         .then(function(){
             return $cordovaFile.removeFile(rootDir,filename)
@@ -168,10 +177,16 @@ angular.module('literaryHalifax')
             //the file already does not exist
             return $q.when()
         }).then(function(success){
+            // for convenience, resolve with the url that
+            // the cached file came from
             return url
         })
     }
-    
+
+    // checks if a url refers to a cached file.
+    // note - this does not check if the file actually exists
+    // if the url is falsy, return true (null is cached because we don't)
+    // need to make a request to use it
     var isCachedUrl = function(url){
         return !url || url.startsWith(rootDir)
     }
@@ -191,11 +206,11 @@ angular.module('literaryHalifax')
                 return false
             }
         }
-        // TODO audio
         return true
     }
-
     
+    // download and cache one item type
+    // such as "geolocations", "items", or "tours"
     var downloadAndCache = function(itemType){
         var url = api+itemType
         return $http.get(url)
@@ -208,6 +223,9 @@ angular.module('literaryHalifax')
     // Dump the item cache to a file
     // Only the results of index requests are needed
     // to recreate the entire cache
+    
+    // This will still work if results from individual requests
+    // are storerd in the item cache, but it's a waste of space.
     var saveItemCache = function(){
         var data = JSON.stringify(itemCache)
         return $cordovaFile.writeFile(rootDir,itemCacheFile,data,true)
@@ -216,11 +234,12 @@ angular.module('literaryHalifax')
     // Read index results out of the file and store them in the item cache.
     var recoverItemCache = function(){
         return $cordovaFile.readAsText(rootDir,itemCacheFile)
-                .then(function(result){
-                    itemCache=JSON.parse(result)
-        })
+            .then(function(result){
+                itemCache=JSON.parse(result)
+            })
     }
     
+    // delete the item cache
     var destroyItemCache = function(){
         return $cordovaFile.removeFile(rootDir,itemCacheFile)
             .then(function(success){
@@ -228,10 +247,15 @@ angular.module('literaryHalifax')
             })
     }
     
+    // delete every cached file, then delete the item cache
     layer.destroyCache = function(){
         var filesIndex = itemCache[api+'files']
 
-        return decorate(filesIndex).then(function(){
+        // decorate the file cache so that remote urls aare replaced with their cached versions.
+        // Normally modifying the cache like this is bad, but
+        // it's going to be deleted anyway
+        return decorate(filesIndex)
+        .then(function(){
             var promises = []
             lodash.each(filesIndex,function(file){
                 for(attr in file.file_urls){
@@ -239,7 +263,6 @@ angular.module('literaryHalifax')
                         promises.push(
                             layer.clearUrl(file.file_urls[attr])
                         )
-
                     }
                 }
             })
