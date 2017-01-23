@@ -245,7 +245,7 @@ angular.module('literaryHalifax')
     server = {   
         
         getPages:function(){
-            return cacheLayer.request(api+'/simple_pages/')
+            return cacheLayer.request(api+'/simple_pages')
             .then(function(pages){
                 return lodash.map(pages,function(serverRecord){
                     return{
@@ -254,7 +254,7 @@ angular.module('literaryHalifax')
                     }
                 })
             }, function(error){
-                console.log(error)
+                window.alert(JSON.stringify(error))
             })
         },
         landmarkInfo:function(id){
