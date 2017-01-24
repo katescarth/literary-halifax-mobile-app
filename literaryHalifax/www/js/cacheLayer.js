@@ -112,6 +112,10 @@ angular.module('literaryHalifax')
     // Expose functionality by adding it to this object
     var layer = {}
 
+    layer.cachingEnabled = function(){
+        return !lodash.isEmpty(itemCache)
+    }
+    
     // access point for http requests. If the request is cached, resolve to the cached result,
     // otherwise make the request and resolve to that result
     layer.request = function(url){

@@ -268,6 +268,10 @@ angular.module('literaryHalifax')
         showLandmarks:false        
     }
     
+    $scope.$on('$ionicView.enter',function(){
+        $scope.settings.cachingEnabled = cacheLayer.cachingEnabled()
+    })
+    
     //fires when the toggle is touched.
     $scope.cachingToggled=function(){
         if($scope.settings.cachingEnabled){
