@@ -648,17 +648,24 @@ angular.module('literaryHalifax')
     // expose the track name to the view
     $scope.media = mediaPlayer
     
-    $scope.loadingMsg='Getting landmark info...'
     
-    server.landmarkInfo($stateParams.landmarkID)
-    .then(function(landmark){
-        $scope.landmark=landmark
-    })              
-    .finally(function(){
-        updateMarker()
-        //UX: On failure go back to previous page, plus an error toast?
-        $scope.loadingMsg=''
-    })
+    $scope.refresh = function(){
+        $scope.loadingMsg='Getting landmark info...'
+        $scope.errorMsg = ''
+        server.landmarkInfo($stateParams.landmarkID)
+        .then(function(landmark){
+            $scope.landmark=landmark
+        })
+        .catch(function(error){
+            $scope.errorMsg = error
+        })
+        .finally(function(){
+            updateMarker()
+            //UX: On failure go back to previous page, plus an error toast?
+            $scope.loadingMsg=''
+        })
+    }
+    
     
     
     //description tab
@@ -831,51 +838,60 @@ angular.module('literaryHalifax')
         $state.go('app.landmarkView',{landmarkID:landmark.id})
     }
     
-    server.tourInfo(
-        $stateParams.tourID            
-    ).then(function(tour){
-        //TODO pan to the start of the tour
-        
-        $scope.tour=tour
-        $scope.loadingMsg='Getting landmarks'
-        var promises = []
-        for(i=0;i<$scope.tour.landmarks.length;i++){
-            // Use a closure to give the promises access to index
-            (function(index){
-                promises.push(
-                    server.landmarkInfo($scope.tour.landmarks[index].id)
-                    .then(function(landmark){
-                        angular.extend($scope.tour.landmarks[index], landmark)
-                    })
-                )
-            })(i)
-        }
-        
-        return $q.all(promises).then(function(){
+    $scope.refresh = function(){
+        server.tourInfo(
+            $stateParams.tourID            
+        ).then(function(tour){
+            //TODO pan to the start of the tour
+
+            $scope.tour=tour
+            $scope.loadingMsg='Getting landmarks'
+            $scope.errorMsg=''
+            var promises = []
             for(i=0;i<$scope.tour.landmarks.length;i++){
-                $scope.markers[i] =
-                    {
-                        lat: $scope.tour.landmarks[i].location.lat,
-                        lng: $scope.tour.landmarks[i].location.lng,
-                        message:
-                                "<span ng-click='goTo("+i+")'>" +
-                                 $scope.tour.landmarks[i].name+
-                                 "</span>",
-                        getMessageScope: function(){return $scope},
-                        focus: false,
-                        icon: {
-                            iconUrl: iconFor(i),
-                            iconSize:     [21, 30], // size of the icon
-                            iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
-                            popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
-                        },
-                    }
+                // Use a closure to give the promises access to index
+                (function(index){
+                    promises.push(
+                        server.landmarkInfo($scope.tour.landmarks[index].id)
+                        .then(function(landmark){
+                            angular.extend($scope.tour.landmarks[index], landmark)
+                        })
+                    )
+                })(i)
             }
+
+            return $q.all(promises).then(function(){
+                for(i=0;i<$scope.tour.landmarks.length;i++){
+                    $scope.markers[i] =
+                        {
+                            lat: $scope.tour.landmarks[i].location.lat,
+                            lng: $scope.tour.landmarks[i].location.lng,
+                            message:
+                                    "<span ng-click='goTo("+i+")'>" +
+                                     $scope.tour.landmarks[i].name+
+                                     "</span>",
+                            getMessageScope: function(){return $scope},
+                            focus: false,
+                            icon: {
+                                iconUrl: iconFor(i),
+                                iconSize:     [21, 30], // size of the icon
+                                iconAnchor:   [10.5, 30], // point of the icon which will correspond to marker's location
+                                popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+                            },
+                        }
+                }
+            })
         })
-    })
-    .finally(function(){
-        //UX: Go back to previous page, plus an error toast?
-        $scope.loadingMsg=''
-    })
+        .catch(function(error){
+            //UX: back to previous page, plus an error toast?
+            $scope.errorMsg = error
+        })
+        .finally(function(){
+            $scope.loadingMsg=''
+        })
+    }
+    
+    // TODO should be in an onEnter callback
+    $scope.refresh()
     
 });

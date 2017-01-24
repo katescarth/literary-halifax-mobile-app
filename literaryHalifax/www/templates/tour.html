@@ -38,7 +38,7 @@
             <p>{{tour.description}}</p>
             <div class="list">
                 
-                <list-loader loading-msg="loadingMsg"></list-loader>
+                <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
                 
                 <div class="list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks"
                   ng-click="go(landmark)">

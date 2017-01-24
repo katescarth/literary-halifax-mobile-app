@@ -11,11 +11,11 @@
         <ion-tab title="Description" icon="ion-android-list" disabled="loadingMsg">
           <overscroll-pane>
 <!--              This is the default tab, so we put the loading message here.-->
-            <div class="display-card" ng-if="loadingMsg"> 
-                <list-loader loading-msg="loadingMsg"></list-loader>
+            <div class="display-card" ng-if="loadingMsg||errorMsg"> 
+                <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
             </div>
               
-            <div class="display-card" ng-show="!loadingMsg"> 
+            <div class="display-card" ng-show="!(loadingMsg||errorMsg)"> 
 
               <h3 class="title">
                 <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-off':'ion-android-volume-up'"
@@ -29,7 +29,7 @@
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Images" icon="ion-android-image" disabled="loadingMsg">
+        <ion-tab title="Images" icon="ion-android-image" disabled="loadingMsg||errorMsg">
           <overscroll-pane>
             <div class="display-card" ng-show="!loadingMsg">
 
@@ -51,7 +51,7 @@
           </overscroll-pane>
         </ion-tab>
 
-        <ion-tab title="Map" icon="ion-android-pin" disabled="loadingMsg">
+        <ion-tab title="Map" icon="ion-android-pin" disabled="loadingMsg||errorMsg">
           <overscroll-pane>
             <div class="display-card" ng-show="!loadingMsg">                
                 <marker-map map-info="mapInfo" map-markers="markers">
