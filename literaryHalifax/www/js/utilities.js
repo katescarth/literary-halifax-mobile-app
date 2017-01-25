@@ -5,6 +5,9 @@ angular.module('literaryHalifax')
  */
 .factory('utils', function($q, $ionicPlatform, $timeout){
     
+    // set a hard(ish) time limit on a promise. If it hasn't resolved after the given
+    // number of milliseconds, return a rejection. Note- this does not actually stop the 
+    // promise from being carried out, so it should not be used with large, multi step promises.
     var timeoutWrapper = function(promise,millis){
         var deferred = $q.defer()
         promise.then(
@@ -87,7 +90,7 @@ angular.module('literaryHalifax')
             
             if(navigator.geolocation){
                 timeoutWrapper(getPermissions, options.timeout)
-                    .then(function(){
+                    .then(function(success){
                         navigator.geolocation.getCurrentPosition(
                             function(currentPosition){
                                 deferred.resolve({
@@ -100,7 +103,9 @@ angular.module('literaryHalifax')
                             },
                             options
                         )
-                    })
+                    }, function(error){
+                    deferred.reject(error)
+                })
             } else {
                 deferred.reject("No navigator!")
             }
