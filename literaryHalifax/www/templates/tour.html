@@ -6,7 +6,7 @@
             <marker-map map-markers="markers" map-info="mapInfo">
           </marker-map>
             
-            
+<!--            A row that shows the user's current position in the tour-->
             <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
                 
                     <div class="list-item-div clearfix" ng-click="upNextClicked()" style="padding-top:5px">
@@ -16,7 +16,7 @@
                             {{tour.landmarks[currentLandmark].name}}
                         </div>
                         <div class="list-item-subtitle">
-                            {{tour.landmarks[currentLandmark].description}}
+                            {{tour.landmarks[currentLandmark].subtitle}}
                         </div>
                     </div>
                     <div class="list-item-div up-next-button-row" style="text-align:center;">
@@ -28,8 +28,6 @@
                             Next
                             <i class="ion-chevron-right"> </i>
                         </span>
-
-                        <span>{{currentLandmark+1}}/{{tour.landmarks.length}} </span>
 
                     </div>
             </div>

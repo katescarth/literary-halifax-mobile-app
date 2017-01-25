@@ -24,7 +24,7 @@ angular.module('literaryHalifax')
     
     $ionicPlatform.ready(function(){
         
-        rootDir = cordova.file.dataDirectory
+        rootDir = "cordova.file.dataDirectory"
         itemCacheFile = 'itemCache'
         
         $cordovaFile.checkFile(rootDir, itemCacheFile)
@@ -299,6 +299,8 @@ angular.module('literaryHalifax')
             promise = $http.get(api+'files?item='+itemID)
                     .then(function(result){
                         return result.data
+                    }, function(error){
+                        return $q.reject('Couldn\'t complete the request')
                     })
         }
         return promise.then(decorate)

@@ -665,6 +665,7 @@ angular.module('literaryHalifax')
         })
     }
     
+    $scope.refresh()
     
     
     //description tab
