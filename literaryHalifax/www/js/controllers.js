@@ -494,7 +494,6 @@ angular.module('literaryHalifax')
         }).catch(function(error){
             $scope.loadingMsg=''
             $scope.errorMessage = error
-            window.alert(JSON.stringify(error))
         })
         
     }

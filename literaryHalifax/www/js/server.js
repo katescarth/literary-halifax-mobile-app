@@ -181,8 +181,6 @@ angular.module('literaryHalifax')
                 if(!landmark.streetAddress){
                     landmark.streetAddress=location.address
                 }
-            },function(error){
-                window.alert("Conversion error:\n"+JSON.stringify(error))
             })
         )
         
@@ -253,8 +251,6 @@ angular.module('literaryHalifax')
                         rawHtml: serverRecord.text
                     }
                 })
-            }, function(error){
-                window.alert(JSON.stringify(error))
             })
         },
         landmarkInfo:function(id){
@@ -262,8 +258,8 @@ angular.module('literaryHalifax')
             return cacheLayer.request(api+'/items/'+id)
                 .then(convertLandmark)
                 .then(function(result){
-                return result
-            })
+                    return result
+                })
         },
         getLandmarks:function(nearPoint){
             var landmarks = []

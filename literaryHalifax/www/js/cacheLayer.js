@@ -130,6 +130,9 @@ angular.module('literaryHalifax')
                 promise = $http.get(url)
                             .then(function(result){
                                 return result.data
+                            }, function(error){
+                                console.log(error)
+                                return $q.reject('Couldn\'t complete the request')
                             })
                 if(cacheIncoming){
                     promise = promise.then(
