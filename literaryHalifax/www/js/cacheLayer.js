@@ -24,7 +24,7 @@ angular.module('literaryHalifax')
     
     $ionicPlatform.ready(function(){
         
-        rootDir = cordova.file.dataDirectory
+        rootDir = "cordova.file.dataDirectory"
         itemCacheFile = 'itemCache'
         
         $cordovaFile.checkFile(rootDir, itemCacheFile)

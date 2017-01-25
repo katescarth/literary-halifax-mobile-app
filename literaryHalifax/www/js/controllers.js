@@ -757,18 +757,13 @@ angular.module('literaryHalifax')
 }).controller('tourCtrl',function($scope,$stateParams, server, $state, $q,$timeout){
     
     
-    // If a landmark is the current landmark, green. If it's a previous one, grey. If it's ahead, blue
+    // If a landmark is the current landmark, blue, otherwise, green
     iconFor = function(index){
-        var url
-        if (index<$scope.currentLandmark) {
-            url = "img/grey-pin.png"
-        } else if (index==$scope.currentLandmark) {
-            url = "img/green-pin.png"
+        if (index==$scope.currentLandmark) {
+            return "img/blue-pin.png"
         } else {
-            url = "img/blue-pin.png"
+            return "img/green-pin.png"
         }
-        
-        return url
     }
     
     updateIcon = function(index){
@@ -784,26 +779,6 @@ angular.module('literaryHalifax')
         }
     // index of the current landmark (the one user will visit next)
     $scope.currentLandmark=0
-    
-    $scope.upNextClicked = function(){
-        $scope.go($scope.tour.landmarks[$scope.currentLandmark])
-        // When the user returns, they will automatically be advanced
-        // Whether this is correct or not is a UX question
-        $scope.toNext()
-    }
-
-    //  show an info window for a landmark (specified by index)
-    //  and make sure that no other windows are displayed.
-    //  Also center the map on the marker
-    $scope.focus=function(event, landmarkIndex){
-        event.stopPropagation()
-        for(i=0;i<$scope.markers.length;i++){
-            // unfocus all the other ones
-            $scope.markers[i].focus=(i==landmarkIndex)
-        }
-        $scope.mapInfo.lat=$scope.markers[landmarkIndex].lat
-        $scope.mapInfo.lng=$scope.markers[landmarkIndex].lng
-    }
 
     // utility method for going to a landmark and moving the position in 
     // the tour appropriately
@@ -812,8 +787,7 @@ angular.module('literaryHalifax')
         $scope.currentLandmark = destIndex
         for(i=0;i<$scope.markers.length;i++){
             updateIcon(i)
-        }
-        $scope.upNextClicked()        
+        }        
     }
     
     // advancing the current landmark (but not navigating to it)
