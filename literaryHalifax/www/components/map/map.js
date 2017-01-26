@@ -67,18 +67,11 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         
         
 //      The tileset used by Curatescape  
-//      url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
         
         
         
         $scope.tiles ={
-            url: 'https://api.mapbox.com/v4/{mapID}/{z}/{x}/{y}.png?access_token={apikey}',
-            options: {
-                // TODO: This is David Walker's key, get our own for production
-                apikey: 'pk.eyJ1IjoiZHdhbGtlcmhhbGlmYXgiLCJhIjoiY2l3bzVieDNoMDAxdDJ6bXJzODg2cHF5OCJ9.AyPfYz71uJidlIqouYDNPA',
-                mapID: 'mapbox.light'
-            }
-
+            url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
         }
         
     })

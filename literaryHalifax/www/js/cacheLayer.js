@@ -24,8 +24,15 @@ angular.module('literaryHalifax')
     
     $ionicPlatform.ready(function(){
         
+        
+        // If there are quotes around this, it's because I was debugging in
+        // the browser. That will break caching
         rootDir = "cordova.file.dataDirectory"
         itemCacheFile = 'itemCache'
+        
+        if((ionic.Platform.isAndroid() || ionic.Platform.isIOS())){
+            rootDir = cordova.file.dataDirectory
+        }
         
         $cordovaFile.checkFile(rootDir, itemCacheFile)
         .then(function(success){
@@ -41,6 +48,16 @@ angular.module('literaryHalifax')
     // remote locations of files and items
     var api = "http://206.167.183.207/api/"
     var files = "http://206.167.183.207/files/"
+    
+    $ionicPlatform.ready(function(){
+            if(!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())){
+                // David's ionic serve address
+                // Copy pasted from server.js
+                // Gods of development forgive me
+                api="http://192.168.2.14:8100/api/"
+                files="http://192.168.2.14:8100/files/"
+            }
+        })
     
     // convert a url into a filename
     var hash = function(url){

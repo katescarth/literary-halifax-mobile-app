@@ -19,7 +19,7 @@
 
               <h3 class="title">
                 <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-off':'ion-android-volume-up'"
-                        ng-click="media.title==landmark.name?media.stop():playAudio()">
+                        ng-click="media.title==landmark.name?media.stop():playAudio()" ng-if="landmark.audio">
                 </button>
                   <div style="description-title">{{landmark.name}}</div>
               </h3>
