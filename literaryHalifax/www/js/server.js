@@ -92,16 +92,19 @@ angular.module('literaryHalifax')
 /*
 
  * Spec for landmark:
- *  id: a unique identifier (str)
- *  name: The name of the landmark (str)
+ *  id: a unique identifier (str, though it's a representation of an integer.)
+ *  title: The name of the landmark (str)
  *  location: the lat,lng of the landmark (object with lat,lng attributes)
  *  streetAddress: the landmark's street address (str)
- *  description: text description of the landmark (array[str]. Each element is a
-                 paragraph)
- *  subtitle: A short 'hook' for the landmark (str)
+ *  description: main text description of the landmark (str, possibly html?)
+ *  subtitle: An alternate title for the landmark (str)
+ *  lede: A brief introductory section that is intended to entice the reader to read the full entry. (str, html)
+ *  identifier: an unambiguous identifier, its purpose is unclear given we already have id's (str)
+ *  related: a list of related items, I assume (array[str])
+ *  creator: The person who created/curated the landmark record (not the landmark itself) (str)
+ *  subjects: a list of topics the landmark relates to (array[str])
  *  images: a list of images associated with the landmark. (array[image])
- *  audio:  an audio reading of the landmark's description (url)
- *
+ *  audio:  an audio reading of the landmark's description (str, url)
  
  
  * Spec for image:
@@ -110,7 +113,7 @@ angular.module('literaryHalifax')
  *  thumb: url of a thumbnail of the image
  
  * Spec for tour:
- *  id: a unique identifier (str)
+ *  id: a unique identifier (str, though it's a representation of an integer.)
  *  name: the name of the tour (str)
  *  description: a description of the tour (str)
  *  landmarks: the landmarks in the tour, in order (array of objects with 'id' attributes)
@@ -146,7 +149,9 @@ angular.module('literaryHalifax')
     convertLandmark = function(serverRecord){
         var landmark = {
             id:serverRecord.id,
-            images:[]
+            images:[],
+            subjects:[],
+            related:[]
         }
         var promises = []
         
@@ -155,7 +160,6 @@ angular.module('literaryHalifax')
             .then(function(files){
                 lodash.forEach(files,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
-                        // TODO this doesn't guarantee the order of the images
                         landmark.images.push(
                             {
                                 full:file.file_urls.fullsize,
@@ -199,6 +203,22 @@ angular.module('literaryHalifax')
                     break;
                 case STREET_ADDRESS:
                     landmark.streetAddress=resource.text
+                    break;
+                case LEDE:
+                    landmark.lede=resource.text
+                    break;
+                case CREATOR:
+                    landmark.creator=resource.text
+                    break;
+                case IDENTIFIER:
+                    landmark.identifier=resource.text
+                    break;
+                // TODO should these be text or objects?
+                case RELATED_RESOURCES:
+                    landmark.related.push(resource.text)
+                    break;
+                case TOPIC:
+                    landmark.subjects.push(resource.text)
                     break;
                 default:
                     console.log('No rule found for '+resource.element.name)

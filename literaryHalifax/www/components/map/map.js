@@ -33,7 +33,6 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);
     
-    
         utils.watchPosition(
             function(result){
                 angular.extend($scope.userLocationMarker,
@@ -65,13 +64,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             $ionicScrollDelegate.freezeAllScrolls(false)
         }
         
-        
-//      The tileset used by Curatescape  
-        
-        
-        
         $scope.tiles ={
-            url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+            url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
         }
         
     })
