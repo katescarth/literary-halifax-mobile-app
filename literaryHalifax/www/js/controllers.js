@@ -268,8 +268,11 @@ angular.module('literaryHalifax')
         showLandmarks:false        
     }
     
+    $scope.expandedTours = []
+    
     $scope.$on('$ionicView.enter',function(){
         $scope.settings.cachingEnabled = cacheLayer.cachingEnabled()
+        $scope.expandedTours = []
     })
     
     //fires when the toggle is touched.
@@ -279,9 +282,9 @@ angular.module('literaryHalifax')
             cacheLayer.cacheMetadata()
             .then($scope.refresh, function(error){
                         console.log(error)
-                        $scope.settings.showLandmarks = false
-                        $scope.settings.showTours = false
-                        $scope.settings.cachingEnabled = false
+//                        $scope.settings.showLandmarks = false
+//                        $scope.settings.showTours = false
+//                        $scope.settings.cachingEnabled = false
                     })
         } else {
             // delay the update while we show a confirmation popup
@@ -310,8 +313,7 @@ angular.module('literaryHalifax')
     $scope.landmarkCached = cacheLayer.landmarkIsCached
     
     $scope.tourCached = function(tour){
-        // TODO duh
-        return true
+        return lodash.every(tour.landmarks, cacheLayer.landmarkIsCached)
     }
     
     //cache every file associated with the given landmark

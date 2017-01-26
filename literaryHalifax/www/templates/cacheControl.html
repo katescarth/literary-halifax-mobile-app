@@ -29,11 +29,13 @@
                     <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
                     Tours
                 </div>
-                <div class="list-item-div" ng-if="settings.showTours" ng-repeat="tour in tours track by $index">
+                <div class="list-item-div" ng-if="settings.showTours" ng-repeat="tour in tours track by $index"
+                     style="padding-right:0px;">
                         <div class="list-item-title">
+                            <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'" ng-click="expandedTours[$index]=!expandedTours[$index]"></i>
                             {{tour.name}}
                         </div>
-                        <div class="list-item-div"  ng-repeat="landmark in tour.landmarks track by $index">
+                        <div class="list-item-div"  ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title">
                                 <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
                                 {{landmark.name}}
