@@ -261,7 +261,7 @@ angular.module('literaryHalifax')
     //expose this to the popover
     $scope.media = mediaPlayer
 })
-.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout, $q, $ionicPopup){
+.controller('cacheCtrl', function($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash){
     $scope.settings={
         cachingEnabled:false,
         showTours:false,
@@ -283,7 +283,7 @@ angular.module('literaryHalifax')
                         $scope.settings.showTours = false
                         $scope.settings.cachingEnabled = false
                     })
-        }else{
+        } else {
             // delay the update while we show a confirmation popup
             // turning off caching deletes the cache, so we need to make 
             $scope.settings.cachingEnabled = true
@@ -291,7 +291,7 @@ angular.module('literaryHalifax')
                 title:"Turn caching off?",
                 template:"This will delete all of your cached data. You will have to download it again to use it.",
                 okType: 'button-balanced'
-            }).then(function(shouldDelete) {
+            }).then(function(shouldDelete){
                 if (shouldDelete) {
                     //caching is being switched off, so collapse the menus
                     $scope.settings.showLandmarks = false
@@ -372,15 +372,28 @@ angular.module('literaryHalifax')
     
     $scope.refresh=function(){
         $scope.landmarks = []
-        server.getLandmarks()
-        .then(function(result){
-            $scope.landmarks = result
-        })
-        
         $scope.tours = []
-        server.getTours()
-        .then(function(tours){
-            $scope.tours=tours
+        
+        return $q.all([
+            server.getLandmarks()
+            .then(function(result){
+                $scope.landmarks = result
+            }),
+            server.getTours()
+            .then(function(tours){
+                $scope.tours=tours
+            })
+        ]).then(function(){
+            lodash.forEach($scope.tours,function(tour){
+                for(var i=0;i<tour.landmarks.length;i++){
+                    var id = tour.landmarks[i].id
+                    tour.landmarks[i] = lodash.find(
+                                            $scope.landmarks, function(landmark){
+                                                return landmark.id==id
+                                            }
+                                        )
+                }
+            })
         })
         
     }

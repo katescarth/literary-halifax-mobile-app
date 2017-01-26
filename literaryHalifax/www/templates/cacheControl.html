@@ -31,9 +31,15 @@
                 </div>
                 <div class="list-item-div" ng-if="settings.showTours" ng-repeat="tour in tours track by $index">
                         <div class="list-item-title">
-                            <i class="icon" style="float:right;" ng-class="tourCached(tour)?'ion-trash-b':'ion-arrow-down-a'" ng-click="ping(tour)"></i>
                             {{tour.name}}
                         </div>
+                        <div class="list-item-div"  ng-repeat="landmark in tour.landmarks track by $index">
+                            <div class="list-item-title">
+                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
+                                {{landmark.name}}
+                            </div>
+                        </div>
+                    
                 </div>
             </div>
             
