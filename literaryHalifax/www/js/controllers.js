@@ -282,9 +282,9 @@ angular.module('literaryHalifax')
             cacheLayer.cacheMetadata()
             .then($scope.refresh, function(error){
                         console.log(error)
-                        $scope.settings.showLandmarks = false
-                        $scope.settings.showTours = false
-                        $scope.settings.cachingEnabled = false
+//                        $scope.settings.showLandmarks = false
+//                        $scope.settings.showTours = false
+//                        $scope.settings.cachingEnabled = false
                     })
         } else {
             // delay the update while we show a confirmation popup

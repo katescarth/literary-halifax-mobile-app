@@ -120,6 +120,10 @@ overscroll-pane {
     border-style: solid;
 }
 
+.list-item-indent{
+    margin-left:12px;
+}
+
 .greyout{
     color:silver;
 }

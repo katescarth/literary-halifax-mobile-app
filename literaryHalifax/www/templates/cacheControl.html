@@ -2,46 +2,47 @@
     <ion-content>
         <div class="display-card">
             <div class="list">
-            
-            <div class="list-item-div">
-                <label class="toggle toggle-balanced disable-user-behavior"  style="float:right;">
-                    <input ng-model="settings.cachingEnabled" ng-change="cachingToggled()" type="checkbox">
-                    <div class="track">
-                        <div class="handle">
+                <div class="list-item-div">
+                    <label class="toggle toggle-balanced disable-user-behavior"  style="float:right;">
+                        <input ng-model="settings.cachingEnabled" ng-change="cachingToggled()" type="checkbox">
+                        <div class="track">
+                            <div class="handle">
+                            </div>
                         </div>
-                    </div>
-                </label>            
-                Preload content to save your data as you explore Halifax
-            </div>
-                
+                    </label>            
+                    Preload content to save your data as you explore Halifax
+                </div>
+
                 <div class="list-item-div" ng-click="settings.showLandmarks=settings.cachingEnabled && !settings.showLandmarks" ng-class = "settings.cachingEnabled?'':'greyout'">
-                    <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
-                    Landmarks
+                    <div>
+                        <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
+                        Landmarks
+                    </div>
+                    <div class="list-item-div list-item-indent" ng-if="settings.showLandmarks" ng-repeat="landmark in landmarks track by $index">
+                            <div class="list-item-title">
+                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
+                                {{landmark.name}}
+                            </div>
+
+                    </div>
                 </div>
-                <div class="list-item-div" ng-if="settings.showLandmarks" ng-repeat="landmark in landmarks track by $index">
-                        <div class="list-item-title">
-                            <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
-                            {{landmark.name}}
-                        </div>
-                    
-                </div>
-                <div class="list-item-div" ng-click="settings.showTours=settings.cachingEnabled && !settings.showTours" ng-class = "settings.cachingEnabled?'':'greyout'">
-                    <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
-                    Tours
-                </div>
-                <div class="list-item-div" ng-if="settings.showTours" ng-repeat="tour in tours track by $index"
-                     style="padding-right:0px;">
-                        <div class="list-item-title">
-                            <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'" ng-click="expandedTours[$index]=!expandedTours[$index]"></i>
+                <div class="list-item-div" ng-class = "settings.cachingEnabled?'':'greyout'">
+                    <div ng-click="settings.showTours=settings.cachingEnabled && !settings.showTours">
+                        <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
+                        Tours
+                    </div>
+                    <div class="list-item-div list-item-indent" ng-if="settings.showTours" ng-repeat="tour in tours track by $index" style="padding-right:0px;">
+                        <div class="list-item-title" ng-click="expandedTours[$index]=!expandedTours[$index]">
+                            <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
                             {{tour.name}}
                         </div>
-                        <div class="list-item-div"  ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
+                        <div class="list-item-div list-item-indent" ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title">
                                 <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)"></i>
                                 {{landmark.name}}
                             </div>
                         </div>
-                    
+                    </div>
                 </div>
             </div>
             
