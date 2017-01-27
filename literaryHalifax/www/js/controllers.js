@@ -329,27 +329,26 @@ angular.module('literaryHalifax')
         // wrap this entire function in a closure so nothing goes wrong if
         // it gets called many times at once
         return (function(landmark){
-            var promises = []
-            for(var i=0;i<landmark.images.length;i++){
-                (function(images){
-                    promises.push(cacheLayer.cacheUrl(images.full)
-                    .then(function(newUrl){
-                        images.full = newUrl
-                    }))
-                    promises.push(cacheLayer.cacheUrl(images.squareThumb)
-                    .then(function(newUrl){
-                        images.squareThumb = newUrl
-                    }))
-                    promises.push(cacheLayer.cacheUrl(images.thumb)
-                    .then(function(newUrl){
-                        images.thumb = newUrl
-                    }))
-                })(landmark.images[i])
-            }
-            promises.push(cacheLayer.cacheUrl(landmark.audio)
-                    .then(function(newUrl){
-                        landmark.audio = newUrl
-                    }))
+            var promises = [cacheLayer.cacheUrl(landmark.audio)
+                                .then(function(newUrl){
+                                    landmark.audio = newUrl
+                                })]
+            
+            lodash.forEach(landmark.images,function(images){
+                promises.push(cacheLayer.cacheUrl(images.full)
+                .then(function(newUrl){
+                    images.full = newUrl
+                }))
+                promises.push(cacheLayer.cacheUrl(images.squareThumb)
+                .then(function(newUrl){
+                    images.squareThumb = newUrl
+                }))
+                promises.push(cacheLayer.cacheUrl(images.thumb)
+                .then(function(newUrl){
+                    images.thumb = newUrl
+                }))
+                
+            })
             return $q.all(promises)
         })(LM)
     }
@@ -363,22 +362,21 @@ angular.module('literaryHalifax')
         // it gets called many times at once
         return (function(landmark){
             var promises = [cacheLayer.clearUrl(landmark.audio)]
-            for(var i=0;i<landmark.images.length;i++){
-                (function(images){
-                    promises.push(cacheLayer.clearUrl(images.full)
-                    .then(function(newUrl){
-                        images.full = newUrl
-                    }))
-                    promises.push(cacheLayer.clearUrl(images.squareThumb)
-                    .then(function(newUrl){
-                        images.squareThumb = newUrl
-                    }))
-                    promises.push(cacheLayer.clearUrl(images.thumb)
-                    .then(function(newUrl){
-                        images.thumb = newUrl
-                    }))
-                })(landmark.images[i])
-            }
+            
+            lodash.forEach(landmark.images, function(images){
+                promises.push(cacheLayer.clearUrl(images.full)
+                .then(function(newUrl){
+                    images.full = newUrl
+                }))
+                promises.push(cacheLayer.clearUrl(images.squareThumb)
+                .then(function(newUrl){
+                    images.squareThumb = newUrl
+                }))
+                promises.push(cacheLayer.clearUrl(images.thumb)
+                .then(function(newUrl){
+                    images.thumb = newUrl
+                }))
+            })
             return $q.all(promises)
         })(LM)
     }
@@ -398,14 +396,14 @@ angular.module('literaryHalifax')
             })
         ]).then(function(){
             lodash.forEach($scope.tours,function(tour){
-                for(var i=0;i<tour.landmarks.length;i++){
-                    var id = tour.landmarks[i].id
-                    tour.landmarks[i] = lodash.find(
-                                            $scope.landmarks, function(landmark){
-                                                return landmark.id==id
+                
+                tour.landmarks = lodash.map(tour.landmarks,function(landmarkA){
+                    return lodash.find($scope.landmarks,
+                                        function(landmarkB){
+                                                return landmarkB.id==landmarkA.id
                                             }
                                         )
-                }
+                })
             })
         })
         
@@ -728,6 +726,8 @@ angular.module('literaryHalifax')
         $timeout().then(openModal)
     }
     
+    // make sure the zombie is dead
+    // also, zoom in or back out
     $scope.doubleTap = function(event){
         delegate = $ionicScrollDelegate.$getByHandle('zoom-pane')
         if(delegate){
@@ -814,7 +814,6 @@ angular.module('literaryHalifax')
     // utility method for going to a landmark and moving the position in 
     // the tour appropriately
     $scope.goTo=function(destIndex){
-
         $scope.currentLandmark = destIndex
         for(i=0;i<$scope.markers.length;i++){
             updateIcon(i)
