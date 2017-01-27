@@ -254,6 +254,12 @@ angular.module('literaryHalifax')
       mediaController.show($event)
     }
     
+    $scope.$watch('media.isPlaying',function(newVal, oldVal){
+        if(newVal&&!oldVal&&!mediaController.isShown()){
+            mediaController.show('.media-display-target')
+        }
+    })
+    
     $scope.closePopover = function(){
         mediaController.hide()
     }
