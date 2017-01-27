@@ -122,10 +122,15 @@ overscroll-pane {
 
 .list-item-indent{
     margin-left:12px;
+    padding-right:0px !important;
 }
 
 .greyout{
     color:silver;
+}
+
+.italic{
+    font-style: italic !important;
 }
 
 .centered-list-item {

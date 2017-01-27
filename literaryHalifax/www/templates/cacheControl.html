@@ -13,8 +13,8 @@
                     Preload content to save your data as you explore Halifax
                 </div>
 
-                <div class="list-item-div" ng-click="settings.showLandmarks=settings.cachingEnabled && !settings.showLandmarks" ng-class = "settings.cachingEnabled?'':'greyout'">
-                    <div>
+                <div class="list-item-div" ng-class = "settings.cachingEnabled?'':'greyout'">
+                    <div ng-click="settings.showLandmarks=settings.cachingEnabled && !settings.showLandmarks">
                         <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
                         Landmarks
                     </div>
@@ -32,9 +32,10 @@
                         Tours
                     </div>
                     <div class="list-item-div list-item-indent" ng-if="settings.showTours" ng-repeat="tour in tours track by $index" style="padding-right:0px;">
+                        <i class="icon" style="float:right;" ng-class="tourCached(tour)?'ion-checkmark':'ion-arrow-down-a'" ng-click="tourCached(tour)?undefined:cacheTour(tour)"></i>
                         <div class="list-item-title" ng-click="expandedTours[$index]=!expandedTours[$index]">
                             <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'"></i>
-                            {{tour.name}}
+                            {{tour.name}} <span class="italic">({{cachedLandmarkCount(tour)}}/{{tour.landmarks.length}})</span>
                         </div>
                         <div class="list-item-div list-item-indent" ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title">

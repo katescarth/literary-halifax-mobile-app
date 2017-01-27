@@ -282,10 +282,14 @@ angular.module('literaryHalifax')
             cacheLayer.cacheMetadata()
             .then($scope.refresh, function(error){
                         console.log(error)
-//                        $scope.settings.showLandmarks = false
-//                        $scope.settings.showTours = false
-//                        $scope.settings.cachingEnabled = false
+                        // TODO toast
+                        $scope.settings.showLandmarks = false
+                        $scope.settings.showTours = false
+                        $scope.settings.cachingEnabled = false
                     })
+            .finally(function(){
+                $scope.expandedTours = []
+            })
         } else {
             // delay the update while we show a confirmation popup
             // turning off caching deletes the cache, so we need to make 
@@ -314,6 +318,10 @@ angular.module('literaryHalifax')
     
     $scope.tourCached = function(tour){
         return lodash.every(tour.landmarks, cacheLayer.landmarkIsCached)
+    }
+    
+    $scope.cachedLandmarkCount = function(tour){
+        return lodash.filter(tour.landmarks, $scope.landmarkCached).length
     }
     
     //cache every file associated with the given landmark
@@ -346,11 +354,15 @@ angular.module('literaryHalifax')
         })(LM)
     }
     
+    //cache every landmark in the given tour
+    $scope.cacheTour=function(tour){
+        return lodash.forEach(tour.landmarks,$scope.cacheLandmark)
+    }
     $scope.clearLandmark = function(LM){
         // wrap this entire function in a closure so nothing goes wrong if
         // it gets called many times at once
         return (function(landmark){
-            var promises = []
+            var promises = [cacheLayer.clearUrl(landmark.audio)]
             for(var i=0;i<landmark.images.length;i++){
                 (function(images){
                     promises.push(cacheLayer.clearUrl(images.full)
@@ -367,7 +379,6 @@ angular.module('literaryHalifax')
                     }))
                 })(landmark.images[i])
             }
-            // TODO audio
             return $q.all(promises)
         })(LM)
     }
