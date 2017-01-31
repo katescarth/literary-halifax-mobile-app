@@ -70,6 +70,12 @@ ion-nav-view {
     position: relative;
 }
 
+/*
+.popover-backdrop.active{
+    pointer-events: none;
+}
+*/
+
 overscroll-pane {
     background-color: transparent !important;
     height: 100%;

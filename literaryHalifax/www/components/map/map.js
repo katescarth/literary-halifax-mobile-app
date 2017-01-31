@@ -14,7 +14,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
             },
             templateUrl: 'components/map/map.html'
         };
-    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils) {
+    }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q) {
     
         $scope.userLocationMarker = {
             focus: false,
@@ -28,7 +28,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
                 iconAnchor:   [5,5]
             }
         }
-        // display the union of passed-in markers and the user loocation marker
+        // display the union of passed-in markers and the user location marker
         $scope.$watch("mapMarkers", function (newValue, oldValue) {
                     $scope.markers = [$scope.userLocationMarker].concat(newValue)
                 }, true);
@@ -66,6 +66,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         
         $scope.tiles ={
             url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
+//            function(arg){
+//                console.log(arg)
+//                return $q.when("http://www.clker.com/cliparts/F/D/1/9/O/E/chess-board-black-and-white.svg")
+//            }
         }
         
     })

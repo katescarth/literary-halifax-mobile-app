@@ -111,6 +111,8 @@ angular.module('literaryHalifax')
  *  full: url of the image at full resolution
  *  squareThumb: url of a square thumbnail of the image
  *  thumb: url of a thumbnail of the image
+ *  title: title of the image
+ *  description: description of the image
  
  * Spec for tour:
  *  id: a unique identifier (str, though it's a representation of an integer.)
@@ -160,13 +162,33 @@ angular.module('literaryHalifax')
             .then(function(files){
                 lodash.forEach(files,function(file){
                     if(file.metadata.mime_type.startsWith('image')){
-                        landmark.images.push(
-                            {
-                                full:file.file_urls.fullsize,
-                                squareThumb:file.file_urls.square_thumbnail,
-                                thumb:file.file_urls.thumbnail
+                        var imageObj = {
+                            full:file.file_urls.fullsize,
+                            squareThumb:file.file_urls.square_thumbnail,
+                            thumb:file.file_urls.thumbnail
+                        }
+                        
+                        
+                        lodash.forEach(file.element_texts,function(resource){
+                            switch(resource.element.id){
+                                case TITLE:
+                                    imageObj.title=resource.text
+                                    break;
+                                case DESCRIPTION:
+                                    imageObj.description=resource.text
+                                    break;
+                                case CREATOR:
+                                    imageObj.creator=resource.text
+                                    break;
+                                case SOURCE:
+                                    imageObj.identifier=resource.text
+                                    break;
+                                default:
+                                    console.log('No rule found for '+resource.element.name)
                             }
-                        )
+                        })
+                        
+                        landmark.images.push(imageObj)
                     } else if(file.metadata.mime_type.startsWith('audio')){
                         landmark.audio = file.file_urls.original
                     }
@@ -188,9 +210,7 @@ angular.module('literaryHalifax')
             })
         )
         
-        
-        for(var i = 0, len = serverRecord.element_texts.length; i < len; i++){
-            var resource = serverRecord.element_texts[i]
+        lodash.forEach(serverRecord.element_texts,function(resource){
             switch(resource.element.id){
                 case TITLE:
                     landmark.name=resource.text
@@ -223,7 +243,7 @@ angular.module('literaryHalifax')
                 default:
                     console.log('No rule found for '+resource.element.name)
             }
-        }
+        })
         
         return $q.all(promises)
         .then(function(){

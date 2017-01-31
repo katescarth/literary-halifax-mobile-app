@@ -4631,8 +4631,15 @@ angular.module('ui-leaflet').directive('tiles', ["leafletLogger", "leafletData",
                         if (isDefined(tiles.url)) {
                             tileLayerUrl = tiles.url;
                         }
+                        
+                        // David did this outside of source control.
+                        // What a Dummy!
+                        if(_.isFunction(tileLayerUrl)||tileLayerUrl.then){
+                            tileLayerObj = L.tileLayer.functional(tileLayerUrl, tileLayerOptions);
+                        } else {
+                            tileLayerObj = L.tileLayer(tileLayerUrl, tileLayerOptions);
+                        }
 
-                        tileLayerObj = L.tileLayer(tileLayerUrl, tileLayerOptions);
                         tileLayerObj.addTo(map);
                         leafletData.setTiles(tileLayerObj, attrs.id);
                         return;
@@ -4644,7 +4651,13 @@ angular.module('ui-leaflet').directive('tiles', ["leafletLogger", "leafletData",
                         tileLayerOptions = defaults.tileLayerOptions;
                         angular.copy(tiles.options, tileLayerOptions);
                         tileLayerUrl = tiles.url;
-                        tileLayerObj = L.tileLayer(tileLayerUrl, tileLayerOptions);
+                        // David did this outside of source control.
+                        // What a Dummy!
+                        if(_.isFunction(tileLayerUrl)||tileLayerUrl.then){
+                            tileLayerObj = L.tileLayer.functional(tileLayerUrl, tileLayerOptions);
+                        } else {
+                            tileLayerObj = L.tileLayer(tileLayerUrl, tileLayerOptions);
+                        }
                         tileLayerObj.addTo(map);
                         leafletData.setTiles(tileLayerObj, attrs.id);
                         return;
