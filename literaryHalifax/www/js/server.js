@@ -181,7 +181,7 @@ angular.module('literaryHalifax')
                                     imageObj.creator=resource.text
                                     break;
                                 case SOURCE:
-                                    imageObj.identifier=resource.text
+                                    imageObj.source=resource.text
                                     break;
                                 default:
                                     console.log('No rule found for '+resource.element.name)

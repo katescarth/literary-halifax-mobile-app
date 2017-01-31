@@ -36,15 +36,15 @@
               <div class="row" ng-repeat="image in landmark.images" ng-if="$index % 3 === 0">
                 <div class="col col-33" ng-if="$index < landmark.images.length">
                     <img ng-src="{{landmark.images[$index].thumb}}" class="gallery-thumb"
-                    ng-click="display(landmark.images[$index].full)"/>
+                    ng-click="display(landmark.images[$index])"/>
                 </div>
                 <div class="col col-33" ng-if="$index + 1 < landmark.images.length">
                     <img ng-src="{{landmark.images[$index + 1].thumb}}" class="gallery-thumb"
-                    ng-click="display(landmark.images[$index +1].full)"/>
+                    ng-click="display(landmark.images[$index +1])"/>
                 </div>
                 <div class="col col-33" ng-if="$index + 2 < landmark.images.length">
                     <img ng-src="{{landmark.images[$index + 2].thumb}}" class="gallery-thumb"
-                    ng-click="display(landmark.images[$index +2].full)"/>
+                    ng-click="display(landmark.images[$index +2])"/>
                 </div>
               </div>
             </div>

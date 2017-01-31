@@ -724,8 +724,10 @@ angular.module('literaryHalifax')
     }
     
     // display an image in the image modal
-    $scope.display = function(url){
-        $scope.imageSrc = url
+    $scope.display = function(image){
+        $scope.imageSrc = image.full
+        $scope.imageTitle = image.title
+        $scope.imageDescription = image.description
         $scope.imageAnimation="fade-appear"
         $scope.backgroundAnimation="frost-appear"
         // let the class register to avoid flicker
@@ -753,6 +755,8 @@ angular.module('literaryHalifax')
         .then(function(){
             modal.hide()
             $scope.imageSrc = undefined
+            $scope.imageTitle = undefined
+            $scope.imageDescription = undefined
             $ionicScrollDelegate.$getByHandle('zoom-pane').zoomTo(1)
         })
     };
