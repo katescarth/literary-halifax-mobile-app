@@ -1,3 +1,13 @@
+/*Ionic switches this off for some reason*/
+em,i{
+    font-style:italic;
+}
+
+q:before,
+q:after {
+ content: "\"";
+}
+
 a {
     color: black;
     text-decoration: none;
