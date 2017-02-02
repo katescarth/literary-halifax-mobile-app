@@ -9,6 +9,7 @@ a {
     opacity: 0;
 }
 
+
 /*before the background image loads, this is visible*/
 
 ion-nav-view {
@@ -27,10 +28,18 @@ ion-nav-view {
     background-color: transparent;
 }
 
+.leaflet-popup-content{
+    margin-left: 11px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    /* needs to be big enough to accomodate the X button*/
+    margin-right:18px;
+    max-width:215px;
+}
+
 .info-window {
-    width: 175px;
-    max-width: 175px !important;
-    max-height: 60px;
+    max-width: 205px !important;
+    max-height: 100px;
     align-content: center;
     overflow: hidden;
 }

@@ -514,8 +514,8 @@ angular.module('literaryHalifax')
                     message:
                         "<div class='info-window' dotdotdot ng-click='go(landmarks["+index+"])'>" +
                             "<h6>"+landmark.name+"</h6>" +
-                            "<p>"+landmark.description+"</p>"+
-                         "</div>",
+                                   landmark.lede+
+                        "</div>",
                     getMessageScope: function(){return $scope},
                     focus: false,
                     icon: {
