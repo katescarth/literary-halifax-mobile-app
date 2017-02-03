@@ -74,7 +74,7 @@
     "cordova-plugin-android-permissions": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-android-permissions"
+            "id": "cordova-plugin-android-permissions@~0.10.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -90,7 +90,7 @@
     "cordova-plugin-file-transfer": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file-transfer"
+            "id": "cordova-plugin-file-transfer@~1.6.1"
         },
         "is_top_level": true,
         "variables": {}

@@ -45,7 +45,7 @@ const FORMAT=42
 const IDENTIFIER=43
 const LANGUAGE=44
 const PUBLISHER=45
-const REALTION=46//a related resource (not a database relation)
+const RELATION=46//a related resource (not a database relation)
 const RIGHTS=47
 const SOURCE=48
 const TOPIC=49
@@ -241,7 +241,7 @@ angular.module('literaryHalifax')
                     landmark.subjects.push(resource.text)
                     break;
                 default:
-                    console.log('No rule found for '+resource.element.name)
+                    console.log('No rule found for '+resource.element.name+':'+resource.element.id)
             }
         })
         

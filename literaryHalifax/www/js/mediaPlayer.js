@@ -31,14 +31,12 @@ angular.module('literaryHalifax')
     
     //plays the currently selected track
     play=function(){
-        player.isPlaying = true
         if(media){   
             media.play()//TODO add  iOS options
         }
     }
     //pauses the currently playing track (which can be resumed using play())
     pause=function(){
-        player.isPlaying = true
         if(media){
             media.pause()
         }
@@ -61,7 +59,7 @@ angular.module('literaryHalifax')
         player.title=title
         track=src
         player.hasTrack=true
-//        media=new Media(src, function(){},function(){},statusManager)
+        media=new Media(src, function(){},function(){},statusManager)
     }
     //scans to a particular location (between 0 and 1)
     scan=function(position){

@@ -15,16 +15,19 @@
                 <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
             </div>
               
-            <div class="display-card" ng-show="!(loadingMsg||errorMsg)"> 
+            <div class="display-card landmark-text-card" ng-show="!(loadingMsg||errorMsg)"> 
 
               <h3 class="title">
                 <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-up':'ion-android-volume-off'"
                         ng-click="media.title==landmark.name?media.stop():playAudio()" ng-if="landmark.audio">
                 </button>
-                  <div style="description-title">{{landmark.name}}</div>
+                  <div class="landmark-text-card-title">{{landmark.name}}</div>
               </h3>
+              <h5 class="title landmark-text-card-title" ng-bind-html="landmark.subtitle"></h5>                
                 
-                <div ng-bind-html="landmark.description"></div>
+              <div class="landmark-text-card-lede" ng-bind-html="landmark.lede"></div>
+                
+              <div class="landmark-text-card-body" ng-bind-html="landmark.description"></div>
             </div>
           </overscroll-pane>
         </ion-tab>
