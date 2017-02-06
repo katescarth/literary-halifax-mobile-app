@@ -241,7 +241,7 @@ angular.module('literaryHalifax')
                     landmark.subjects.push(resource.text)
                     break;
                 default:
-                    console.log('No rule found for '+resource.element.name+':'+resource.element.id)
+                    console.log('No rule found for '+resource.element.name)
             }
         })
         
@@ -267,7 +267,7 @@ angular.module('literaryHalifax')
             zoom:serverRecord.start.zoom
         }
         
-        tour.landmarks = _.map(serverRecord.items,
+        tour.landmarks = lodash.map(serverRecord.items,
             function(record) {
                 return {
                     id: record.id
@@ -349,7 +349,6 @@ angular.module('literaryHalifax')
         },
         
         tourInfo:function(id){
-            
             return cacheLayer.request(api+'/tours/'+id)
             .then(convertTour).then(function(result){
              

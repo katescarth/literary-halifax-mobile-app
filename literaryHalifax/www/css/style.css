@@ -198,6 +198,10 @@ overscroll-pane {
     white-space: nowrap;
 }
 
+.loader-subtitle{
+    font-family: sans-serif;
+}
+
 .list-item-distance {
     font-size: 10px;
     font-family: sans-serif;
