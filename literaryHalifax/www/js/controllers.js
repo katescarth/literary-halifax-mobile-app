@@ -1,5 +1,6 @@
 angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData, server, lodash) {
     // items for the side menu
+    "use strict";
     $scope.menuItems = [
         {
             displayName: 'Landmarks',
@@ -226,6 +227,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //expose this to the popover
     $scope.media = mediaPlayer;
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash) {
+    "use strict";
     $scope.settings = {
         cachingEnabled: false,
         showTours: false,
@@ -342,9 +344,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.refresh();
 }).controller('pageCtrl', function ($scope, $stateParams) {
+    "use strict";
     $scope.page = $stateParams.page;
 }).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData) {
     // number of items to show in the list. Increased as user scrolls down
+    "use strict";
     $scope.numListItems = 5;
     // the map. Needed this so we can invalidate its size if it gets in a bad state.
     var map,
@@ -472,6 +476,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
 }).controller('toursCtrl', function ($scope, $state, $q, server, utils, lodash) {
+    "use strict";
     var location;
     $scope.loadingMsg = '';
         // When the view is entered, try to get the user's location.
@@ -535,6 +540,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('landmarkCtrl', function ($scope, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate) {
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
+    "use strict";
     var modal,
         marker = {};
     // description tab
@@ -632,6 +638,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.refresh();
 }).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash) {
     // If a landmark is the current landmark, blue, otherwise, green
+    "use strict";
     function iconFor(index) {
         if (index === $scope.currentLandmark) {
             return "img/blue-pin.png";
