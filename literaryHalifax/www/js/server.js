@@ -1,90 +1,90 @@
 // id's of element types defined by omeka
-var/*const*/ TEXT = 1;
-var/*const*/ INTERVIEWER = 2;
-var/*const*/ INTERVIEWEE = 3;
-var/*const*/ LOCATION = 4;//The location of an interview
-var/*const*/ TRANSCRIPTION = 5;
-var/*const*/ LOCAL_URL = 6;
-var/*const*/ ORIGINAL_FORMAT = 7;
-var/*const*/ PHYSICAL_DIMENSIONS = 10;
-var/*const*/ DURATION = 11;
-var/*const*/ COMPRESSION = 12;
-var/*const*/ PRODUCER = 13;
-var/*const*/ DIRECTOR = 14;
-var/*const*/ BIT_RATE = 15;
-var/*const*/ TIME_SUMMARY = 16;
-var/*const*/ EMAIL_BODY = 17;
-var/*const*/ SUBJECT_LINE = 18;
-var/*const*/ FROM = 19;
-var/*const*/ TO = 20;
-var/*const*/ CC = 21;
-var/*const*/ BCC = 22;
-var/*const*/ NUMBER_OF_ATTACHMENTS = 23;
-var/*const*/ STANDARDS = 24;
-var/*const*/ OBJECTIVES = 25;
-var/*const*/ MATERIALS = 26;
-var/*const*/ LESSON_PLAN_TEXT = 27;
-var/*const*/ URL = 28;
-var/*const*/ EVENT_TYPE = 29;
-var/*const*/ PARTICIPANTS = 30;
-var/*const*/ BIRTH_DATE = 31;
-var/*const*/ BIRTH_PLACE = 32;
-var/*const*/ DEATH_DATE = 33;
-var/*const*/ OCCUPATION = 34;
-var/*const*/ BIOGRAPHICAL_TEXT = 35;
-var/*const*/ BIBLIOGRAPHY = 36;
+var TEXT = 1;
+var INTERVIEWER = 2;
+var INTERVIEWEE = 3;
+var LOCATION = 4;//The location of an interview
+var TRANSCRIPTION = 5;
+var LOCAL_URL = 6;
+var ORIGINAL_FORMAT = 7;
+var PHYSICAL_DIMENSIONS = 10;
+var DURATION = 11;
+var COMPRESSION = 12;
+var PRODUCER = 13;
+var DIRECTOR = 14;
+var BIT_RATE = 15;
+var TIME_SUMMARY = 16;
+var EMAIL_BODY = 17;
+var SUBJECT_LINE = 18;
+var FROM = 19;
+var TO = 20;
+var CC = 21;
+var BCC = 22;
+var NUMBER_OF_ATTACHMENTS = 23;
+var STANDARDS = 24;
+var OBJECTIVES = 25;
+var MATERIALS = 26;
+var LESSON_PLAN_TEXT = 27;
+var URL = 28;
+var EVENT_TYPE = 29;
+var PARTICIPANTS = 30;
+var BIRTH_DATE = 31;
+var BIRTH_PLACE = 32;
+var DEATH_DATE = 33;
+var OCCUPATION = 34;
+var BIOGRAPHICAL_TEXT = 35;
+var BIBLIOGRAPHY = 36;
 
 //id's of Dublin Core element types
-var/*const*/ CONTRIBUTOR = 37;
-var/*const*/ COVERAGE = 38;
-var/*const*/ CREATOR = 39;
-var/*const*/ DATE = 40;
-var/*const*/ DESCRIPTION = 41;
-var/*const*/ FORMAT = 42;
-var/*const*/ IDENTIFIER = 43;
-var/*const*/ LANGUAGE = 44;
-var/*const*/ PUBLISHER = 45;
-var/*const*/ RELATION = 46;//a related resource (not a database relation)
-var/*const*/ RIGHTS = 47;
-var/*const*/ SOURCE = 48;
-var/*const*/ TOPIC = 49;
-var/*const*/ TITLE = 50;
-var/*const*/ TYPE = 51;
+var CONTRIBUTOR = 37;
+var COVERAGE = 38;
+var CREATOR = 39;
+var DATE = 40;
+var DESCRIPTION = 41;
+var FORMAT = 42;
+var IDENTIFIER = 43;
+var LANGUAGE = 44;
+var PUBLISHER = 45;
+var RELATION = 46;//a related resource (not a database relation)
+var RIGHTS = 47;
+var SOURCE = 48;
+var TOPIC = 49;
+var TITLE = 50;
+var TYPE = 51;
 
 
 
 
 //id's of elements defined by Curatescape
-var/*const*/ SUBTITLE = 52;
-var/*const*/ LEDE = 53;
-var/*const*/ STORY = 54;
-var/*const*/ SPONSOR = 55;
-var/*const*/ FACTOID = 56;
-var/*const*/ RELATED_RESOURCES = 57;
-var/*const*/ OFFICIAL_WEBSITE = 58;
-var/*const*/ STREET_ADDRESS = 59;
-var/*const*/ ACCESS_INFORMATION = 60;
+var SUBTITLE = 52;
+var LEDE = 53;
+var STORY = 54;
+var SPONSOR = 55;
+var FACTOID = 56;
+var RELATED_RESOURCES = 57;
+var OFFICIAL_WEBSITE = 58;
+var STREET_ADDRESS = 59;
+var ACCESS_INFORMATION = 60;
 
 //id's of item types
 
-// var/*const*/ TEXT = 1 Text is both an item type and an element. Fortunately, both the ID's are 1.
+// var TEXT = 1 Text is both an item type and an element. Fortunately, both the ID's are 1.
 // I see no way this could go wrong
-var/*const*/ MOVING_IMAGE = 3;
-var/*const*/ ORAL_HISTORY = 4;
-var/*const*/ SOUND = 5;
-var/*const*/ STILL_IMAGE = 6;
-var/*const*/ WEBSITE = 7;
-var/*const*/ EVENT = 8;
-var/*const*/ EMAIL = 9;
-var/*const*/ LESSON_PLAN = 10;
-var/*const*/ HYPERLINK = 11;
-var/*const*/ PERSON = 12;
-var/*const*/ INTERACTIVE_RESOURCE = 13;
-var/*const*/ DATASET = 14;
-var/*const*/ PHYSICAL_OBJECT = 15;
-var/*const*/ SERVICE = 16;
-var/*const*/ SOFTWARE = 17;
-var/*const*/ CURATESCAPE_STORY = 18;
+var MOVING_IMAGE = 3;
+var ORAL_HISTORY = 4;
+var SOUND = 5;
+var STILL_IMAGE = 6;
+var WEBSITE = 7;
+var EVENT = 8;
+var EMAIL = 9;
+var LESSON_PLAN = 10;
+var HYPERLINK = 11;
+var PERSON = 12;
+var INTERACTIVE_RESOURCE = 13;
+var DATASET = 14;
+var PHYSICAL_OBJECT = 15;
+var SERVICE = 16;
+var SOFTWARE = 17;
+var CURATESCAPE_STORY = 18;
 
 angular.module('literaryHalifax')
 
