@@ -6,8 +6,9 @@
  * DO NOT TRANSCLUDE AN <ION-CONTENT> BLOCK
  */
 angular.module('literaryHalifax').directive('overscrollPane', function () {
+    "use strict";
     return {
-        transclude: true
-        , templateUrl: 'components/overscrollPane/overscrollPane.html'
-    }
-})
+        transclude : true,
+        templateUrl : 'components/overscrollPane/overscrollPane.html'
+    };
+});
