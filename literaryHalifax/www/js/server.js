@@ -1,91 +1,90 @@
-
 // id's of element types defined by omeka
-const TEXT=1
-const INTERVIEWER=2
-const INTERVIEWEE=3
-const LOCATION=4//The location of an interview
-const TRANSCRIPTION=5
-const LOCAL_URL=6
-const ORIGINAL_FORMAT=7
-const PHYSICAL_DIMENSIONS=10
-const DURATION=11
-const COMPRESSION=12
-const PRODUCER=13
-const DIRECTOR=14
-const BIT_RATE=15
-const TIME_SUMMARY=16
-const EMAIL_BODY=17
-const SUBJECT_LINE=18
-const FROM=19
-const TO=20
-const CC=21
-const BCC=22
-const NUMBER_OF_ATTACHMENTS=23
-const STANDARDS=24
-const OBJECTIVES=25
-const MATERIALS=26
-const LESSON_PLAN_TEXT=27
-const URL=28
-const EVENT_TYPE=29
-const PARTICIPANTS=30
-const BIRTH_DATE=31
-const BIRTH_PLACE=32
-const DEATH_DATE=33
-const OCCUPATION=34
-const BIOGRAPHICAL_TEXT=35
-const BIBLIOGRAPHY=36
+var/*const*/ TEXT = 1;
+var/*const*/ INTERVIEWER = 2;
+var/*const*/ INTERVIEWEE = 3;
+var/*const*/ LOCATION = 4;//The location of an interview
+var/*const*/ TRANSCRIPTION = 5;
+var/*const*/ LOCAL_URL = 6;
+var/*const*/ ORIGINAL_FORMAT = 7;
+var/*const*/ PHYSICAL_DIMENSIONS = 10;
+var/*const*/ DURATION = 11;
+var/*const*/ COMPRESSION = 12;
+var/*const*/ PRODUCER = 13;
+var/*const*/ DIRECTOR = 14;
+var/*const*/ BIT_RATE = 15;
+var/*const*/ TIME_SUMMARY = 16;
+var/*const*/ EMAIL_BODY = 17;
+var/*const*/ SUBJECT_LINE = 18;
+var/*const*/ FROM = 19;
+var/*const*/ TO = 20;
+var/*const*/ CC = 21;
+var/*const*/ BCC = 22;
+var/*const*/ NUMBER_OF_ATTACHMENTS = 23;
+var/*const*/ STANDARDS = 24;
+var/*const*/ OBJECTIVES = 25;
+var/*const*/ MATERIALS = 26;
+var/*const*/ LESSON_PLAN_TEXT = 27;
+var/*const*/ URL = 28;
+var/*const*/ EVENT_TYPE = 29;
+var/*const*/ PARTICIPANTS = 30;
+var/*const*/ BIRTH_DATE = 31;
+var/*const*/ BIRTH_PLACE = 32;
+var/*const*/ DEATH_DATE = 33;
+var/*const*/ OCCUPATION = 34;
+var/*const*/ BIOGRAPHICAL_TEXT = 35;
+var/*const*/ BIBLIOGRAPHY = 36;
 
 //id's of Dublin Core element types
-const CONTRIBUTOR=37
-const COVERAGE=38
-const CREATOR=39
-const DATE=40
-const DESCRIPTION=41
-const FORMAT=42
-const IDENTIFIER=43
-const LANGUAGE=44
-const PUBLISHER=45
-const RELATION=46//a related resource (not a database relation)
-const RIGHTS=47
-const SOURCE=48
-const TOPIC=49
-const TITLE=50
-const TYPE=51
+var/*const*/ CONTRIBUTOR = 37;
+var/*const*/ COVERAGE = 38;
+var/*const*/ CREATOR = 39;
+var/*const*/ DATE = 40;
+var/*const*/ DESCRIPTION = 41;
+var/*const*/ FORMAT = 42;
+var/*const*/ IDENTIFIER = 43;
+var/*const*/ LANGUAGE = 44;
+var/*const*/ PUBLISHER = 45;
+var/*const*/ RELATION = 46;//a related resource (not a database relation)
+var/*const*/ RIGHTS = 47;
+var/*const*/ SOURCE = 48;
+var/*const*/ TOPIC = 49;
+var/*const*/ TITLE = 50;
+var/*const*/ TYPE = 51;
 
 
 
 
 //id's of elements defined by Curatescape
-const SUBTITLE=52
-const LEDE=53
-const STORY=54
-const SPONSOR=55
-const FACTOID=56
-const RELATED_RESOURCES=57
-const OFFICIAL_WEBSITE=58
-const STREET_ADDRESS=59
-const ACCESS_INFORMATION=60
+var/*const*/ SUBTITLE = 52;
+var/*const*/ LEDE = 53;
+var/*const*/ STORY = 54;
+var/*const*/ SPONSOR = 55;
+var/*const*/ FACTOID = 56;
+var/*const*/ RELATED_RESOURCES = 57;
+var/*const*/ OFFICIAL_WEBSITE = 58;
+var/*const*/ STREET_ADDRESS = 59;
+var/*const*/ ACCESS_INFORMATION = 60;
 
 //id's of item types
 
-// const TEXT=1 Text is both an item type and an element. Fortunately, both the ID's are 1.
+// var/*const*/ TEXT = 1 Text is both an item type and an element. Fortunately, both the ID's are 1.
 // I see no way this could go wrong
-const MOVING_IMAGE=3
-const ORAL_HISTORY=4
-const SOUND=5
-const STILL_IMAGE=6
-const WEBSITE=7
-const EVENT=8
-const EMAIL=9
-const LESSON_PLAN=10
-const HYPERLINK=11
-const PERSON=12
-const INTERACTIVE_RESOURCE=13
-const DATASET=14
-const PHYSICAL_OBJECT=15
-const SERVICE=16
-const SOFTWARE=17
-const CURATESCAPE_STORY=18
+var/*const*/ MOVING_IMAGE = 3;
+var/*const*/ ORAL_HISTORY = 4;
+var/*const*/ SOUND = 5;
+var/*const*/ STILL_IMAGE = 6;
+var/*const*/ WEBSITE = 7;
+var/*const*/ EVENT = 8;
+var/*const*/ EMAIL = 9;
+var/*const*/ LESSON_PLAN = 10;
+var/*const*/ HYPERLINK = 11;
+var/*const*/ PERSON = 12;
+var/*const*/ INTERACTIVE_RESOURCE = 13;
+var/*const*/ DATASET = 14;
+var/*const*/ PHYSICAL_OBJECT = 15;
+var/*const*/ SERVICE = 16;
+var/*const*/ SOFTWARE = 17;
+var/*const*/ CURATESCAPE_STORY = 18;
 
 angular.module('literaryHalifax')
 
@@ -130,232 +129,222 @@ angular.module('literaryHalifax')
  * getTours(): resolves to a list of all tours on the server
  * tourInfo(id): resolves to an object representing the tour with the given id
  */
-.factory('server', function($timeout,$q,cacheLayer,utils,lodash,$ionicPlatform){
-    var SMALL_DELAY = 400
-    var LARGE_DELAY = 2000
-    var api = "http://206.167.183.207/api"
+    .factory('server', function ($timeout, $q, cacheLayer, utils, lodash, $ionicPlatform) {
+        "use strict";
+        var SMALL_DELAY = 400,
+            LARGE_DELAY = 2000,
+            api = "http://206.167.183.207/api",
+            server;
 
-
-        $ionicPlatform.ready(function(){
-            if(!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())){
+        $ionicPlatform.ready(function () {
+            if (!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
                 // David's ionic serve address
                 // Gods of development forgive me
-                api="http://192.168.2.14:8100/api"
+                api = "http://192.168.2.14:8100/api";
             }
-        })
-    
+        });
+        // converts a landmark from the server to one that matches our spec. 
+        // This includes making requests for files and location.
+        function convertLandmark(serverRecord) {
+            var landmark = {
+                id : serverRecord.id,
+                images : [],
+                subjects : [],
+                related : []
+            },
+                promises = [];
 
-    
-    // converts a landmark from the server to one that matches our spec. 
-    // This includes making requests for files and location.
-    convertLandmark = function(serverRecord){
-        var landmark = {
-            id:serverRecord.id,
-            images:[],
-            subjects:[],
-            related:[]
-        }
-        var promises = []
-        
-        promises.push(
-            cacheLayer.filesForItem(serverRecord.id)
-            .then(function(files){
-                lodash.forEach(files,function(file){
-                    if(file.metadata.mime_type.startsWith('image')){
-                        var imageObj = {
-                            full:file.file_urls.fullsize,
-                            squareThumb:file.file_urls.square_thumbnail,
-                            thumb:file.file_urls.thumbnail
-                        }
-                        
-                        
-                        lodash.forEach(file.element_texts,function(resource){
-                            switch(resource.element.id){
-                                case TITLE:
-                                    imageObj.title=resource.text
-                                    break;
-                                case DESCRIPTION:
-                                    imageObj.description=resource.text
-                                    break;
-                                case CREATOR:
-                                    imageObj.creator=resource.text
-                                    break;
-                                case SOURCE:
-                                    imageObj.source=resource.text
-                                    break;
-                                default:
-                                    console.log('No rule found for '+resource.element.name)
+            promises.push(
+                cacheLayer.filesForItem(serverRecord.id)
+                    .then(function (files) {
+                        lodash.forEach(files, function (file) {
+                            if (file.metadata.mime_type.startsWith('image')) {
+                                var imageObj = {
+                                    full : file.file_urls.fullsize,
+                                    squareThumb : file.file_urls.square_thumbnail,
+                                    thumb : file.file_urls.thumbnail
+                                };
+
+
+                                lodash.forEach(file.element_texts, function (resource) {
+                                    switch (resource.element.id) {
+                                    case TITLE:
+                                        imageObj.title = resource.text;
+                                        break;
+                                    case DESCRIPTION:
+                                        imageObj.description = resource.text;
+                                        break;
+                                    case CREATOR:
+                                        imageObj.creator = resource.text;
+                                        break;
+                                    case SOURCE:
+                                        imageObj.source = resource.text;
+                                        break;
+                                    default:
+                                        console.log('No rule found for ' + resource.element.name);
+                                    }
+                                });
+
+                                landmark.images.push(imageObj);
+                            } else if (file.metadata.mime_type.startsWith('audio')) {
+                                landmark.audio = file.file_urls.original;
                             }
-                        })
-                        
-                        landmark.images.push(imageObj)
-                    } else if(file.metadata.mime_type.startsWith('audio')){
-                        landmark.audio = file.file_urls.original
-                    }
-                })
-            })
-        )
-        promises.push(
-            cacheLayer.request(api+'/geolocations/' + 
-                      serverRecord.extended_resources.geolocations.id)
-            .then(function(location){
-                landmark.location={
-                    lat:location.latitude,
-                    lng:location.longitude,
-                    zoom:location.zoom
-                }
-                if(!landmark.streetAddress){
-                    landmark.streetAddress=location.address
-                }
-            })
-        )
-        
-        lodash.forEach(serverRecord.element_texts,function(resource){
-            switch(resource.element.id){
+                        });
+                    })
+            );
+            promises.push(
+                cacheLayer.request(api + '/geolocations/' + serverRecord.extended_resources.geolocations.id)
+                    .then(function (location) {
+                        landmark.location = {
+                            lat : location.latitude,
+                            lng : location.longitude,
+                            zoom : location.zoom
+                        };
+                        if (!landmark.streetAddress) {
+                            landmark.streetAddress = location.address;
+                        }
+                    })
+            );
+
+            lodash.forEach(serverRecord.element_texts, function (resource) {
+                switch (resource.element.id) {
                 case TITLE:
-                    landmark.name=resource.text
+                    landmark.name = resource.text;
                     break;
                 case SUBTITLE:
-                    landmark.subtitle=resource.text
+                    landmark.subtitle = resource.text;
                     break;
                 case STORY:
-                    landmark.description=resource.text
+                    landmark.description = resource.text;
                     break;
                 case STREET_ADDRESS:
-                    landmark.streetAddress=resource.text
+                    landmark.streetAddress = resource.text;
                     break;
                 case LEDE:
-                    landmark.lede=resource.text
+                    landmark.lede = resource.text;
                     break;
                 case CREATOR:
-                    landmark.creator=resource.text
+                    landmark.creator = resource.text;
                     break;
                 case IDENTIFIER:
-                    landmark.identifier=resource.text
+                    landmark.identifier = resource.text;
                     break;
                 // TODO should these be text or objects?
                 case RELATED_RESOURCES:
-                    landmark.related.push(resource.text)
+                    landmark.related.push(resource.text);
                     break;
                 case TOPIC:
-                    landmark.subjects.push(resource.text)
+                    landmark.subjects.push(resource.text);
                     break;
                 default:
-                    console.log('No rule found for '+resource.element.name)
+                    console.log('No rule found for ' + resource.element.name);
+                }
+            });
+
+            return $q.all(promises)
+                .then(function () {
+                    return $q.when(landmark);
+                }, function (error) {
+                    console.log(error);
+                    return $q.reject(error);
+                });
+
+        }
+
+        // converts a tour from the server to one that matches our spec. 
+        function convertTour(serverRecord) {
+            var tour = {
+                id : serverRecord.id
+            };
+
+            tour.start = {
+                lat : serverRecord.start.latitude,
+                lng : serverRecord.start.longitude,
+                zoom : serverRecord.start.zoom
+            };
+
+            tour.landmarks = lodash.map(serverRecord.items,
+                function (record) {
+                    return {
+                        id : record.id
+                    };
+                });
+            tour.name = serverRecord.title;
+            tour.description = serverRecord.description;
+
+            return tour;
+        }
+
+        server = {
+            getPages : function () {
+                return cacheLayer.request(api + '/simple_pages')
+                    .then(function (pages) {
+                        return lodash.map(pages, function (serverRecord) {
+                            return {
+                                title : serverRecord.title,
+                                rawHtml : serverRecord.text
+                            };
+                        });
+                    });
+            },
+            landmarkInfo : function (id) {
+                return cacheLayer.request(api + '/items/' + id)
+                    .then(convertLandmark)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
+            getLandmarks : function (nearPoint) {
+                var landmarks = [];
+                return cacheLayer.request(api + '/items')
+                    .then(function (result) {
+                        var promises = [];
+                        lodash.forEach(result, function (landmark) {
+                            promises.push(
+                                convertLandmark(landmark)
+                                    .then(function (newLandmark) {
+                                        landmarks.push(newLandmark);
+                                    })
+                            );
+                        });
+                        return $q.all(promises);
+                    }).then(function () {
+                        if (nearPoint) {
+                            landmarks = lodash.sortBy(landmarks,
+                                function (landmark) {
+                                    return utils.distance(nearPoint, landmark.location);
+                                });
+                        }
+                        return $q.when(landmarks);
+                    });
+            },
+
+            getTours : function (nearPoint) {
+                var tours = [];
+                return cacheLayer.request(api + '/tours')
+                    .then(function (result) {
+                        lodash.forEach(result, function (tour) {
+                            tours.push(convertTour(tour));
+                        });
+
+                        if (nearPoint) {
+                            tours = lodash.sortBy(tours, function (tour) {
+                                return utils.distance(nearPoint, tour.start);
+                            });
+                        }
+                        return tours;
+                    });
+
+            },
+
+            tourInfo : function (id) {
+                return cacheLayer.request(api + '/tours/' + id)
+                    .then(convertTour)
+                    .then(function (result) {
+                        return result;
+                    });
             }
-        })
-        
-        return $q.all(promises)
-        .then(function(){
-            return $q.when(landmark)
-        }, function(error){
-            console.log(error)
-            return $q.reject(error)
-        })
-        
-    }
-    
-    // converts a tour from the server to one that matches our spec. 
-    convertTour = function(serverRecord){
-        var tour = {
-            id:serverRecord.id,
-        }
-        
-        tour.start={
-            lat:serverRecord.start.latitude,
-            lng:serverRecord.start.longitude,
-            zoom:serverRecord.start.zoom
-        }
-        
-        tour.landmarks = lodash.map(serverRecord.items,
-            function(record) {
-                return {
-                    id: record.id
-                }
-            }
-        )
-        tour.name = serverRecord.title
-        tour.description = serverRecord.description
-        
-        return tour
-    }
+        };
 
-    server = {   
-        
-        getPages:function(){
-            return cacheLayer.request(api+'/simple_pages')
-            .then(function(pages){
-                return lodash.map(pages,function(serverRecord){
-                    return{
-                        title: serverRecord.title,
-                        rawHtml: serverRecord.text
-                    }
-                })
-            })
-        },
-        landmarkInfo:function(id){
-            
-            return cacheLayer.request(api+'/items/'+id)
-                .then(convertLandmark)
-                .then(function(result){
-                    return result
-                })
-        },
-        getLandmarks:function(nearPoint){
-            var landmarks = []
-            return cacheLayer.request(api+'/items')
-            .then(function(result){
-                var promises = []
-                lodash.forEach(result,function(landmark){
-                    promises.push(
-                        convertLandmark(landmark)
-                        .then(function(newLandmark){
-                            landmarks.push(newLandmark)
-                        })
-                    )
-                })
-                return $q.all(promises)
-            }).then(function(){
-                if(nearPoint){
-                    landmarks = lodash.sortBy(landmarks,
-                        function(landmark){
-                            return utils.distance(nearPoint,landmark.location)
-                        }   
-                    )
-                }
-                return $q.when(landmarks)
-            })
-
-        },
-        
-        getTours:function(nearPoint){
-
-            var tours = []
-            return cacheLayer.request(api+'/tours')
-            .then(
-            function(result){
-                lodash.forEach(result,function(tour){
-                    tours.push(convertTour(tour))
-                })            
-                
-                if(nearPoint){
-                    tours = lodash.sortBy(tours,function(tour){
-                        return utils.distance(nearPoint,tour.start)
-                    })
-                }
-                return tours
-            })
-
-        },
-        
-        tourInfo:function(id){
-            return cacheLayer.request(api+'/tours/'+id)
-            .then(convertTour).then(function(result){
-             
-                return result
-            })
-        }
-    }
-
-    return server
-})
+        return server;
+    });
