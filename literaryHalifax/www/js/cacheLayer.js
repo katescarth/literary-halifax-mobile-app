@@ -4,9 +4,9 @@ angular.module('literaryHalifax')
  *
  *
  */
-    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile) {
+    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup) {
         "use strict";
-        // initialize the cache before handling any requests
+        // when this promise resolves, the cache layer is ready to handle requests
         var initDeferred = $q.defer(),
             init = initDeferred.promise,
             // cache for the results of GET requests
@@ -100,8 +100,8 @@ angular.module('literaryHalifax')
 
         // checks if a url refers to a cached file.
         // note - this does not check if the file actually exists
-        // if the url is falsy, return true (null is cached because we don't)
-        // need to make a request to use it
+        // if the url is falsy, return true (null is cached because we don't
+        // need to make a request to use it)
         function isCachedUrl(url) {
             return !url || url.startsWith(rootDir);
         }
@@ -185,15 +185,12 @@ angular.module('literaryHalifax')
         // determines whether all files associated with the landmark are cached
         // this must be done quickly, so it is imperfect (we can't actually look for the files)
         layer.landmarkIsCached = function (landmark) {
-            if (!isCachedUrl(landmark.audio)) {
-                return false;
-            }
-            
-            return lodash.every(landmark.images, function (imageObj) {
-                return isCachedUrl(imageObj.full) &&
-                    isCachedUrl(imageObj.squareThumb) &&
-                    isCachedUrl(imageObj.thumb);
-            });
+            return isCachedUrl(landmark.audio) &&
+                lodash.every(landmark.images, function (imageObj) {
+                    return isCachedUrl(imageObj.full) &&
+                        isCachedUrl(imageObj.squareThumb) &&
+                        isCachedUrl(imageObj.thumb);
+                });
         };
 
         // download and cache one item type
@@ -210,7 +207,7 @@ angular.module('literaryHalifax')
         // Dump the item cache to a file
         // Only the results of index requests are needed
         // to recreate the entire cache
-
+        //
         // This will still work if results from individual requests
         // are storerd in the item cache, but it's a waste of space.
         function saveItemCache() {
@@ -336,10 +333,19 @@ angular.module('literaryHalifax')
                     // no cache, that's fine
                     return $q.when();
                 }).then(function () {
-                    initDeferred.resolve();
+                    if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
+                        $ionicPopup.alert({
+                            title : 'No conncection',
+                            template : 'Until you connect to the internet, no content will be available.',
+                            okType : 'button-balanced'
+                        }).finally(function () {
+                            initDeferred.resolve();
+                        });
+                    } else {
+                        initDeferred.resolve();
+                    }
                 });
         });
-
 
         return layer;
     });
