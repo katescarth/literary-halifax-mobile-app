@@ -63,7 +63,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.menuStyle = {
             'left': newPosition + 'px'
         };
-            // the shadow appears on the left side of the menu as it slides out
+        // the shadow appears on the left side of the menu as it slides out
         var shadowLength = 10.0 * newPosition / menuWidth;
         $scope.listStyle = {
             'box-shadow': shadowLength + 'px 0px 10px #111111'
@@ -77,13 +77,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if (animationPromise) {
             $interval.cancel(animationPromise);
         }
-        //  number of frames in this animation
-        var frameCount = Math.round(maxFrames * Math.abs(from - to) / menuWidth),
+        //  number of frames in this animation. Must be at least 1
+        var frameCount = Math.max(1, Math.round(maxFrames * Math.abs(from - to) / menuWidth)),
             stepSize = (to - from) / frameCount,
             count = 0;
-        if (!frameCount) {
-            frameCount = 1;
-        }
         //  distance the menu shifts each frame
         animationPromise = $interval(function () {
             count += 1;
