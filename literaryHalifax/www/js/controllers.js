@@ -20,18 +20,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
     ];
     $ionicPlatform.ready(function () {
-        server.getPages().then(function (pages) {
-            lodash.forEach(pages, function (page) {
-                $scope.menuItems.push({
-                    displayName: page.title,
-                    onClick: function () {
-                        $state.go('app.page', {
-                            page: page
-                        });
-                    }
-                });
-            });
-        });
+        $scope.refresh();
     });
     var menuWidth = 275,
         // tracks whether or not the menu is open
@@ -223,6 +212,21 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     //expose this to the popover
     $scope.media = mediaPlayer;
+    
+    $scope.refresh = function () {
+        server.getPages().then(function (pages) {
+            lodash.forEach(pages, function (page) {
+                $scope.menuItems.push({
+                    displayName: page.title,
+                    onClick: function () {
+                        $state.go('app.page', {
+                            page: page
+                        });
+                    }
+                });
+            });
+        });
+    };
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash) {
     "use strict";
     $scope.settings = {
@@ -479,7 +483,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // When the view is entered, try to get the user's location.
         // If successful, use it to get the tours from the server
         // in order of nearness. Otherwise, get the tours in arbitrary order
-    $scope.loadResults = function () {
+    $scope.refresh = function () {
         location = undefined;
         $scope.tours = [];
         $scope.loadingMsg = 'getting your location...';
@@ -505,7 +509,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.errorMsg = error;
         });
     };
-    $scope.loadResults();
+    $scope.refresh();
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
