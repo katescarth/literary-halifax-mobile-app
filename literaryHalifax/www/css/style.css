@@ -170,14 +170,19 @@ overscroll-pane {
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 2.5px;
+    display:none;/*only display if the shown class is selected*/
 }
 
-.list-item-div + .list-item-div {
+.shown-list-item-div {
+    display:block;
+}
+.shown-list-item-div ~ .shown-list-item-div {
     padding-top: 2.5px;
     border-top-color: silver;
     border-top-width: 1px;
     border-style: solid;
 }
+
 
 .list-item-indent{
     margin-left:12px;

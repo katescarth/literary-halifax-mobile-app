@@ -9,7 +9,7 @@
 <!--            A row that shows the user's current position in the tour-->
             <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
                 
-                    <div class="list-item-div" style="text-align:center;" style="padding-top:5px">
+                    <div class="list-item-div shown-list-item-div" style="text-align:center;" style="padding-top:5px">
                         <div style="float:right;font-size:25px;padding:2px;padding-top:7px;" ng-click="toNext()">
                             <i class="ion-chevron-right"> </i>
                         </div>
@@ -34,7 +34,7 @@
                 
                 <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
                 
-                <div class="list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks"
+                <div class="list-item-div shown-list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks"
                   ng-click="go(landmark)">
                     <div class="list-item-title">
                         {{$index + 1}}. {{landmark.name}}

@@ -10,7 +10,7 @@
             
             <div class="list">
                 <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
-                <div class="list-item-div"  ng-repeat="tour in tours"
+                <div class="list-item-div shown-list-item-div"  ng-repeat="tour in tours"
                   ng-click="go(tour)" ng-if="showTour(tour)">
                     <div class="list-item-title">
                         <div class="list-item-distance" ng-if="displayDistance(tour)">
