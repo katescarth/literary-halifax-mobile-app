@@ -19,9 +19,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             }
         }
     ];
-    $ionicPlatform.ready(function () {
-        $scope.refresh();
-    });
     var menuWidth = 275,
         // tracks whether or not the menu is open
         menuOpen = false,
@@ -44,6 +41,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         dragVelocity = 0.0,
         decayConstant = 0.5,
         BACK_NAV_CODE = 100,
+        // the panel which controls audio that is being played
         mediaController;
     
     function updateMenuPosition(newPosition) {
@@ -191,7 +189,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             goBack();
         }
     }, BACK_NAV_CODE);
-    // the panel which controls audio that is being played
     $ionicPopover.fromTemplateUrl('components/mediaControl/mediaControl.html', {
         scope: $scope,
         animation: 'in-from-right'
@@ -227,6 +224,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             });
         });
     };
+    $ionicPlatform.ready(function () {
+        $scope.refresh();
+        //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    });
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash) {
     "use strict";
     $scope.settings = {
@@ -344,6 +345,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
+    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
@@ -353,8 +355,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.numListItems = 5;
     // the map. Needed this so we can invalidate its size if it gets in a bad state.
     var map,
-    // the user's location
-        location;
+        // the user's location
+        location,
+        ALL_TAG = 'Show all';
     leafletData.getMap().then(function (result) {
         map = result;
     }, function (error) {
@@ -433,6 +436,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
+    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
         //     What will they want to see? Where they are, or where the landmarks are?
@@ -441,16 +445,25 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         lng: -63.5806,
         zoom: 15
     };
-    //ngModel doesn't work without a dot. Represents the text entered into the filter bar
     $scope.filter = {
-        text: ''
+        text: '',
+        tag: ALL_TAG
     };
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark = function (landmark) {
+        var nameMatch, tagMatch;
         if (!$scope.filter.text) {
-            return true;
+            nameMatch = true;
+        } else {
+            nameMatch = landmark.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
         }
-        return landmark.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
+        
+        if ($scope.filter.tag === ALL_TAG) {
+            tagMatch = true;
+        } else {
+            tagMatch = lodash.includes(landmark.tags, $scope.filter.tag);
+        }
+        return tagMatch && nameMatch;
     };
     // show or hide markers according to whether or not their corresponding
     // landmarks should be filtered out
@@ -510,6 +523,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
+    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
@@ -637,6 +651,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
+    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash) {
     // If a landmark is the current landmark, blue, otherwise, green
     "use strict";
@@ -727,4 +742,5 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     // TODO should be in an onEnter callback
     $scope.refresh();
+    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
 });

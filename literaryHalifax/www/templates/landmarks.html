@@ -9,6 +9,14 @@
         </div>
         <div class="display-card">
             
+            <div class="select-style">
+                <select ng-model="filter.tag">
+                  <option>Show all</option>
+                  <option>tag01</option>
+                  <option>Dalhousie University</option>
+                </select>
+                <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'tag-filter-inactive':'tag-filter-active'"></i>
+            </div>
             <div class="item item-input filter-bar">
                 <input type="text" placeholder="Filter by title..." ng-model="filter.text" ng-change="applyFilter()">
                 <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"

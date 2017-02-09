@@ -240,6 +240,8 @@ angular.module('literaryHalifax')
                     console.log('No rule found for ' + resource.element.name);
                 }
             });
+            
+            landmark.tags = lodash.map(serverRecord.tags, 'name');
 
             return $q.all(promises)
                 .then(function () {
