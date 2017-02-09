@@ -335,7 +335,7 @@ angular.module('literaryHalifax')
                 }).then(function () {
                     if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
                         $ionicPopup.alert({
-                            title : 'No conncection',
+                            title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',
                             okType : 'button-balanced'
                         }).finally(function () {

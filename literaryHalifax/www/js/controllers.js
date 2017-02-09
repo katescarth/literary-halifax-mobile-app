@@ -13,7 +13,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 $state.go('app.tours');
             }
         }, {
-            displayName: 'Cache Control',
+            displayName: 'Offline Options',
             onClick: function () {
                 $state.go('app.cacheControl');
             }

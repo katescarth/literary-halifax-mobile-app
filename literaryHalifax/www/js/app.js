@@ -67,7 +67,7 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
             // currently unimplemented
             .state('app.cacheControl', {
                 url: '/cacheControl',
-                title: 'Cache Control',
+                title: 'Offline Options',
                 views: {
                     'mainContent': {
                         templateUrl: 'templates/cacheControl.html',
@@ -77,6 +77,7 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
             })
 
             // Displays a simple page from the server.
+            // The page provides its own title
             .state('app.page', {
                 url: '/page',
                 params: {page: null},
