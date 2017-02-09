@@ -154,6 +154,8 @@ angular.module('literaryHalifax')
             },
                 promises = [];
 
+            landmark.tags = lodash.map(serverRecord.tags, 'name');
+
             promises.push(
                 cacheLayer.filesForItem(serverRecord.id)
                     .then(function (files) {
@@ -164,7 +166,6 @@ angular.module('literaryHalifax')
                                     squareThumb : file.file_urls.square_thumbnail,
                                     thumb : file.file_urls.thumbnail
                                 };
-
 
                                 lodash.forEach(file.element_texts, function (resource) {
                                     switch (resource.element.id) {
@@ -234,14 +235,13 @@ angular.module('literaryHalifax')
                     landmark.related.push(resource.text);
                     break;
                 case TOPIC:
-                    landmark.subjects.push(resource.text);
+                    landmark.tags.push(resource.text);
                     break;
                 default:
                     console.log('No rule found for ' + resource.element.name);
                 }
             });
             
-            landmark.tags = lodash.map(serverRecord.tags, 'name');
 
             return $q.all(promises)
                 .then(function () {

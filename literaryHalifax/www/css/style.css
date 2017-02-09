@@ -176,6 +176,7 @@ overscroll-pane {
 .shown-list-item-div {
     display:block;
 }
+
 .shown-list-item-div ~ .shown-list-item-div {
     padding-top: 2.5px;
     border-top-color: silver;
@@ -184,16 +185,16 @@ overscroll-pane {
 }
 
 
-.list-item-indent{
+.list-item-indent {
     margin-left:12px;
     padding-right:0px !important;
 }
 
-.greyout{
+.greyout {
     color:silver;
 }
 
-.italic{
+.italic {
     font-style: italic !important;
 }
 

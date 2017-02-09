@@ -357,7 +357,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     var map,
         // the user's location
         location,
-        ALL_TAG = 'Show all';
+        ALL_TAGS = 'Show all';
     leafletData.getMap().then(function (result) {
         map = result;
     }, function (error) {
@@ -412,6 +412,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }).then(function (result) {
             $scope.landmarks = result;
             $scope.loadingMsg = '';
+            $scope.tags = lodash.union([ALL_TAGS], lodash.flatten(lodash.map(result, 'tags')));
             $scope.markers = lodash.times(result.length, function (index) {
                 var landmark = result[index];
                 return {
@@ -445,10 +446,15 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         lng: -63.5806,
         zoom: 15
     };
+    // constraints on which landmarks to show
     $scope.filter = {
         text: '',
-        tag: ALL_TAG
+        tag: ALL_TAGS
     };
+    
+    // list of tags which can be selected from
+    $scope.tags = [ALL_TAGS];
+    
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark = function (landmark) {
         var nameMatch, tagMatch;
@@ -458,7 +464,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             nameMatch = landmark.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
         }
         
-        if ($scope.filter.tag === ALL_TAG) {
+        if ($scope.filter.tag === ALL_TAGS) {
             tagMatch = true;
         } else {
             tagMatch = lodash.includes(landmark.tags, $scope.filter.tag);

@@ -11,9 +11,7 @@
             
             <div class="select-style">
                 <select ng-model="filter.tag">
-                  <option>Show all</option>
-                  <option>tag01</option>
-                  <option>Dalhousie University</option>
+                  <option ng-repeat="tag in tags">{{tag}}</option>
                 </select>
                 <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'tag-filter-inactive':'tag-filter-active'"></i>
             </div>

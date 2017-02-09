@@ -333,7 +333,7 @@ angular.module('literaryHalifax')
                     // no cache, that's fine
                     return $q.when();
                 }).then(function () {
-                    if (0&&!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
+                    if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
                         $ionicPopup.alert({
                             title : 'No conncection',
                             template : 'Until you connect to the internet, no content will be available.',
