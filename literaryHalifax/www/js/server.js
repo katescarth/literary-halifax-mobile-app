@@ -246,9 +246,6 @@ angular.module('literaryHalifax')
             return $q.all(promises)
                 .then(function () {
                     return $q.when(landmark);
-                }, function (error) {
-                    console.log(error);
-                    return $q.reject(error);
                 });
 
         }

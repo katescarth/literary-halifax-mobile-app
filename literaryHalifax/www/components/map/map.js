@@ -65,9 +65,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
 
     $scope.tiles = {
         url : 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
-
-
-//            function(arg){
+//      url:  function(arg){
 //                console.log(arg)
 //                return $q.when("http://www.clker.com/cliparts/F/D/1/9/O/E/chess-board-black-and-white.svg")
 //            }

@@ -245,7 +245,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if ($scope.settings.cachingEnabled) {
             // initialize the cache
             cacheLayer.cacheMetadata().then($scope.refresh, function (error) {
-                console.log(error);
+                console.log('error turning on caching: 'JSON.stringify(error));
                 // TODO toast
                 $scope.settings.showLandmarks = false;
                 $scope.settings.showTours = false;

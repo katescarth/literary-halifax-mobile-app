@@ -35,11 +35,11 @@ angular.module('literaryHalifax')
         $ionicPlatform.ready(function () {
             navigator.geolocation.getCurrentPosition(
                 function (currentPosition) {
-                    console.log('Got permissions');
+                    console.log('Got geolocation permissions');
                     permissionsDeferred.resolve();
                 },
                 function (error) {
-                    console.log('Something went wrong getting permissions. Trust in the heart of the cards');
+                    console.log('Something went wrong getting geolocation permissions: '+JSON.stringify(error));
                     permissionsDeferred.resolve();
                 },
                 {
@@ -60,7 +60,7 @@ angular.module('literaryHalifax')
                     );
                 });
             } else {
-                console.log('no navigator!');
+                console.log('no navigator: watchPosition canceled');
             }
         };
 
