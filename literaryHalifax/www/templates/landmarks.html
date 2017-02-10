@@ -6,19 +6,18 @@
             <marker-map map-handle="mapHandle" map-info="mapInfo" map-markers="markers">
                 
           </marker-map>
-        </div>
-        <div class="display-card">
-            
-            <div class="select-style">
-                <select ng-model="filter.tag">
-                  <option ng-repeat="tag in tags">{{tag}}</option>
-                </select>
-                <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'tag-filter-inactive':'tag-filter-active'"></i>
-            </div>
-            <div class="item item-input filter-bar">
-                <input type="text" placeholder="Filter by title..." ng-model="filter.text" ng-change="applyFilter()">
-                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
-                   ng-click="clearFilter()"></i>
+            <div class="filter-area">
+                <div class="select-style">
+                    <select ng-model="filter.tag">
+                      <option ng-repeat="tag in tags">{{tag}}</option>
+                    </select>
+                    <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'tag-filter-inactive':'tag-filter-active'"></i>
+                </div>
+                <div class="item item-input filter-bar">
+                    <input type="text" placeholder="Filter by title..." ng-model="filter.text" ng-change="applyFilter()">
+                    <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'"
+                       ng-click="clearFilter()"></i>
+                </div>
             </div>
             
             <div class="list">

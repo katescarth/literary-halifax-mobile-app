@@ -138,7 +138,7 @@ overscroll-pane {
 }
 
 .bumpdown {
-    padding-top: 45%;
+    padding-top: 30%;
     margin-bottom: 0%;
 }
 
@@ -205,6 +205,10 @@ overscroll-pane {
 .error-icon {
     color: firebrick;
     font-size: 32px;
+}
+
+.filter-area {
+    padding-top: 10px;
 }
 
 .filter-icon {
