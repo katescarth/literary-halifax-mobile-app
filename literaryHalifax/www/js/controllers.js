@@ -105,20 +105,20 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
     };
     
-    $scope.facebook = function() {
-        window.open("https://www.facebook.com/halifaxliterarylandmarks")
+    $scope.facebook = function () {
+        window.open("https://www.facebook.com/halifaxliterarylandmarks");
     };
     
-    $scope.twitter = function() {
-        window.open("https://twitter.com/halifaxliterary")
+    $scope.twitter = function () {
+        window.open("https://twitter.com/halifaxliterary");
     };
     
-    $scope.instagram = function() {
-        window.open("https://www.instagram.com/halifaxliterarylandmarks/")
+    $scope.instagram = function () {
+        window.open("https://www.instagram.com/halifaxliterarylandmarks/");
     };
     
-    $scope.email = function() {
-        
+    $scope.mail = function () {
+        window.open("mailto:halifaxliterarylandmarks@gmail.com");
     };
     
     // handle a gesture (the user dragging the menu to the left or right)
