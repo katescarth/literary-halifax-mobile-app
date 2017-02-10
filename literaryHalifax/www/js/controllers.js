@@ -105,6 +105,22 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
     };
     
+    $scope.facebook = function() {
+        window.open("https://www.facebook.com/halifaxliterarylandmarks")
+    };
+    
+    $scope.twitter = function() {
+        window.open("https://twitter.com/halifaxliterary")
+    };
+    
+    $scope.instagram = function() {
+        window.open("https://www.instagram.com/halifaxliterarylandmarks/")
+    };
+    
+    $scope.email = function() {
+        
+    };
+    
     // handle a gesture (the user dragging the menu to the left or right)
     $scope.onDragStart = function (event) {
         dragBase = menuPosition;
@@ -245,7 +261,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if ($scope.settings.cachingEnabled) {
             // initialize the cache
             cacheLayer.cacheMetadata().then($scope.refresh, function (error) {
-                console.log('error turning on caching: 'JSON.stringify(error));
+                console.log('error turning on caching: ' + JSON.stringify(error));
                 // TODO toast
                 $scope.settings.showLandmarks = false;
                 $scope.settings.showTours = false;
