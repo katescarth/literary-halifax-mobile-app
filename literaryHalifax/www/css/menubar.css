@@ -12,6 +12,10 @@
     margin: 0 20px !important;
 }
 
+.green-bar {
+    background-color: #28a54c !important;
+}
+
 .side-menu{
     /*Below nav bar(9), but above tabs(5)*/
     z-index: 8;
@@ -40,7 +44,7 @@
 /*    I don't know why 40px works. Maybe a margin thing?*/
     bottom: 40px;
     width:100%;
-    background-color: #AAAAAA;
+    background-color: #28a54c;
 }
 
 .side-menu-footer-item{
@@ -48,6 +52,7 @@
     height:100%;
     width:25%;
     text-align: center;
+    color: white;
     float:left;
 }
 
