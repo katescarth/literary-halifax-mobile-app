@@ -28,6 +28,10 @@
               <div class="landmark-text-card-lede" ng-bind-html="landmark.lede"></div>
                 
               <div class="landmark-text-card-body" ng-bind-html="landmark.description"></div>
+              <div class="landmark-text-card-tags">
+                <i class="icon ion-pricetag"></i>
+                <span ng-repeat="tag in landmark.tags" ng-click="go(tag)"> {{tag}}{{$last ? '' : ', '}}</span>
+              </div>
             </div>
           </overscroll-pane>
         </ion-tab>

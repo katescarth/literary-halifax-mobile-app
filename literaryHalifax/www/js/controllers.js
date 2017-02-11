@@ -365,7 +365,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
-}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData) {
+}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams) {
     // number of items to show in the list. Increased as user scrolls down
     "use strict";
     $scope.numListItems = 5;
@@ -386,10 +386,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     }
     //  When navigating back to a map, the tiles will sometimes
     //  only render in the top left corner. Making the map resize
-    //  inself fixes the issue
+    //  itself fixes the issue
     $scope.$on('$ionicView.afterEnter', function () {
         inval();
     });
+    
+    // constraints on which landmarks to show
+    $scope.$on('$ionicView.enter', function () {
+        $scope.filter = {
+            text: '',
+            tag: $stateParams.tag || ALL_TAGS
+        };
+    });
+    
     $scope.displayMore = function () {
         $scope.numListItems += 5;
         $scope.$broadcast('scroll.infiniteScrollComplete');
@@ -462,11 +471,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         lng: -63.5806,
         zoom: 15
     };
-    // constraints on which landmarks to show
-    $scope.filter = {
-        text: '',
-        tag: ALL_TAGS
-    };
     
     // list of tags which can be selected from
     $scope.tags = [ALL_TAGS];
@@ -474,6 +478,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark = function (landmark) {
         var nameMatch, tagMatch;
+        if(!$scope.filter){
+            return true;
+        }
         if (!$scope.filter.text) {
             nameMatch = true;
         } else {
@@ -574,7 +581,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
         return tour.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
     };
-}).controller('landmarkCtrl', function ($scope, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate) {
+}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate) {
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
     "use strict";
@@ -586,6 +593,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.playAudio = function () {
         mediaPlayer.setTrack($scope.landmark.audio, $scope.landmark.name);
         mediaPlayer.play();
+    };
+    
+    $scope.go = function (tag) {
+        $state.go('app.tag', {tag: tag});
     };
     //Images tab
     $ionicModal.fromTemplateUrl('components/imageView/imageView.html', {

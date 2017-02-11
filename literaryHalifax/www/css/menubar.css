@@ -58,17 +58,18 @@
 
 .tab-item{
     border-width: 0 !important;
-    background-color:#2cb553 !important;
+    background-color:#33cd5f !important;
+    opacity: 1;
 }
 
 .tabs-striped.tabs-balanced .tabs{
     border-width: 0 !important;
-    background-color:#2cb553 !important;
+    background-color:#33cd5f !important;
 }
 
 .tab-item.tab-item-active {
     margin-top: 0 !important;
-    background-color:#33cd5f !important;
+    background-color:#28a54c !important;
 }
 
 .tabs-loading{

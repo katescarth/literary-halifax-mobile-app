@@ -50,6 +50,7 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
                     }
                 }
             })
+        
 
             // shows the user a list of tours
             .state('app.tours', {
@@ -86,6 +87,18 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
                     'mainContent': {
                         templateUrl: 'templates/page.html',
                         controller: 'pageCtrl'
+                    }
+                }
+            })
+
+            // the landmarks view, but not top level and initialized with a tag filter
+            .state('app.tag', {
+                url: '/tag',
+                params: {tag: null},
+                views: {
+                    'mainContent': {
+                        templateUrl: 'templates/landmarks.html',
+                        controller: 'landmarksCtrl'
                     }
                 }
             })
