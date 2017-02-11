@@ -1,11 +1,13 @@
 /*Ionic switches this off for some reason*/
-em,i{
-    font-style:italic;
+
+em,
+i {
+    font-style: italic;
 }
 
 q:before,
 q:after {
- content: "\"";
+    content: "\"";
 }
 
 a {
@@ -17,19 +19,20 @@ a {
 .select-style {
     padding: 0;
     margin: 6px 0px 6px 6px;
-    width:22px;
-    height:22px;
+    width: 22px;
+    height: 22px;
     overflow: hidden;
-    float:right;
+    float: right;
 }
 
 .select-style select {
     opacity: 0;
-    width:22px;
-    height:22px;
-    position:absolute;
+    width: 22px;
+    height: 22px;
+    position: absolute;
     z-index: 10;
 }
+
 .select-style i {
     z-index: 11;
     font-size: 22px;
@@ -44,10 +47,10 @@ a {
 }
 
 .tag-filter-inactive {
-    color:#aaa;
+    color: #aaa;
 }
 
-.cloak{
+.cloak {
     display: none !important;
     opacity: 0;
 }
@@ -71,13 +74,13 @@ ion-nav-view {
     background-color: transparent;
 }
 
-.leaflet-popup-content{
+.leaflet-popup-content {
     margin-left: 11px;
     margin-top: 3px;
     margin-bottom: 3px;
     /* needs to be big enough to accomodate the X button*/
-    margin-right:18px;
-    max-width:215px;
+    margin-right: 18px;
+    max-width: 215px;
 }
 
 .info-window {
@@ -121,6 +124,7 @@ ion-nav-view {
     top: 0;
     position: relative;
 }
+
 
 /*
 .popover-backdrop.active{
@@ -170,11 +174,12 @@ overscroll-pane {
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 2.5px;
-    display:none;/*only display if the shown class is selected*/
+    display: none;
+    /*only display if the shown class is selected*/
 }
 
 .shown-list-item-div {
-    display:block;
+    display: block;
 }
 
 .shown-list-item-div ~ .shown-list-item-div {
@@ -184,14 +189,13 @@ overscroll-pane {
     border-style: solid;
 }
 
-
 .list-item-indent {
-    margin-left:12px;
-    padding-right:0px !important;
+    margin-left: 12px;
+    padding-right: 0px !important;
 }
 
 .greyout {
-    color:silver;
+    color: silver;
 }
 
 .italic {
@@ -207,8 +211,7 @@ overscroll-pane {
     font-size: 32px;
 }
 
-.filter-area {
-}
+.filter-area {}
 
 .filter-icon {
     padding-left: 6px;
@@ -240,7 +243,7 @@ overscroll-pane {
     white-space: nowrap;
 }
 
-.loader-subtitle{
+.loader-subtitle {
     font-family: sans-serif;
 }
 
@@ -328,18 +331,22 @@ overscroll-pane {
     line-height: 13px;
 }
 
-.landmark-text-card-title{
+.landmark-text-card-title {
     font-variant: small-caps;
     font-family: serif;
-    text-align:center;
+    text-align: center;
 }
 
-.landmark-text-card-lede{
+.landmark-text-card-lede {
     font-style: italic;
-    padding-left:20px;
-    padding-right:20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.landmark-text-card br{
+.landmark-text-card-tags {
+    color: darkgray;
+}
+
+.landmark-text-card br {
     line-height: 250%;
 }

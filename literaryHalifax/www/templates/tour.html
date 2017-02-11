@@ -1,41 +1,35 @@
 <ion-view view-title="Tour">
     <ion-content>
         <div class="display-card">
-            
-            
-            <marker-map map-markers="markers" map-info="mapInfo">
-          </marker-map>
-            
-<!--            A row that shows the user's current position in the tour-->
+            <marker-map map-markers="markers" map-info="mapInfo"> </marker-map>
+            <!--            A row that shows the user's current position in the tour-->
             <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
-                
-                    <div class="list-item-div shown-list-item-div" style="text-align:center;" style="padding-top:5px">
-                        <div style="float:right;font-size:25px;padding:2px;padding-top:7px;" ng-click="toNext()">
-                            <i class="ion-chevron-right"> </i>
+                <div class="list-item-div shown-list-item-div" style="text-align:center;" style="padding-top:5px">
+                    <div style="float:right;font-size:25px;padding:2px;padding-top:7px;" ng-click="toNext()">
+                        <i class="ion-chevron-right"> </i>
+                    </div>
+                    <div style="float:left;font-size:25px;padding:2px;padding-top:7px;" ng-click="toPrev()">
+                        <i class="ion-chevron-left"></i>
+                    </div>
+                    <div ng-click="go(tour.landmarks[currentLandmark])">
+                        <div class="list-item-title">
+                            {{tour.landmarks[currentLandmark].name}}
                         </div>
-                        <div style="float:left;font-size:25px;padding:2px;padding-top:7px;" ng-click="toPrev()">
-                            <i class="ion-chevron-left"></i>
-                        </div>
-                        <div ng-click="go(tour.landmarks[currentLandmark])">
-                            <div class="list-item-title">
-                                {{tour.landmarks[currentLandmark].name}}
-                            </div>
-                            <div class="list-item-subtitle">
-                                {{tour.landmarks[currentLandmark].subtitle}}
-                            </div>
+                        <div class="list-item-subtitle">
+                            {{tour.landmarks[currentLandmark].subtitle}}
                         </div>
                     </div>
-                    
+                </div>
             </div>
-            
-            <h3 class="title">{{tour.name}}</h3>
-            <p>{{tour.description}}</p>
+            <h3 class="title">
+                {{tour.name}}
+            </h3>
+            <p>
+                {{tour.description}}
+            </p>
             <div class="list">
-                
                 <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
-                
-                <div class="list-item-div shown-list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks"
-                  ng-click="go(landmark)">
+                <div class="list-item-div shown-list-item-div" ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks" ng-click="go(landmark)">
                     <div class="list-item-title">
                         {{$index + 1}}. {{landmark.name}}
                     </div>
