@@ -392,7 +392,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     });
     
     // constraints on which landmarks to show
-    $scope.$on('$ionicView.enter', function () {
+    $scope.$on('$ionicView.beforeEnter', function () {
         $scope.filter = {
             text: '',
             tag: $stateParams.tag || ALL_TAGS
