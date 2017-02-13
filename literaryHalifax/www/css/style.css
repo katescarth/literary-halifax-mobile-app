@@ -42,11 +42,11 @@ a {
     outline: none;
 }
 
-.tag-filter-active {
+.enabled-black {
     color: #444;
 }
 
-.tag-filter-inactive {
+.disabled-grey {
     color: #aaa;
 }
 
@@ -124,13 +124,6 @@ ion-nav-view {
     top: 0;
     position: relative;
 }
-
-
-/*
-.popover-backdrop.active{
-    pointer-events: none;
-}
-*/
 
 overscroll-pane {
     background-color: transparent !important;

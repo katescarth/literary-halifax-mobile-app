@@ -449,7 +449,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                     },
                     focus: false,
                     icon: {
-                        iconUrl: "img/green-pin.png",
+                        iconUrl: "img/pin.png",
                         iconSize: [21, 30], // size of the icon
                         iconAnchor: [10.5, 30], // point of the icon which will correspond to marker's location
                         popupAnchor: [0, -30] // point from which the popup should open relative to the iconAnchor
@@ -478,7 +478,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //false if a landmark is being filtered out, otherwise true
     $scope.showLandmark = function (landmark) {
         var nameMatch, tagMatch;
-        if(!$scope.filter){
+        if (!$scope.filter) {
             return true;
         }
         if (!$scope.filter.text) {
@@ -657,7 +657,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 focus: false,
                 clickable: false,
                 icon: {
-                    iconUrl: "img/green-pin.png",
+                    iconUrl: "img/pin.png",
                     iconSize: [21, 30], // size of the icon
                     iconAnchor: [10.5, 30], // point of the icon which will correspond to marker's location
                     popupAnchor: [0, -30] // point from which the popup should open relative to the iconAnchor
@@ -686,17 +686,24 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.refresh();
     //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash) {
-    // If a landmark is the current landmark, blue, otherwise, green
     "use strict";
     function iconFor(index) {
+        var icon = {
+            iconSize : [21, 30], // size of the icon
+            iconAnchor : [10.5, 30], // point of the icon which will correspond to marker's location
+            popupAnchor : [0, -30] // point from which the popup should open relative to the iconAnchor
+        };
+        
+        
         if (index === $scope.currentLandmark) {
-            return "img/blue-pin.png";
+            icon.iconUrl = "img/pin.png";
         } else {
-            return "img/green-pin.png";
+            icon.iconUrl = "img/small-pin.png";
         }
+        return icon;
     }
     function updateIcon(index) {
-        $scope.markers[index].icon.iconUrl = iconFor(index);
+        angular.extend($scope.markers[index].icon, iconFor(index));
     }
     $scope.markers = [];
     $scope.mapInfo = {
@@ -714,9 +721,17 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             updateIcon(i);
         });
     };
+    // can we move forward?
+    $scope.hasNext = function () {
+        return $scope.currentLandmark < $scope.tour.landmarks.length - 1;
+    };
+    // can we move backward?
+    $scope.hasPrev = function () {
+        return $scope.currentLandmark > 0;
+    };
     // advancing the current landmark (but not navigating to it)
     $scope.toNext = function () {
-        if ($scope.currentLandmark < $scope.tour.landmarks.length - 1) {
+        if ($scope.hasNext()) {
             $scope.currentLandmark += 1;
             updateIcon($scope.currentLandmark);
             updateIcon($scope.currentLandmark - 1);
@@ -724,7 +739,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     // retracting the current landmark (but not navigating to it)
     $scope.toPrev = function () {
-        if ($scope.currentLandmark > 0) {
+        if ($scope.hasPrev()) {
             $scope.currentLandmark -= 1;
             updateIcon($scope.currentLandmark + 1);
             updateIcon($scope.currentLandmark);
@@ -757,12 +772,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                             return $scope;
                         },
                         focus: false,
-                        icon: {
-                            iconUrl: iconFor(i),
-                            iconSize: [21, 30], // size of the icon
-                            iconAnchor: [10.5, 30], // point of the icon which will correspond to marker's location
-                            popupAnchor: [0, -30] // point from which the popup should open relative to the iconAnchor
-                        }
+                        icon: iconFor(i)
                     };
                 });
             });

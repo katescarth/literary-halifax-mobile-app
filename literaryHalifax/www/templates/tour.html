@@ -6,10 +6,10 @@
             <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
                 <div class="list-item-div shown-list-item-div" style="text-align:center;" style="padding-top:5px">
                     <div style="float:right;font-size:25px;padding:2px;padding-top:7px;" ng-click="toNext()">
-                        <i class="ion-chevron-right"> </i>
+                        <i class="ion-chevron-right" ng-class="hasNext()?'enabled-black':'disabled-grey'"> </i>
                     </div>
                     <div style="float:left;font-size:25px;padding:2px;padding-top:7px;" ng-click="toPrev()">
-                        <i class="ion-chevron-left"></i>
+                        <i class="ion-chevron-left" ng-class="hasPrev()?'enabled-black':'disabled-grey'"></i>
                     </div>
                     <div ng-click="go(tour.landmarks[currentLandmark])">
                         <div class="list-item-title">

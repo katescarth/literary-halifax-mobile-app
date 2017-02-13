@@ -24,7 +24,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         lng : 0,
         opacity : 0,//not visible until location is set
         icon : {
-            iconUrl : "img/Air.png",
+            iconUrl : "img/blue-circle.png",
             iconSize : [10, 10],
             iconAnchor : [5, 5]
         }
