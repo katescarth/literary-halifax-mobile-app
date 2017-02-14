@@ -25,8 +25,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         opacity : 0,//not visible until location is set
         icon : {
             iconUrl : "img/blue-circle.png",
-            iconSize : [10, 10],
-            iconAnchor : [5, 5]
+            iconSize : [8, 8],
+            iconAnchor : [4, 4]
         }
     };
     // display the union of passed-in markers and the user location marker
