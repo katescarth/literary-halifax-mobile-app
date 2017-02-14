@@ -228,7 +228,7 @@ overscroll-pane {
 .list-item-subtitle {
     font-size: 10px;
     line-height: 13px;
-    max-height: 34px;
+    max-height: 44px;
     margin-top: 3px;
     color: #626262;
     text-overflow: ellipsis;
