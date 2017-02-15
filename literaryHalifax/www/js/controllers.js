@@ -397,7 +397,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             text: '',
             tag: $stateParams.tag || ALL_TAGS
         };
-        $scope.refresh();
+        $scope.applyFilter();
     });
     
     
@@ -458,11 +458,13 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                     }
                 };
             });
+            $scope.applyFilter();
         }).catch(function (error) {
             $scope.loadingMsg = '';
             $scope.errorMessage = error;
         });
     };
+    $scope.refresh();
     //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
@@ -509,7 +511,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             }
         });
     };
-    $scope.$watch('filter', $scope.applyFilter, true);
     $scope.clearFilter = function () {
         $scope.filter.text = '';
     };

@@ -116,7 +116,7 @@ angular.module('literaryHalifax')
         return {
             restrict : 'A',
             link : function (scope, element, attrs) {
-                scope.$watch(function () {
+                scope.$evalAsync(function () {
 					element.dotdotdot({
                         wrap: 'letter',
                         watch: true

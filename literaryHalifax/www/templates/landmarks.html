@@ -6,7 +6,7 @@
         <div class="display-card">
             <div class="filter-area">
                 <div class="select-style">
-                    <select ng-model="filter.tag">
+                    <select ng-model="filter.tag" ng-change="applyFilter()">
                         <option ng-repeat="tag in tags">{{tag}}</option>
                     </select>
                     <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'disabled-grey':'enabled-black'"></i>
