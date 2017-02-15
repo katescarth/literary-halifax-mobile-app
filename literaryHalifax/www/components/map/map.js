@@ -15,7 +15,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         },
         templateUrl : 'components/map/map.html'
     };
-}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q) {
+}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout) {
     "use strict";
     $scope.userLocationMarker = {
         focus : false,
@@ -31,7 +31,9 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     };
     // display the union of passed-in markers and the user location marker
     $scope.$watch("mapMarkers", function (newValue, oldValue) {
-        $scope.markers = [$scope.userLocationMarker].concat(newValue);
+        $timeout(function () {
+            $scope.markers = [$scope.userLocationMarker].concat(newValue);
+        });
     }, true);
     utils.watchPosition(
         function (result) {
