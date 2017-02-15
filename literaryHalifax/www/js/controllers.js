@@ -391,13 +391,15 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         inval();
     });
     
-    // constraints on which landmarks to show
-    $scope.$on('$ionicView.beforeEnter', function () {
+    $scope.$on('$ionicView.enter', function () {
+        // constraints on which landmarks to show
         $scope.filter = {
             text: '',
             tag: $stateParams.tag || ALL_TAGS
         };
+        $scope.refresh();
     });
+    
     
     $scope.displayMore = function () {
         $scope.numListItems += 5;
@@ -461,7 +463,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.errorMessage = error;
         });
     };
-    $scope.refresh();
     //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
@@ -508,9 +509,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             }
         });
     };
+    $scope.$watch('filter', $scope.applyFilter, true);
     $scope.clearFilter = function () {
         $scope.filter.text = '';
-        $scope.applyFilter();
     };
     //  Go to landmark view for the given landmark
     $scope.go = function (landmark) {

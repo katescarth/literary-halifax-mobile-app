@@ -6,7 +6,9 @@ angular.module('literaryHalifax')
     .factory('utils', function ($q, $ionicPlatform, $timeout) {
 
         "use strict";
-        var utils = {};
+        var utils = {},
+            permissionsDeferred = $q.defer(),
+            getPermissions = permissionsDeferred.promise;
         // set a hard(ish) time limit on a promise. If it hasn't resolved after the given
         // number of milliseconds, return a rejection. Note- this does not actually stop the 
         // promise from being carried out, so it should not be used with large, multi step promises.
@@ -26,8 +28,6 @@ angular.module('literaryHalifax')
             return deferred.promise;
         }
 
-        var permissionsDeferred = $q.defer(),
-            getPermissions = permissionsDeferred.promise;
 
         // cordova diagnostics aren't working, so this is how we request location permissions.
         // concurrent requests are an issue, so wait until this one resolves before requesting
@@ -39,7 +39,7 @@ angular.module('literaryHalifax')
                     permissionsDeferred.resolve();
                 },
                 function (error) {
-                    console.log('Something went wrong getting geolocation permissions: '+JSON.stringify(error));
+                    console.log('Something went wrong getting geolocation permissions: ' + JSON.stringify(error));
                     permissionsDeferred.resolve();
                 },
                 {
@@ -111,16 +111,17 @@ angular.module('literaryHalifax')
     })
 
     // an element with the dotdotdot attribute will truncate text with ellipses
-    .directive('dotdotdot', function () {
+    .directive('dotdotdot', function ($timeout) {
         "use strict";
         return {
             restrict : 'A',
             link : function (scope, element, attrs) {
-                scope.$evalAsync(function () {
-                    element.dotdotdot({
-                        wrap: 'letter'
+                scope.$watch(function () {
+					element.dotdotdot({
+                        wrap: 'letter',
+                        watch: true
                     });
-                });
+				});
             }
         };
     });
