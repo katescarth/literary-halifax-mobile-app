@@ -86,6 +86,8 @@ var SERVICE = 16;
 var SOFTWARE = 17;
 var CURATESCAPE_STORY = 18;
 
+/*global angular */
+/*global ionic */
 angular.module('literaryHalifax')
 
 /*

@@ -1,3 +1,4 @@
+/*global angular */
 angular.module('literaryHalifax')
     /*
      * Displays a spinner and loading message if a loading message is provided.

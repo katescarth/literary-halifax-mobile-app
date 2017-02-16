@@ -1,3 +1,5 @@
+/*global angular */
+/*global Media */
 angular.module('literaryHalifax')
 
     /*

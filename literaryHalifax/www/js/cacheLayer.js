@@ -1,3 +1,6 @@
+/*global angular */
+/*global cordova */
+/*global ionic */
 angular.module('literaryHalifax')
 
 /*

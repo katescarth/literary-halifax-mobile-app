@@ -1,3 +1,4 @@
+/*global angular */
 angular.module('literaryHalifax').directive('markerMap', function () {
     "use strict";
     return {

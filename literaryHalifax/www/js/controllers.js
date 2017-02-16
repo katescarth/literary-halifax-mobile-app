@@ -1,3 +1,5 @@
+/*global angular */
+/*global ionic */
 angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData, server, lodash) {
     // items for the side menu
     "use strict";

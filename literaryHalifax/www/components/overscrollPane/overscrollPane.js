@@ -5,6 +5,7 @@
  * the content which is overlayed.
  * DO NOT TRANSCLUDE AN <ION-CONTENT> BLOCK
  */
+/*global angular */
 angular.module('literaryHalifax').directive('overscrollPane', function () {
     "use strict";
     return {
