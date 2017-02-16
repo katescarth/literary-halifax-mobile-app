@@ -4,7 +4,7 @@ angular.module('literaryHalifax')
  *
  *
  */
-    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup) {
+    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup, $log) {
         "use strict";
         // when this promise resolves, the cache layer is ready to handle requests
         var initDeferred = $q.defer(),
@@ -125,7 +125,7 @@ angular.module('literaryHalifax')
                         .then(function (result) {
                             return result.data;
                         }, function (error) {
-                            console.log(error);
+                            $log.error("http request failed: " + angular.toJson(error));
                             return $q.reject('Couldn\'t complete the request');
                         });
 //                    if (cacheIncoming) {
@@ -145,7 +145,7 @@ angular.module('literaryHalifax')
         // download the given resource and cache it
         layer.cacheUrl = function (url, force) {
             if (!url) {
-                console.log('tried to cache a non-existent url');
+                $log.warn('Tried to cache a non-existent url');
                 return $q.when(url);
             }
             if (!force && isCachedUrl(url)) {
@@ -162,7 +162,7 @@ angular.module('literaryHalifax')
         // uncache the given path
         layer.clearUrl = function (path) {
             if (!path) {
-                console.log("attempted to clear a null path");
+                $log.warn("Tried to clear a null path");
                 return $q.when(path);
             }
 
@@ -211,7 +211,7 @@ angular.module('literaryHalifax')
         // This will still work if results from individual requests
         // are storerd in the item cache, but it's a waste of space.
         function saveItemCache() {
-            var data = JSON.stringify(itemCache);
+            var data = angular.toJson(itemCache);
             return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
         }
 
@@ -219,7 +219,7 @@ angular.module('literaryHalifax')
         function recoverItemCache() {
             return $cordovaFile.readAsText(rootDir, itemCacheFile)
                 .then(function (result) {
-                    itemCache = JSON.parse(result);
+                    itemCache = angular.fromJson(result);
                 });
         }
 

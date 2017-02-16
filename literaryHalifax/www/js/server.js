@@ -129,7 +129,7 @@ angular.module('literaryHalifax')
  * getTours(): resolves to a list of all tours on the server
  * tourInfo(id): resolves to an object representing the tour with the given id
  */
-    .factory('server', function ($timeout, $q, cacheLayer, utils, lodash, $ionicPlatform) {
+    .factory('server', function ($timeout, $q, $log, cacheLayer, utils, lodash, $ionicPlatform) {
         "use strict";
         var SMALL_DELAY = 400,
             LARGE_DELAY = 2000,
@@ -182,7 +182,7 @@ angular.module('literaryHalifax')
                                         imageObj.source = resource.text;
                                         break;
                                     default:
-                                        console.log('No rule found for ' + resource.element.name);
+                                        $log.warn('No rule found for ' + resource.element.name);
                                     }
                                 });
 
@@ -238,7 +238,7 @@ angular.module('literaryHalifax')
                     landmark.tags.push(resource.text);
                     break;
                 default:
-                    console.log('No rule found for ' + resource.element.name);
+                    $log.warn('No rule found for ' + resource.element.name);
                 }
             });
             

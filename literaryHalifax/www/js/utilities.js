@@ -3,7 +3,7 @@ angular.module('literaryHalifax')
     /*
      * This file is a dumping ground for reused code.
      */
-    .factory('utils', function ($q, $ionicPlatform, $timeout) {
+    .factory('utils', function ($q, $ionicPlatform, $timeout, $log) {
 
         "use strict";
         var utils = {},
@@ -35,11 +35,11 @@ angular.module('literaryHalifax')
         $ionicPlatform.ready(function () {
             navigator.geolocation.getCurrentPosition(
                 function (currentPosition) {
-                    console.log('Got geolocation permissions');
+                    $log.info('Got geolocation permissions');
                     permissionsDeferred.resolve();
                 },
                 function (error) {
-                    console.log('Something went wrong getting geolocation permissions: ' + JSON.stringify(error));
+                    $log.error('Something went wrong getting geolocation permissions: ' + angular.toJson(error));
                     permissionsDeferred.resolve();
                 },
                 {
@@ -60,7 +60,7 @@ angular.module('literaryHalifax')
                     );
                 });
             } else {
-                console.log('no navigator: watchPosition canceled');
+                $log.error('no navigator: watchPosition canceled');
             }
         };
 
@@ -71,7 +71,7 @@ angular.module('literaryHalifax')
         utils.distance = function (from, to) {
             
             if (!(from.lat && from.lng && to.lat && to.lng)) {
-                console.log('bad lat/lng format');
+                $log.error('bad lat/lng format');
                 return -1;
             }
             var squarekms = Math.pow((from.lat - to.lat) * 111.1, 2) + Math.pow((from.lng - to.lng) * 79.3, 2);

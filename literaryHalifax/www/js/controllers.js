@@ -26,23 +26,23 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // the panel which controls audio that is being played
         mediaController,
         staticItems = [
-        {
-            displayName: 'Landmarks',
-            onClick: function () {
-                $state.go('app.landmarks');
+            {
+                displayName: 'Landmarks',
+                onClick: function () {
+                    $state.go('app.landmarks');
+                }
+            }, {
+                displayName: 'Tours',
+                onClick: function () {
+                    $state.go('app.tours');
+                }
+            }, {
+                displayName: 'Offline Options',
+                onClick: function () {
+                    $state.go('app.cacheControl');
+                }
             }
-        }, {
-            displayName: 'Tours',
-            onClick: function () {
-                $state.go('app.tours');
-            }
-        }, {
-            displayName: 'Offline Options',
-            onClick: function () {
-                $state.go('app.cacheControl');
-            }
-        }
-    ];
+        ];
     $scope.menuItems = staticItems;
     
     function updateMenuPosition(newPosition) {
@@ -249,7 +249,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $ionicPlatform.ready(function () {
         $scope.refresh();
     });
-}).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash) {
+}).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash, $log) {
     "use strict";
     $scope.settings = {
         cachingEnabled: false,
@@ -266,7 +266,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if ($scope.settings.cachingEnabled) {
             // initialize the cache
             cacheLayer.cacheMetadata().then($scope.refresh, function (error) {
-                console.log('error turning on caching: ' + JSON.stringify(error));
+                $log.error('error turning on caching: ' + angular.toJson(error));
                 // TODO toast
                 $scope.settings.showLandmarks = false;
                 $scope.settings.showTours = false;
@@ -370,7 +370,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
-}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams) {
+}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams, $log) {
     // number of items to show in the list. Increased as user scrolls down
     "use strict";
     $scope.numListItems = 5;
@@ -382,7 +382,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     leafletData.getMap().then(function (result) {
         map = result;
     }, function (error) {
-        console.log(error);
+        $log.error("Couldn't locate map: " + angular.toJson(error));
     });
     function inval() {
         if (map) {
@@ -526,7 +526,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             landmarkID: landmark.id
         });
     };
-}).controller('toursCtrl', function ($scope, $state, $q, server, utils, lodash) {
+}).controller('toursCtrl', function ($scope, $state, $q, $log, server, utils, lodash) {
     "use strict";
     var location;
     $scope.loadingMsg = '';
@@ -548,7 +548,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.loadingMsg = 'getting tours...';
             return server.getTours(location);
         }, function (error) {
-            console.log(error);
+            $log.warn("getPosition failed - retrieving tours anyway");
             $scope.loadingMsg = 'getting tours...';
             return server.getTours();
         }).then(function (result) {

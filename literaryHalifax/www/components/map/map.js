@@ -15,7 +15,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         },
         templateUrl : 'components/map/map.html'
     };
-}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork) {
+}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork, $log) {
     "use strict";
     $scope.userLocationMarker = {
         focus : false,
@@ -46,7 +46,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
 
         },
         function (error) {
-            console.log(error);
+            $log.error("Error watching position: " + angular.toJson(error));
         },
         {
             maximumAge : 3000,
@@ -66,10 +66,10 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     };
 
     $scope.tiles = {
-        url:  function(arg){
+        url: function (arg) {
             return $ionicPlatform.ready().then(function () {
                 if ($cordovaNetwork.isOnline()) {
-                    return 'https://cartodb-basemaps-'+arg.subdomain+'.global.ssl.fastly.net/light_all/'+arg.zoom+'/'+arg.tile.column+'/'+arg.tile.row+'.png';
+                    return 'https://cartodb-basemaps-' + arg.subdomain + '.global.ssl.fastly.net/light_all/' + arg.zoom + '/' + arg.tile.column + '/' + arg.tile.row + '.png';
                 } else {
                     return 'img/offline-map-tile.png';
                 }
