@@ -10,6 +10,8 @@ plugins
 *.DS_Store
 
 lib/angular
+lib/angular-animate
+lib/angular-sanitize
 lib/angular-simple-logger
 lib/ionic
 lib/jQuery.dotdotdot
