@@ -1,24 +1,6 @@
 angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData, server, lodash) {
     // items for the side menu
     "use strict";
-    $scope.menuItems = [
-        {
-            displayName: 'Landmarks',
-            onClick: function () {
-                $state.go('app.landmarks');
-            }
-        }, {
-            displayName: 'Tours',
-            onClick: function () {
-                $state.go('app.tours');
-            }
-        }, {
-            displayName: 'Offline Options',
-            onClick: function () {
-                $state.go('app.cacheControl');
-            }
-        }
-    ];
     var menuWidth = 275,
         // tracks whether or not the menu is open
         menuOpen = false,
@@ -42,7 +24,26 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         decayConstant = 0.5,
         BACK_NAV_CODE = 100,
         // the panel which controls audio that is being played
-        mediaController;
+        mediaController,
+        staticItems = [
+        {
+            displayName: 'Landmarks',
+            onClick: function () {
+                $state.go('app.landmarks');
+            }
+        }, {
+            displayName: 'Tours',
+            onClick: function () {
+                $state.go('app.tours');
+            }
+        }, {
+            displayName: 'Offline Options',
+            onClick: function () {
+                $state.go('app.cacheControl');
+            }
+        }
+    ];
+    $scope.menuItems = staticItems;
     
     function updateMenuPosition(newPosition) {
         // reposition the menu
@@ -228,21 +229,25 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     $scope.refresh = function () {
         server.getPages().then(function (pages) {
-            lodash.forEach(pages, function (page) {
-                $scope.menuItems.push({
-                    displayName: page.title,
-                    onClick: function () {
-                        $state.go('app.page', {
-                            page: page
-                        });
-                    }
-                });
-            });
+            $scope.menuItems = lodash.unionBy(
+                staticItems,
+                lodash.map(pages, function (page) {
+                    return {
+                        displayName: page.title,
+                        onClick: function () {
+                            $state.go('app.page', {
+                                page: page
+                            });
+                        }
+                    };
+                }),
+                'displayName'
+            );
         });
     };
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
     $ionicPlatform.ready(function () {
         $scope.refresh();
-        //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
     });
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash) {
     "use strict";
@@ -361,7 +366,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
@@ -465,7 +470,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
         //     What will they want to see? Where they are, or where the landmarks are?
@@ -554,7 +560,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
@@ -686,7 +692,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash) {
     "use strict";
     function iconFor(index) {
@@ -787,5 +793,5 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     // TODO should be in an onEnter callback
     $scope.refresh();
-    //$scope.$rootScope.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
 });
