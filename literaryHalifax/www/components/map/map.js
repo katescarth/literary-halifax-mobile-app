@@ -15,7 +15,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         },
         templateUrl : 'components/map/map.html'
     };
-}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout) {
+}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork) {
     "use strict";
     $scope.userLocationMarker = {
         focus : false,
@@ -66,11 +66,15 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     };
 
     $scope.tiles = {
-        url : 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
-//      url:  function(arg){
-//                console.log(arg)
-//                return $q.when("http://www.clker.com/cliparts/F/D/1/9/O/E/chess-board-black-and-white.svg")
-//            }
+        url:  function(arg){
+            return $ionicPlatform.ready().then(function () {
+                if ($cordovaNetwork.isOnline()) {
+                    return 'https://cartodb-basemaps-'+arg.subdomain+'.global.ssl.fastly.net/light_all/'+arg.zoom+'/'+arg.tile.column+'/'+arg.tile.row+'.png';
+                } else {
+                    return 'img/offline-map-tile.png';
+                }
+            });
+        }
     };
 
 });
