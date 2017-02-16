@@ -8,3 +8,11 @@ plugins
 *.swo
 *.log
 *.DS_Store
+
+lib/angular
+lib/angular-simple-logger
+lib/ionic
+lib/jQuery.dotdotdot
+lib/jquery
+lib/ng-lodash
+lib/ngCordova
