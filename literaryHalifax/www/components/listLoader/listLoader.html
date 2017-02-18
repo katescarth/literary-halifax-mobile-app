@@ -1,10 +1,10 @@
-<div class="list-item-div shown-list-item-div centered-list-item" ng-if="loadingMsg">
+<div class="list-item-div centered-list-item" shown-list-item-div ng-if="loadingMsg">
     <ion-spinner class="spinner-balanced" icon="spiral"></ion-spinner>
     <div class="list-item-subtitle loader-subtitle">
         {{loadingMsg}}
     </div>
 </div>
-<div class="list-item-div shown-list-item-div centered-list-item" ng-if="errorMsg&&!loadingMsg">
+<div class="list-item-div centered-list-item" shown-list-item-div ng-if="errorMsg&&!loadingMsg">
     <i class="icon ion-close-round error-icon" ng-click="refresh()"></i>
     <div class="list-item-subtitle loader-subtitle">
         {{errorMsg}}

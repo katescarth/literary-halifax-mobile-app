@@ -112,17 +112,19 @@ angular.module('literaryHalifax')
     })
 
     // an element with the dotdotdot attribute will truncate text with ellipses
-    .directive('dotdotdot', function ($timeout) {
+    .directive('dotdotdot', function ($log) {
         "use strict";
         return {
             restrict : 'A',
             link : function (scope, element, attrs) {
-                scope.$evalAsync(function () {
-					element.dotdotdot({
+                function truncate() {
+                    element.dotdotdot({
                         wrap: 'letter',
                         watch: true
                     });
-				});
+                }
+                scope.$evalAsync(truncate);
+//                scope.$root.$on('truncate', truncate);
             }
         };
     });

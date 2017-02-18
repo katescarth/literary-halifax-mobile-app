@@ -518,9 +518,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 marker.focus = false;
             }
         });
+        $scope.$root.$emit('truncate');
     };
     $scope.clearFilter = function () {
         $scope.filter.text = '';
+        $scope.applyFilter();
     };
     //  Go to landmark view for the given landmark
     $scope.go = function (landmark) {

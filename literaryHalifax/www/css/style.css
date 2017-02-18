@@ -171,11 +171,11 @@ overscroll-pane {
     /*only display if the shown class is selected*/
 }
 
-.shown-list-item-div {
+[shown-list-item-div] {
     display: block;
 }
 
-.shown-list-item-div ~ .shown-list-item-div {
+[shown-list-item-div] ~ [shown-list-item-div] {
     padding-top: 2.5px;
     border-top-color: silver;
     border-top-width: 1px;
