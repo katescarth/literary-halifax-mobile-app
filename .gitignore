@@ -3,6 +3,7 @@ node_modules
 .sass-cache
 coverage
 platforms
+plugins
 *.swp
 *.swo
 *.log
