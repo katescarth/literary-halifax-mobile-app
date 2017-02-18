@@ -2,34 +2,34 @@
     <ion-content>
         <div class="display-card">
             <div class="list" style="font-family:sans-serif;">
-                <div class="list-item-div shown-list-item-div">
+                <div class="list-item-div" shown-list-item-div>
                     <label class="toggle toggle-balanced disable-user-behavior" style="float:right;">
                         <input ng-model="settings.cachingEnabled" ng-change="cachingToggled()" type="checkbox">
                         <div class="track">
                             <div class="handle"> </div>
                         </div>
                     </label> Preload content to make it accessible when offline. </div>
-                <div class="list-item-div shown-list-item-div" ng-class="settings.cachingEnabled?'':'greyout'">
+                <div class="list-item-div" shown-list-item-div ng-class="settings.cachingEnabled?'':'greyout'">
                     <div ng-click="settings.showLandmarks=settings.cachingEnabled && !settings.showLandmarks">
                         <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i> Landmarks 
                     </div>
-                    <div class="list-item-div shown-list-item-div list-item-indent" ng-if="settings.showLandmarks" ng-repeat="landmark in landmarks track by $index" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)">
+                    <div class="list-item-div list-item-indent" shown-list-item-div ng-if="settings.showLandmarks" ng-repeat="landmark in landmarks track by $index" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)">
                         <div class="list-item-title"> 
                             <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.name}} 
                         </div>
                     </div>
                 </div>
-                <div class="list-item-div shown-list-item-div" ng-class="settings.cachingEnabled?'':'greyout'">
+                <div class="list-item-div" shown-list-item-div ng-class="settings.cachingEnabled?'':'greyout'">
                     <div ng-click="settings.showTours=settings.cachingEnabled && !settings.showTours">
                         <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i> Tours
                     </div>
-                    <div class="list-item-div shown-list-item-div list-item-indent" ng-if="settings.showTours" ng-repeat="tour in tours track by $index" style="padding-right:0px;">
+                    <div class="list-item-div list-item-indent" shown-list-item-div ng-if="settings.showTours" ng-repeat="tour in tours track by $index" style="padding-right:0px;">
                         <i class="icon" style="float:right;" ng-class="tourCached(tour)?'ion-checkmark':'ion-arrow-down-a'" ng-click="tourCached(tour)?undefined:cacheTour(tour)"></i>
                         <div class="list-item-title" ng-click="expandedTours[$index]=!expandedTours[$index]">
                             <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'"></i> {{tour.name}} 
                             <span class="italic">({{cachedLandmarkCount(tour)}}/{{tour.landmarks.length}})</span> 
                         </div>
-                        <div class="list-item-div shown-list-item-div list-item-indent" ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
+                        <div class="list-item-div list-item-indent" shown-list-item-div ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)">
                                 <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.name}} 
                             </div>
