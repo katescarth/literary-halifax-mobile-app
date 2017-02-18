@@ -168,8 +168,24 @@ overscroll-pane {
     padding-right: 5px;
     padding-bottom: 2.5px;
     display: none;
-    /*only display if the shown class is selected*/
+    /*only display if the element has the attribute 'shown-list-item-div'*/
 }
+
+/*
+ * I feel like this one needs some explanation/apology.
+ * List items often need to be filtered out of lists, but it is not performant
+ * to remove them using ng-if, so instead we just hide them. However, since we
+ * draw borders *between* list items, we need to be able to select for displayed
+ * list items which follow other displayed list items (but not hidden ones). 
+ * This means that hidden, not shown, must be the default.
+ *
+ * Text in list items must also sometimes be truncated using dotdotdot, which must
+ * be an attribute. However, since dotdotdot relies on knowing the size of its 
+ * target, it must be applied when the element appears. While it can wwatch the
+ * size of the element, this causes flickering. Instead, we apply the dotdotdot
+ * attr only when the element becomes visible, using ng-attr-dotdotdot. In order
+ * for these to synchronize correctly, shown-list-item-div must also be an attr.
+ */
 
 [shown-list-item-div] {
     display: block;
