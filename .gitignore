@@ -9,12 +9,12 @@ plugins
 *.log
 *.DS_Store
 
-lib/angular
-lib/angular-animate
-lib/angular-sanitize
-lib/angular-simple-logger
-lib/ionic
-lib/jQuery.dotdotdot
-lib/jquery
-lib/ng-lodash
-lib/ngCordova
+www/lib/angular*
+www/lib/angular-animate*
+www/lib/angular-sanitize*
+www/lib/angular-simple-logger*
+www/lib/ionic*
+www/lib/jQuery.dotdotdot*
+www/lib/jquery*
+www/lib/ng-lodash*
+www/lib/ngCordova*
