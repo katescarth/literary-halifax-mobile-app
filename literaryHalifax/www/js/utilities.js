@@ -117,14 +117,11 @@ angular.module('literaryHalifax')
         return {
             restrict : 'A',
             link : function (scope, element, attrs) {
-                function truncate() {
+                scope.$evalAsync(function () {
                     element.dotdotdot({
-                        wrap: 'letter',
-                        watch: true
+                        wrap: 'letter'
                     });
-                }
-                scope.$evalAsync(truncate);
-//                scope.$root.$on('truncate', truncate);
+                });
             }
         };
     });
