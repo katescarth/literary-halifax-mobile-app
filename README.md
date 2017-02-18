@@ -1,21 +1,35 @@
 # literary-halifax-mobile-app
 Literary Halifax Mobile App
 
-To run:
-
 install [Node.js](https://nodejs.org/en/)
 
 Clone this repository
 
 npm install -g cordova ionic
 
-navigate the 'literaryHalifax' folder
+navigate to the 'literaryHalifax' folder
+
+bower install
+
+# To run in a browser:
 
 in www/js/server.js, change '192.168.2.14' to your localhost IP address
 
 ionic serve
 
-This will launch the app in a browser, but some parts of the app (specifically audio) won't work. To run the full version of the app on android, download and install the latest apk from [here](https://www.dropbox.com/sh/an112jsdms3pnfd/AACK8klx-eQ-c4R47w_VM6qpa?dl=0).
+This will launch the app in a browser, but some parts of the app (specifically audio) won't work.
+
+# Running in android
+
+Download and install [Android SDK Command Line Tools](https://developer.android.com/studio/index.html#downloads) 
+
+Launch the SDK manager and install build tools and platform for android 23
+
+navigate to the 'literaryHalifax' folder
+
+ionic run android
+
+To run the full version of the app on android, download and install the latest apk from [here](https://www.dropbox.com/sh/an112jsdms3pnfd/AACK8klx-eQ-c4R47w_VM6qpa?dl=0). 
 
 Chris G.'s notes one building for my mobile android device:
 To run on your mobile device follow these instructions: http://www.neilberry.com/how-to-run-your-ionic-app-on-real-devices/
