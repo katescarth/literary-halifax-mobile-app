@@ -18,6 +18,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     };
 }).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork, $log) {
     "use strict";
+//    must wait for all markers to be available before passing them in
     $scope.userLocationMarker = {
         focus : false,
         clickable : false,
@@ -33,7 +34,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     // display the union of passed-in markers and the user location marker
     $scope.$watch("mapMarkers", function (newValue, oldValue) {
         $scope.$evalAsync(function () {
-            $scope.markers = newValue.concat([$scope.userLocationMarker]);
+            $scope.markers = [$scope.userLocationMarker].concat(newValue);
         });
     }, true);
     utils.watchPosition(
