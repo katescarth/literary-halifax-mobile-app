@@ -32,8 +32,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     };
     // display the union of passed-in markers and the user location marker
     $scope.$watch("mapMarkers", function (newValue, oldValue) {
-        $timeout(function () {
-            $scope.markers = [$scope.userLocationMarker].concat(newValue);
+        $scope.$evalAsync(function () {
+            $scope.markers = newValue.concat([$scope.userLocationMarker]);
         });
     }, true);
     utils.watchPosition(
