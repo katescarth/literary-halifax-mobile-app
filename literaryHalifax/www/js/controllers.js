@@ -663,6 +663,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     function updateMarker() {
         if (!marker.lat) {
+            // we are generating the marker for the first time
+            // breaks if the marker is on the equator
             angular.extend(marker, {
                 lat: $scope.landmark.location.lat,
                 lng: $scope.landmark.location.lng,

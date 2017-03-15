@@ -32,6 +32,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         }
     };
     // display the union of passed-in markers and the user location marker
+    // leaflet is pretty picky about markers. It is important to never resize a marker, so the user location
+    // marker is always first.
     $scope.$watch("mapMarkers", function (newValue, oldValue) {
         $scope.$evalAsync(function () {
             $scope.markers = [$scope.userLocationMarker].concat(newValue);

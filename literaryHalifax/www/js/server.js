@@ -135,16 +135,7 @@ angular.module('literaryHalifax')
         "use strict";
         var SMALL_DELAY = 400,
             LARGE_DELAY = 2000,
-            api = "http://206.167.183.207/api",
             server;
-
-        $ionicPlatform.ready(function () {
-            if (!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
-                // David's ionic serve address
-                // Gods of development forgive me
-                api = "http://192.168.2.14:8100/api";
-            }
-        });
         // converts a landmark from the server to one that matches our spec. 
         // This includes making requests for files and location.
         function convertLandmark(serverRecord) {
@@ -193,10 +184,15 @@ angular.module('literaryHalifax')
                                 landmark.audio = file.file_urls.original;
                             }
                         });
+                    }, function (error) {
+                        $log.error(error);
                     })
             );
             promises.push(
-                cacheLayer.request(api + '/geolocations/' + serverRecord.extended_resources.geolocations.id)
+                cacheLayer.request(
+                    cacheLayer.getRequest('geolocations')
+                        .setId(serverRecord.extended_resources_mirror.geolocations.id)
+                )
                     .then(function (location) {
                         landmark.location = {
                             lat : location.latitude,
@@ -277,8 +273,15 @@ angular.module('literaryHalifax')
         }
 
         server = {
-            getPages : function () {
-                return cacheLayer.request(api + '/simple_pages')
+            getPages : function (pageNum, perPage) {
+                var req = cacheLayer.getRequest('simple_pages');
+                if (pageNum) {
+                    req.addParam('page', pageNum);
+                }
+                if (perPage) {
+                    req.addParam('per_page', perPage);
+                }
+                return cacheLayer.request(req)
                     .then(function (pages) {
                         return lodash.map(pages, function (serverRecord) {
                             return {
@@ -289,15 +292,26 @@ angular.module('literaryHalifax')
                     });
             },
             landmarkInfo : function (id) {
-                return cacheLayer.request(api + '/items/' + id)
+                var req = cacheLayer.getRequest('landmarks').setId(id);
+                return cacheLayer.request(req)
                     .then(convertLandmark)
                     .then(function (result) {
                         return result;
                     });
             },
-            getLandmarks : function (nearPoint) {
-                var landmarks = [];
-                return cacheLayer.request(api + '/items')
+            getLandmarks : function (nearPoint, pageNum, perPage) {
+                var req = cacheLayer.getRequest('landmarks'),
+                    landmarks = [];
+                if (nearPoint) {
+                    req.addParam('near', nearPoint);
+                }
+                if (pageNum) {
+                    req.addParam('page', pageNum);
+                }
+                if (perPage) {
+                    req.addParam('per_page', perPage);
+                }
+                return cacheLayer.request(req)
                     .then(function (result) {
                         var promises = [];
                         lodash.forEach(result, function (landmark) {
@@ -310,36 +324,35 @@ angular.module('literaryHalifax')
                         });
                         return $q.all(promises);
                     }).then(function () {
-                        if (nearPoint) {
-                            landmarks = lodash.sortBy(landmarks,
-                                function (landmark) {
-                                    return utils.distance(nearPoint, landmark.location);
-                                });
-                        }
-                        return $q.when(landmarks);
+                        return landmarks;
                     });
             },
 
-            getTours : function (nearPoint) {
-                var tours = [];
-                return cacheLayer.request(api + '/tours')
+            getTours : function (nearPoint, pageNum, perPage) {
+                var req = cacheLayer.getRequest('tours'),
+                    tours = [];
+                if (nearPoint) {
+                    req.addParam('near', nearPoint);
+                }
+                if (pageNum) {
+                    req.addParam('page', pageNum);
+                }
+                if (perPage) {
+                    req.addParam('per_page', perPage);
+                }
+                return cacheLayer.request(req)
                     .then(function (result) {
                         lodash.forEach(result, function (tour) {
                             tours.push(convertTour(tour));
                         });
-
-                        if (nearPoint) {
-                            tours = lodash.sortBy(tours, function (tour) {
-                                return utils.distance(nearPoint, tour.start);
-                            });
-                        }
                         return tours;
                     });
 
             },
 
             tourInfo : function (id) {
-                return cacheLayer.request(api + '/tours/' + id)
+                var req = cacheLayer.getRequest('tours').setId(id);
+                return cacheLayer.request(req)
                     .then(convertTour)
                     .then(function (result) {
                         return result;

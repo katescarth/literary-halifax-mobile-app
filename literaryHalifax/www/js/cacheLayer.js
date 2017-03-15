@@ -7,7 +7,7 @@ angular.module('literaryHalifax')
  *
  *
  */
-    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup, $log) {
+    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup, $log, utils) {
         "use strict";
         // when this promise resolves, the cache layer is ready to handle requests
         var initDeferred = $q.defer(),
@@ -52,6 +52,41 @@ angular.module('literaryHalifax')
                 tmp = parts.pop();
             return files + parts.pop() + '/' + tmp;
         }
+    
+        function applyParams(records, params) {
+            var point,
+                getDistance = function (record) {
+                    var location;
+                    if(record.start){
+                        location ={
+                            lat: record.start.lat,
+                            lng: record.start.lng
+                        };
+                    } else {
+                        location ={
+                            lat: itemCache[record.extended_resources_mirror.geolocations.url].latitude,
+                            lng: itemCache[record.extended_resources_mirror.geolocations.url].longitude
+                        };
+                    }
+                    return utils.distance(point, location);
+                }, 
+                result = records;
+            if(params.near){
+                point = {
+                    lat:params.near.lat,
+                    lng:params.near.lng
+                };
+                result = lodash.sortBy(result, getDistance);
+            }
+            if(params.page){
+                params.per_page = params.per_page || 20;
+                result = lodash.slice(result, 
+                                      (params.page - 1) * params.per_page,
+                                      (params.page) * params.per_page
+                                     );
+            }
+            return result;
+        }
 
 
         // performs a restricted deep search through the given object for
@@ -64,7 +99,10 @@ angular.module('literaryHalifax')
         // * a "file_urls" property
         function decorate(raw) {
             var promises = [];
-            if (raw.statusText === "OK") {
+            if (!raw) {
+                //no op
+                promises = [$q.when()];
+            } else if (raw.statusText === "OK") {
                 // raw is the response to a GET, decorate the data
                 promises = [decorate(raw.data)];
             } else if (raw.constructor === Array) {
@@ -100,6 +138,25 @@ angular.module('literaryHalifax')
                 return raw;
             });
         }
+    
+        function getAllPages(itemType) {
+            var result,
+                addPage = function (page) {
+                    return layer.request(layer.getRequest(itemType).addParam('page', page))
+                        .then(function (success) {
+                            if (success.length) {
+                                if (result) {
+                                    result = result.concat(success);
+                                } else {
+                                    result = success;
+                                }
+                                return addPage(page + 1);
+                            }
+                            return result;
+                        });
+                };
+            return addPage(1);
+        }
 
         // checks if a url refers to a cached file.
         // note - this does not check if the file actually exists
@@ -112,20 +169,42 @@ angular.module('literaryHalifax')
         layer.cachingEnabled = function () {
             return !lodash.isEmpty(itemCache);
         };
+    
+        layer.getRequest = function (resourceName) {
+            var result = {
+                url: api + resourceName,
+                params: {},
+                setId: function (id) {
+                    result.url = result.url + '/' + id;
+                    return result;
+                },
+                addParam : function (param, value) {
+                    result.params[param] = value;
+                    return result;
+                }
+            };
+            return result;
+        };
 
         // access point for http requests. If the request is cached, resolve to the cached result,
         // otherwise make the request and resolve to that result
-        layer.request = function (url) {
+        layer.request = function (req) {
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
+            $log.info("making a request for " + req.url);
             return init.then(function () {
-                var promise;
+                var promise,
+                    url = req.url,
+                    params = req.params;
 
                 if (itemCache && itemCache[url]) {
-                    promise = $q.when(itemCache[url]);
+                    promise = $q.when(applyParams(itemCache[url], params));
                 } else {
-                    promise = $http.get(url)
+                    promise = $http.get(url, {params: params})
                         .then(function (result) {
+                            if (!result.data) {
+                                $log.info("We got nothing back from " + url);
+                            }
                             return result.data;
                         }, function (error) {
                             $log.error("http request failed: " + angular.toJson(error));
@@ -197,12 +276,14 @@ angular.module('literaryHalifax')
         };
 
         // download and cache one item type
-        // such as "geolocations", "items", or "tours"
+        // such as "geolocations", "landmarks", or "tours"
         function downloadAndCache(itemType) {
-            var url = api + itemType;
-            return $http.get(url)
+            return getAllPages(itemType)
                 .then(function (result) {
-                    itemCache[url] = result.data;
+                    itemCache[layer.getRequest(itemType).url] = result;
+                    $log.info(angular.toJson(result));
+                }, function (error) {
+                    $log.error(angular.toJson(error));
                 });
         }
 
@@ -212,9 +293,10 @@ angular.module('literaryHalifax')
         // to recreate the entire cache
         //
         // This will still work if results from individual requests
-        // are storerd in the item cache, but it's a waste of space.
+        // are stored in the item cache, but it's a waste of space.
         function saveItemCache() {
             var data = angular.toJson(itemCache);
+            $log.info("Item Cache: " + data);
             return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
         }
 
@@ -236,9 +318,9 @@ angular.module('literaryHalifax')
 
         // delete every cached file, then delete the item cache
         layer.destroyCache = function () {
-            var filesIndex = itemCache[api + 'files'];
+            var filesIndex = itemCache[layer.getRequest('files').url];
 
-            // decorate the file cache so that remote urls aare replaced with their cached versions.
+            // decorate the file cache so that remote urls are replaced with their cached versions.
             // Normally modifying the cache like this is bad, but
             // it's going to be deleted anyway
             return decorate(filesIndex)
@@ -265,9 +347,10 @@ angular.module('literaryHalifax')
         layer.filesForItem = function (itemID) {
             var promise,
                 filesIndex,
-                filteredFiles;
-            if (itemCache && itemCache[api + 'files']) {
-                filesIndex = itemCache[api + 'files'];
+                filteredFiles,
+                req = layer.getRequest('files').addParam('item', itemID);
+            if (itemCache && itemCache[req.url]) {
+                filesIndex = itemCache[req.url];
                 filteredFiles = lodash.cloneDeep(
                     lodash.filter(filesIndex,
                         function (file) {
@@ -276,9 +359,9 @@ angular.module('literaryHalifax')
                 );
                 promise = $q.when(filteredFiles);
             } else {
-                promise = $http.get(api + 'files?item=' + itemID)
+                promise = layer.request(req)
                     .then(function (result) {
-                        return result.data;
+                        return result;
                     }, function (error) {
                         return $q.reject('Couldn\'t complete the request');
                     });
@@ -289,8 +372,8 @@ angular.module('literaryHalifax')
         // copy the contents of a cached index request
         // into their own cache entries
         function expandIndex(itemType) {
-            var index = itemCache[api + itemType];
-            
+            var index = itemCache[layer.getRequest(itemType).url];
+            $log.info("KEY: " + angular.toJson(itemCache));
             lodash.times(index.length, function (i) {
                 itemCache[index[i].url] = index[i];
             });
@@ -298,7 +381,7 @@ angular.module('literaryHalifax')
         }
 
         function expandIndices() {
-            expandIndex('items');
+            expandIndex('landmarks');
             expandIndex('tours');
             expandIndex('files');
             expandIndex('simple_pages');
@@ -308,7 +391,7 @@ angular.module('literaryHalifax')
         layer.cacheMetadata = function () {
             return $q.all(
                 [
-                    downloadAndCache('items'),
+                    downloadAndCache('landmarks'),
                     downloadAndCache('tours'),
                     downloadAndCache('files'),
                     downloadAndCache('simple_pages'),
