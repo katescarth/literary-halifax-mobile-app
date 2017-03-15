@@ -165,6 +165,10 @@ angular.module('literaryHalifax')
         function isCachedUrl(url) {
             return !url || url.startsWith(rootDir);
         }
+    
+        layer.getAll = function (itemType) {
+            return getAllPages(itemType).then(decorate);   
+        };
 
         layer.cachingEnabled = function () {
             return !lodash.isEmpty(itemCache);
@@ -401,10 +405,6 @@ angular.module('literaryHalifax')
         };
 
         $ionicPlatform.ready(function () {
-
-
-            // If there are quotes around this, it's because I was debugging in
-            // the browser. That will break caching
             rootDir = "cordova.file.dataDirectory";
             itemCacheFile = 'itemCache';
 

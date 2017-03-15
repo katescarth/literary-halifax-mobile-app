@@ -273,6 +273,9 @@ angular.module('literaryHalifax')
         }
 
         server = {
+            
+            getAll: cacheLayer.getAll,
+            
             getPages : function (pageNum, perPage) {
                 var req = cacheLayer.getRequest('simple_pages');
                 if (pageNum) {

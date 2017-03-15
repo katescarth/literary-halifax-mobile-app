@@ -16,6 +16,10 @@ a {
     /* no underline */
 }
 
+ion-infinite-scroll {
+    display:none;
+}
+
 .select-style {
     padding: 0;
     margin: 6px 0px 6px 6px;

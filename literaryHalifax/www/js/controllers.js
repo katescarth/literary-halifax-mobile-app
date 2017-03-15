@@ -349,11 +349,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.landmarks = [];
         $scope.tours = [];
         return $q.all([
-            server.getLandmarks()
+            server.getAll('landmarks')
                 .then(function (result) {
                     $scope.landmarks = result;
                 }),
-            server.getTours()
+            server.getAll('tours')
                 .then(function (tours) {
                     $scope.tours = tours;
                 })
@@ -380,7 +380,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     var map,
         // the user's location
         location,
-        ALL_TAGS = 'Show all';
+        ALL_TAGS = 'Show all',
+        pageSize,
+        currentPage;
     leafletData.getMap().then(function (result) {
         map = result;
     }, function (error) {
@@ -408,9 +410,25 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     });
     
     
-    $scope.displayMore = function () {
-        $scope.numListItems += 5;
-        $scope.$broadcast('scroll.infiniteScrollComplete');
+    $scope.getNextPage = function () {
+        var promise;
+        if (location) {
+            promise = server.getLandmarks(location, currentPage+1, pageSize);
+        } else {
+            promise = server.getLandmarks(currentPage+1, pageSize);
+        }
+        promise.then(function (newLandmarks){
+            if(newLandmarks.length){
+                lodash.forEach(newLandmarks, function (newLandmark) {
+                    $scope.landmarks.push(newLandmark);
+                });
+                currentPage += 1;
+            } else {
+                $scope.hasNextPage = false;
+            }
+        }).finally(function () {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
     };
     // Number of kilometers to display, rounded to two Significant figures.
     // If this cannot be calculated (e.g. one of the locations is missing),
@@ -429,6 +447,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.markers = [];
         $scope.errorMessage = '';
         $scope.loadingMsg = 'Getting your location...';
+        $scope.hasNextPage = true;
+        currentPage = 0;
+        pageSize = 0;
         //try to get the user's position
         utils.getPosition({
             //we can accept an old result - stalling here shoud be avoided
@@ -445,6 +466,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             return server.getLandmarks();
         }).then(function (result) {
             $scope.landmarks = result;
+            currentPage = 1;
+            pageSize = result.length;
             $scope.loadingMsg = '';
             $scope.tags = lodash.union([ALL_TAGS], lodash.flatten(lodash.map(result, 'tags')));
             $scope.markers = lodash.times(result.length, function (index) {

@@ -30,7 +30,8 @@
                     </div>
                     <div class="list-item-subtitle" ng-attr-dotdotdot="{{showLandmark(landmark)}}" ng-bind-html="landmark.description"> </div>
                 </div>
-                <ion-infinite-scroll ng-if="numListItems<landmarks.length" on-infinite="displayMore()" distance="10%"> </ion-infinite-scroll>
+                <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="10%" immediate-check="false">
+                </ion-infinite-scroll>
             </div>
         </div>
     </ion-content>
