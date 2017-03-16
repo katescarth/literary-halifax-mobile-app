@@ -152,38 +152,21 @@ angular.module('literaryHalifax')
             promises.push(
                 cacheLayer.filesForItem(serverRecord.id)
                     .then(function (files) {
+                        var filePromises = [];
                         lodash.forEach(files, function (file) {
+                            var promise = convertFile(file);
                             if (file.metadata.mime_type.startsWith('image')) {
-                                var imageObj = {
-                                    full : file.file_urls.fullsize,
-                                    squareThumb : file.file_urls.square_thumbnail,
-                                    thumb : file.file_urls.thumbnail
-                                };
-
-                                lodash.forEach(file.element_texts, function (resource) {
-                                    switch (resource.element.id) {
-                                    case TITLE:
-                                        imageObj.title = resource.text;
-                                        break;
-                                    case DESCRIPTION:
-                                        imageObj.description = resource.text;
-                                        break;
-                                    case CREATOR:
-                                        imageObj.creator = resource.text;
-                                        break;
-                                    case SOURCE:
-                                        imageObj.source = resource.text;
-                                        break;
-                                    default:
-                                        $log.warn('No rule found for ' + resource.element.name);
-                                    }
+                                promise.then(function (image) {
+                                    landmark.images.push(image);
                                 });
-
-                                landmark.images.push(imageObj);
                             } else if (file.metadata.mime_type.startsWith('audio')) {
-                                landmark.audio = file.file_urls.original;
+                                promise.then(function (audio) {
+                                    landmark.audio = audio;
+                                });
                             }
+                            filePromises.push(promise);
                         });
+                        return $q.all(filePromises);
                     }, function (error) {
                         $log.error(error);
                     })
@@ -254,12 +237,6 @@ angular.module('literaryHalifax')
                 id : serverRecord.id
             };
 
-            tour.start = {
-                lat : serverRecord.start.latitude,
-                lng : serverRecord.start.longitude,
-                zoom : serverRecord.start.zoom
-            };
-
             tour.landmarks = lodash.map(serverRecord.items,
                 function (record) {
                     return {
@@ -268,13 +245,96 @@ angular.module('literaryHalifax')
                 });
             tour.name = serverRecord.title;
             tour.description = serverRecord.description;
+            return convertGeolocation(serverRecord.start).then(
+                function (start) {
+                    tour.start = start;
+                    return tour;
+                });
+        }
+    
+    
+        function convertPage(serverRecord) {
+            return $q.when({
+                title : serverRecord.title,
+                rawHtml : serverRecord.text
+            });
+        }
+    
+        function convertGeolocation(serverRecord) {
+            return $q.when({
+                lat : serverRecord.latitude,
+                lng : serverRecord.longitude,
+                zoom : serverRecord.zoom
+            });
+        }
+    
+        function convertFile(serverRecord) {
+            if (serverRecord.metadata.mime_type.startsWith('image')) {
+                var imageObj = {
+                    full : serverRecord.file_urls.fullsize,
+                    squareThumb : serverRecord.file_urls.square_thumbnail,
+                    thumb : serverRecord.file_urls.thumbnail
+                };
 
-            return tour;
+                lodash.forEach(serverRecord.element_texts, function (resource) {
+                    switch (resource.element.id) {
+                    case TITLE:
+                        imageObj.title = resource.text;
+                        break;
+                    case DESCRIPTION:
+                        imageObj.description = resource.text;
+                        break;
+                    case CREATOR:
+                        imageObj.creator = resource.text;
+                        break;
+                    case SOURCE:
+                        imageObj.source = resource.text;
+                        break;
+                    default:
+                        $log.warn('No rule found for ' + resource.element.name);
+                    }
+                });
+
+                return $q.when(imageObj);
+            } else if (serverRecord.metadata.mime_type.startsWith('audio')) {
+                return $q.when(serverRecord.file_urls.original);
+            }
+        }
+    
+        function convertRecord(serverRecord, itemType) {
+            if (itemType === 'landmarks'){
+                return convertLandmark(serverRecord);
+            } else if (itemType === 'tours'){
+                return convertTour(serverRecord);
+            } else if (itemType === 'simple_pages'){
+                return convertPage(serverRecord);
+            } else if (itemType === 'geolocations'){
+                return convertGeolocation(serverRecord);
+            } else if (itemType === 'files'){
+                return convertFile(serverRecord);
+            } else {
+                return $q.reject("unknown item type: " + itemType);
+            }
         }
 
         server = {
             
-            getAll: cacheLayer.getAll,
+            getAll: function (itemType) {
+                var result = [];
+                return cacheLayer.getAll(itemType).then(function (records) {
+
+                    return $q.all(
+                        lodash.times(records.length, function (index) {
+                            return convertRecord(records[index], itemType)
+                                .then(function (converted) {
+                                    result[index] = converted;
+                                });
+                        })
+                    ).then(function () {
+                        return $q.when(result)
+                    });
+                });
+            },
             
             getPages : function (pageNum, perPage) {
                 var req = cacheLayer.getRequest('simple_pages');
@@ -286,21 +346,22 @@ angular.module('literaryHalifax')
                 }
                 return cacheLayer.request(req)
                     .then(function (pages) {
-                        return lodash.map(pages, function (serverRecord) {
-                            return {
-                                title : serverRecord.title,
-                                rawHtml : serverRecord.text
-                            };
+                        var result = [];
+                        return $q.all(
+                            lodash.times(pages.length, function (index) {
+                                return convertPage(records[index]).then(function (page) {
+                                    result[index] = page;
+                                })
+                            })
+                        ).then(function () {
+                            return result;
                         });
                     });
             },
             landmarkInfo : function (id) {
                 var req = cacheLayer.getRequest('landmarks').setId(id);
                 return cacheLayer.request(req)
-                    .then(convertLandmark)
-                    .then(function (result) {
-                        return result;
-                    });
+                    .then(convertLandmark);
             },
             getLandmarks : function (nearPoint, pageNum, perPage) {
                 var req = cacheLayer.getRequest('landmarks'),
@@ -316,18 +377,16 @@ angular.module('literaryHalifax')
                 }
                 return cacheLayer.request(req)
                     .then(function (result) {
-                        var promises = [];
-                        lodash.forEach(result, function (landmark) {
-                            promises.push(
-                                convertLandmark(landmark)
+                        return $q.all(
+                            lodash.times(result.length, function (index) {
+                                return convertLandmark(result[index])
                                     .then(function (newLandmark) {
-                                        landmarks.push(newLandmark);
-                                    })
-                            );
+                                        landmarks[index] = newLandmark;
+                                    });
+                            })
+                        ).then(function () {
+                            return landmarks;
                         });
-                        return $q.all(promises);
-                    }).then(function () {
-                        return landmarks;
                     });
             },
 
@@ -345,21 +404,24 @@ angular.module('literaryHalifax')
                 }
                 return cacheLayer.request(req)
                     .then(function (result) {
-                        lodash.forEach(result, function (tour) {
-                            tours.push(convertTour(tour));
+                        return $q.all(
+                            lodash.times(result.length, function (index) {
+                                return convertTour(results[index])
+                                    .then(function (newTour) {
+                                        tours[index] = newTour;
+                                    });
+                            })
+                        ).then(function () {
+                            return tours;
                         });
-                        return tours;
-                    });
+                        });
 
             },
 
             tourInfo : function (id) {
                 var req = cacheLayer.getRequest('tours').setId(id);
                 return cacheLayer.request(req)
-                    .then(convertTour)
-                    .then(function (result) {
-                        return result;
-                    });
+                    .then(convertTour);
             }
         };
 

@@ -1,6 +1,6 @@
 /*global angular */
 /*global ionic */
-angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, leafletData, server, lodash) {
+angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, leafletData, server, lodash) {
     // items for the side menu
     "use strict";
     var menuWidth = 275,
@@ -230,7 +230,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.media = mediaPlayer;
     
     $scope.refresh = function () {
-        server.getPages().then(function (pages) {
+        server.getAll("simple_pages").then(function (pages) {
             $scope.menuItems = lodash.unionBy(
                 staticItems,
                 lodash.map(pages, function (page) {
@@ -245,6 +245,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 }),
                 'displayName'
             );
+        }, function (error) {
+            $log.error('error getting pages: ' + angular.toJson(error));
         });
     };
     $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
