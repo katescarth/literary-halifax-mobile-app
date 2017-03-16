@@ -375,7 +375,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams, $log) {
     // number of items to show in the list. Increased as user scrolls down
     "use strict";
-    $scope.numListItems = 5;
     // the map. Needed this so we can invalidate its size if it gets in a bad state.
     var map,
         // the user's location
@@ -393,6 +392,26 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             map.invalidateSize();
         }
     }
+    
+    function markerForIndex (index) {
+        var landmark = $scope.landmarks[index];
+        return {
+            lat: landmark.location.lat,
+            lng: landmark.location.lng,
+            message: "<div class='info-window' dotdotdot ng-click='go(landmarks[" + index + "])'>" + "<h6>" + landmark.name + "</h6>" + landmark.lede + "</div>",
+            getMessageScope: function () {
+                return $scope;
+            },
+            focus: false,
+            icon: {
+                iconUrl: "img/pin.png",
+                iconSize: [21, 30], // size of the icon
+                iconAnchor: [10.5, 30], // point of the icon which will correspond to marker's location
+                popupAnchor: [0, -30] // point from which the popup should open relative to the iconAnchor
+            }
+        };
+    }
+    
     //  When navigating back to a map, the tiles will sometimes
     //  only render in the top left corner. Making the map resize
     //  itself fixes the issue
@@ -413,20 +432,23 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.getNextPage = function () {
         var promise;
         if (location) {
-            promise = server.getLandmarks(location, currentPage+1, pageSize);
+            promise = server.getLandmarks(location, currentPage + 1, pageSize);
         } else {
-            promise = server.getLandmarks(currentPage+1, pageSize);
+            promise = server.getLandmarks(currentPage + 1, pageSize);
         }
+        $scope.loadingMsg = "Getting more Landmarks...";
         promise.then(function (newLandmarks){
             if(newLandmarks.length){
                 lodash.forEach(newLandmarks, function (newLandmark) {
                     $scope.landmarks.push(newLandmark);
+                    $scope.markers.push(markerForIndex($scope.landmarks.length - 1));
                 });
                 currentPage += 1;
             } else {
                 $scope.hasNextPage = false;
             }
         }).finally(function () {
+            $scope.loadingMsg = undefined;
             $scope.$broadcast('scroll.infiniteScrollComplete');
         });
     };
@@ -470,24 +492,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             pageSize = result.length;
             $scope.loadingMsg = '';
             $scope.tags = lodash.union([ALL_TAGS], lodash.flatten(lodash.map(result, 'tags')));
-            $scope.markers = lodash.times(result.length, function (index) {
-                var landmark = result[index];
-                return {
-                    lat: landmark.location.lat,
-                    lng: landmark.location.lng,
-                    message: "<div class='info-window' dotdotdot ng-click='go(landmarks[" + index + "])'>" + "<h6>" + landmark.name + "</h6>" + landmark.lede + "</div>",
-                    getMessageScope: function () {
-                        return $scope;
-                    },
-                    focus: false,
-                    icon: {
-                        iconUrl: "img/pin.png",
-                        iconSize: [21, 30], // size of the icon
-                        iconAnchor: [10.5, 30], // point of the icon which will correspond to marker's location
-                        popupAnchor: [0, -30] // point from which the popup should open relative to the iconAnchor
-                    }
-                };
-            });
+            $scope.markers = lodash.times(result.length, markerForIndex);
             $scope.applyFilter();
         }).catch(function (error) {
             $scope.loadingMsg = '';
@@ -555,7 +560,36 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
 }).controller('toursCtrl', function ($scope, $state, $q, $log, server, utils, lodash) {
     "use strict";
-    var location;
+    var location,
+        pageSize,
+        currentPage;
+    
+    
+    
+    
+    $scope.getNextPage = function () {
+        var promise;
+        if (location) {
+            promise = server.getTours(location, currentPage + 1, pageSize);
+        } else {
+            promise = server.getTours(currentPage + 1, pageSize);
+        }
+        $scope.loadingMsg = "Getting more Tours...";
+        promise.then(function (newTours){
+            if(newTours.length){
+                lodash.forEach(newTours, function (newTour) {
+                    $scope.tours.push(newTour);
+                });
+                currentPage += 1;
+            } else {
+                $scope.hasNextPage = false;
+            }
+        }).finally(function () {
+            $scope.loadingMsg = undefined;
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+    };
+    
     $scope.loadingMsg = '';
         // When the view is entered, try to get the user's location.
         // If successful, use it to get the tours from the server
@@ -565,6 +599,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.tours = [];
         $scope.loadingMsg = 'getting your location...';
         $scope.errorMsg = '';
+        currentPage = 0;
+        pageSize = 0;
         utils.getPosition({
             //we can accept an old result - stalling here shoud be avoided
             maximumAge: 60000,
@@ -579,6 +615,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.loadingMsg = 'getting tours...';
             return server.getTours();
         }).then(function (result) {
+            
+            currentPage = 1;
+            pageSize = result.length;
             $scope.loadingMsg = '';
             $scope.tours = result;
         }, function (error) {

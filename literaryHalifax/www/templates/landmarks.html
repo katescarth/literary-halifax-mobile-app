@@ -17,7 +17,6 @@
                 </div>
             </div>
             <div class="list">
-                <list-loader loading-msg="loadingMsg" error-msg="errorMessage" refresh="refresh"></list-loader>
                 <div class="list-item-div clearfix" ng-attr-shown-list-item-div="{{showLandmark(landmark)||undefined}}" ng-repeat="landmark in landmarks track by $index" ng-click="go(landmark)" >
                     <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
                     <div>
@@ -30,7 +29,8 @@
                     </div>
                     <div class="list-item-subtitle" ng-attr-dotdotdot="{{showLandmark(landmark)}}" ng-bind-html="landmark.description"> </div>
                 </div>
-                <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="10%" immediate-check="false">
+                <list-loader loading-msg="loadingMsg" error-msg="errorMessage" refresh="refresh"></list-loader>
+                <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="30%" immediate-check="false">
                 </ion-infinite-scroll>
             </div>
         </div>
