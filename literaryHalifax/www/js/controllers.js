@@ -393,7 +393,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
     }
     
-    function markerForIndex (index) {
+    function markerForIndex(index) {
         var landmark = $scope.landmarks[index];
         return {
             lat: landmark.location.lat,
@@ -437,8 +437,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             promise = server.getLandmarks(currentPage + 1, pageSize);
         }
         $scope.loadingMsg = "Getting more Landmarks...";
-        promise.then(function (newLandmarks){
-            if(newLandmarks.length){
+        promise.then(function (newLandmarks) {
+            if (newLandmarks.length) {
                 lodash.forEach(newLandmarks, function (newLandmark) {
                     $scope.landmarks.push(newLandmark);
                     $scope.markers.push(markerForIndex($scope.landmarks.length - 1));
@@ -575,8 +575,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             promise = server.getTours(currentPage + 1, pageSize);
         }
         $scope.loadingMsg = "Getting more Tours...";
-        promise.then(function (newTours){
-            if(newTours.length){
+        promise.then(function (newTours) {
+            if (newTours.length) {
                 lodash.forEach(newTours, function (newTour) {
                     $scope.tours.push(newTour);
                 });

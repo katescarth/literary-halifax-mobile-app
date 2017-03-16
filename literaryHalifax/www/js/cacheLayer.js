@@ -57,30 +57,30 @@ angular.module('literaryHalifax')
             var point,
                 getDistance = function (record) {
                     var location;
-                    if(record.start){
-                        location ={
+                    if (record.start) {
+                        location = {
                             lat: record.start.lat,
                             lng: record.start.lng
                         };
                     } else {
-                        location ={
+                        location = {
                             lat: itemCache[record.extended_resources_mirror.geolocations.url].latitude,
                             lng: itemCache[record.extended_resources_mirror.geolocations.url].longitude
                         };
                     }
                     return utils.distance(point, location);
-                }, 
+                },
                 result = records;
-            if(params.near){
+            if (params.near) {
                 point = {
-                    lat:params.near.lat,
-                    lng:params.near.lng
+                    lat: params.near.lat,
+                    lng: params.near.lng
                 };
                 result = lodash.sortBy(result, getDistance);
             }
-            if(params.page){
+            if (params.page) {
                 params.per_page = params.per_page || 20;
-                result = lodash.slice(result, 
+                result = lodash.slice(result,
                                       (params.page - 1) * params.per_page,
                                       (params.page) * params.per_page
                                      );
@@ -167,7 +167,7 @@ angular.module('literaryHalifax')
         }
     
         layer.getAll = function (itemType) {
-            return getAllPages(itemType).then(decorate);   
+            return getAllPages(itemType).then(decorate);
         };
 
         layer.cachingEnabled = function () {
