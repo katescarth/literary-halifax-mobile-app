@@ -264,6 +264,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.$on('$ionicView.enter', function () {
         $scope.settings.cachingEnabled = cacheLayer.cachingEnabled();
         $scope.expandedTours = [];
+        if ($scope.settings.cachingEnabled){
+            $scope.refresh();
+        }
     });
     //fires when the toggle is touched.
     $scope.cachingToggled = function () {
@@ -292,7 +295,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                     $scope.settings.showLandmarks = false;
                     $scope.settings.showTours = false;
                     $scope.settings.cachingEnabled = false;
-                    return cacheLayer.destroyCache();
+                    return cacheLayer.destroyCache().then(function () {
+                        $scope.landmarks = [];
+                        $scope.tours = [];
+                        $scope.expandedTours = [];
+                    });
                 } else {
                     $scope.settings.cachingEnabled = true;
                 }
@@ -369,8 +376,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             });
         });
     };
-    $scope.refresh();
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
