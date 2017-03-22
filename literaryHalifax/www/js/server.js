@@ -136,6 +136,48 @@ angular.module('literaryHalifax')
         var SMALL_DELAY = 400,
             LARGE_DELAY = 2000,
             server;
+    
+        function convertFile(serverRecord) {
+            if (serverRecord.metadata.mime_type.startsWith('image')) {
+                var imageObj = {
+                    full : serverRecord.file_urls.fullsize,
+                    squareThumb : serverRecord.file_urls.square_thumbnail,
+                    thumb : serverRecord.file_urls.thumbnail
+                };
+
+                lodash.forEach(serverRecord.element_texts, function (resource) {
+                    switch (resource.element.id) {
+                    case TITLE:
+                        imageObj.title = resource.text;
+                        break;
+                    case DESCRIPTION:
+                        imageObj.description = resource.text;
+                        break;
+                    case CREATOR:
+                        imageObj.creator = resource.text;
+                        break;
+                    case SOURCE:
+                        imageObj.source = resource.text;
+                        break;
+                    default:
+                        $log.warn('No rule found for ' + resource.element.name);
+                    }
+                });
+
+                return $q.when(imageObj);
+            } else if (serverRecord.metadata.mime_type.startsWith('audio')) {
+                return $q.when(serverRecord.file_urls.original);
+            }
+        }
+    
+        function convertGeolocation(serverRecord) {
+            return $q.when({
+                lat : serverRecord.latitude,
+                lng : serverRecord.longitude,
+                zoom : serverRecord.zoom
+            });
+        }
+    
         // converts a landmark from the server to one that matches our spec. 
         // This includes making requests for files and location.
         function convertLandmark(serverRecord) {
@@ -249,7 +291,8 @@ angular.module('literaryHalifax')
                 function (start) {
                     tour.start = start;
                     return tour;
-                });
+                }
+            );
         }
     
     
@@ -260,57 +303,16 @@ angular.module('literaryHalifax')
             });
         }
     
-        function convertGeolocation(serverRecord) {
-            return $q.when({
-                lat : serverRecord.latitude,
-                lng : serverRecord.longitude,
-                zoom : serverRecord.zoom
-            });
-        }
-    
-        function convertFile(serverRecord) {
-            if (serverRecord.metadata.mime_type.startsWith('image')) {
-                var imageObj = {
-                    full : serverRecord.file_urls.fullsize,
-                    squareThumb : serverRecord.file_urls.square_thumbnail,
-                    thumb : serverRecord.file_urls.thumbnail
-                };
-
-                lodash.forEach(serverRecord.element_texts, function (resource) {
-                    switch (resource.element.id) {
-                    case TITLE:
-                        imageObj.title = resource.text;
-                        break;
-                    case DESCRIPTION:
-                        imageObj.description = resource.text;
-                        break;
-                    case CREATOR:
-                        imageObj.creator = resource.text;
-                        break;
-                    case SOURCE:
-                        imageObj.source = resource.text;
-                        break;
-                    default:
-                        $log.warn('No rule found for ' + resource.element.name);
-                    }
-                });
-
-                return $q.when(imageObj);
-            } else if (serverRecord.metadata.mime_type.startsWith('audio')) {
-                return $q.when(serverRecord.file_urls.original);
-            }
-        }
-    
         function convertRecord(serverRecord, itemType) {
-            if (itemType === 'landmarks'){
+            if (itemType === 'landmarks') {
                 return convertLandmark(serverRecord);
-            } else if (itemType === 'tours'){
+            } else if (itemType === 'tours') {
                 return convertTour(serverRecord);
-            } else if (itemType === 'simple_pages'){
+            } else if (itemType === 'simple_pages') {
                 return convertPage(serverRecord);
-            } else if (itemType === 'geolocations'){
+            } else if (itemType === 'geolocations') {
                 return convertGeolocation(serverRecord);
-            } else if (itemType === 'files'){
+            } else if (itemType === 'files') {
                 return convertFile(serverRecord);
             } else {
                 return $q.reject("unknown item type: " + itemType);
@@ -331,7 +333,7 @@ angular.module('literaryHalifax')
                                 });
                         })
                     ).then(function () {
-                        return $q.when(result)
+                        return $q.when(result);
                     });
                 });
             },
@@ -349,9 +351,9 @@ angular.module('literaryHalifax')
                         var result = [];
                         return $q.all(
                             lodash.times(pages.length, function (index) {
-                                return convertPage(records[index]).then(function (page) {
+                                return convertPage(pages[index]).then(function (page) {
                                     result[index] = page;
-                                })
+                                });
                             })
                         ).then(function () {
                             return result;
@@ -406,7 +408,7 @@ angular.module('literaryHalifax')
                     .then(function (result) {
                         return $q.all(
                             lodash.times(result.length, function (index) {
-                                return convertTour(results[index])
+                                return convertTour(result[index])
                                     .then(function (newTour) {
                                         tours[index] = newTour;
                                     });
@@ -414,7 +416,7 @@ angular.module('literaryHalifax')
                         ).then(function () {
                             return tours;
                         });
-                        });
+                    });
 
             },
 

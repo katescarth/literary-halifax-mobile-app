@@ -34,8 +34,8 @@ angular.module('literaryHalifax')
                 // David's ionic serve address
                 // Copy pasted from server.js
                 // Gods of development forgive me
-                api = "http://192.168.2.14:8100/api/";
-                files = "http://192.168.2.14:8100/files/";
+                api = "http://192.168.2.12:8100/api/";
+                files = "http://192.168.2.12:8100/files/";
             }
         });
 

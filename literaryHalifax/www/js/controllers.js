@@ -264,7 +264,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.$on('$ionicView.enter', function () {
         $scope.settings.cachingEnabled = cacheLayer.cachingEnabled();
         $scope.expandedTours = [];
-        if ($scope.settings.cachingEnabled){
+        if ($scope.settings.cachingEnabled) {
             $scope.refresh();
         }
     });
@@ -437,14 +437,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     
     $scope.getNextPage = function () {
-        var promise;
-        if (location) {
-            promise = server.getLandmarks(location, currentPage + 1, pageSize);
-        } else {
-            promise = server.getLandmarks(currentPage + 1, pageSize);
-        }
+        
         $scope.loadingMsg = "Getting more Landmarks...";
-        promise.then(function (newLandmarks) {
+        server.getLandmarks(location, currentPage + 1, pageSize)
+            .then(function (newLandmarks) {
             if (newLandmarks.length) {
                 lodash.forEach(newLandmarks, function (newLandmark) {
                     $scope.landmarks.push(newLandmark);
