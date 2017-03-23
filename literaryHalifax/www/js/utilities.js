@@ -117,21 +117,15 @@ angular.module('literaryHalifax')
         return {
             restrict : 'A',
             link : function (scope, element, attrs) {
-//                scope.$evalAsync(function() {
-//                    element.on('resize', function () {
-                        scope.$evalAsync(function() {
-                            element.dotdotdot({
-                                wrap: 'letter'
-                            });
-                            $log.info("dotted");
+                scope.$watch(function () {
+                    return true && attrs.dotdotdot;
+                }, function () {
+                    scope.$evalAsync(function () {
+                        element.dotdotdot({
+                            wrap: 'letter'
                         });
-//                        $log.info("dotting");
-//                    });
-//                    $log.info(angular.toJson(element));
-                    console.log(element);
-                }//)
-                
-                    
+                    });
+                });
             }
-        });
-//    });
+        };
+    });

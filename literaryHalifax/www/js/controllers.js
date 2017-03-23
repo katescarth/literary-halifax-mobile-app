@@ -405,7 +405,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         return {
             lat: landmark.location.lat,
             lng: landmark.location.lng,
-            message: "<div class='info-window' dotdotdot ng-click='go(landmarks[" + index + "])'>" + "<h6>" + landmark.name + "</h6>" + landmark.lede + "</div>",
+            message: "<div class='info-window' dotdotdot='true' ng-click='go(landmarks[" + index + "])'>" + "<h6>" + landmark.name + "</h6>" + landmark.lede + "</div>",
             getMessageScope: function () {
                 return $scope;
             },
@@ -534,7 +534,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         } else {
             tagMatch = lodash.includes(landmark.tags, $scope.filter.tag);
         }
-        return tagMatch && nameMatch;
+        return (tagMatch && nameMatch) || undefined;
     };
     // show or hide markers according to whether or not their corresponding
     // landmarks should be filtered out

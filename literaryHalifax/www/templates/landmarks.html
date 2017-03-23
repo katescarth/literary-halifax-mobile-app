@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="list">
-                <div class="list-item-div clearfix" ng-attr-shown-list-item-div="{{showLandmark(landmark)||undefined}}" ng-repeat="landmark in landmarks track by $index" ng-click="go(landmark)" >
+                <div class="list-item-div clearfix" ng-attr-shown-list-item-div="{{showLandmark(landmark)}}" ng-repeat="landmark in landmarks track by $index" ng-click="go(landmark)" >
                     <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
                     <div>
                         <div class="list-item-distance" ng-if="displayDistance(landmark)">
