@@ -441,19 +441,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.loadingMsg = "Getting more Landmarks...";
         server.getLandmarks(location, currentPage + 1, pageSize)
             .then(function (newLandmarks) {
-            if (newLandmarks.length) {
-                lodash.forEach(newLandmarks, function (newLandmark) {
-                    $scope.landmarks.push(newLandmark);
-                    $scope.markers.push(markerForIndex($scope.landmarks.length - 1));
-                });
-                currentPage += 1;
-            } else {
-                $scope.hasNextPage = false;
-            }
-        }).finally(function () {
-            $scope.loadingMsg = undefined;
-            $scope.$broadcast('scroll.infiniteScrollComplete');
-        });
+                if (newLandmarks.length) {
+                    lodash.forEach(newLandmarks, function (newLandmark) {
+                        $scope.landmarks.push(newLandmark);
+                        $scope.markers.push(markerForIndex($scope.landmarks.length - 1));
+                    });
+                    currentPage += 1;
+                } else {
+                    $scope.hasNextPage = false;
+                }
+            }).finally(function () {
+                $scope.loadingMsg = undefined;
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
     };
     // Number of kilometers to display, rounded to two Significant figures.
     // If this cannot be calculated (e.g. one of the locations is missing),
