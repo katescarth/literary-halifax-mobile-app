@@ -66,13 +66,11 @@ ion-nav-view {
     background-color: white;
 }
 
-.platform-android ion-nav-view {
-    background: url(/android_asset/www/img/BG1.jpg);
+
+ion-nav-view {
+    background: url(../img/BG1.jpg);
 }
 
-.platform-browser ion-nav-view {
-    background: url(/img/BG1.jpg);
-}
 
 .pane {
     background-color: transparent;
