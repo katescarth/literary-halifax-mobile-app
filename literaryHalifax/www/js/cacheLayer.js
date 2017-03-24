@@ -2,7 +2,6 @@
 /*global cordova */
 /*global ionic */
 angular.module('literaryHalifax')
-
 /*
  *
  *
@@ -107,12 +106,9 @@ angular.module('literaryHalifax')
                 promises = [decorate(raw.data)];
             } else if (raw.constructor === Array) {
                 // raw is a list, decorate each item
-                lodash.forEach(raw, function (item) {
-                    promises.push(decorate(item));
-                });
+                promises = lodash.map(raw, decorate);
             } else if (raw.file_urls) {
                 // we've found the files. Check for cached versions
-                
                 lodash.forOwn(raw.file_urls, function (value, key) {
                     if (value) {
                         var newUrl = hash(value);
@@ -166,15 +162,35 @@ angular.module('literaryHalifax')
             return !url || url.startsWith(rootDir);
         }
     
-        layer.getAll = function (itemType) {
-            return getAllPages(itemType).then(decorate);
-        };
+        // Dump the item cache to a file
+        // Only the results of index requests are needed
+        // to recreate the entire cache
+        //
+        // This will still work if results from individual requests
+        // are stored in the item cache, but it's a waste of space.
+        function saveItemCache() {
+            var data = angular.toJson(itemCache);
+            $log.info("Item Cache: " + data);
+            return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
+        }
 
-        layer.cachingEnabled = function () {
-            return !lodash.isEmpty(itemCache);
-        };
+        // Read index results out of the file and store them in the item cache.
+        function recoverItemCache() {
+            return $cordovaFile.readAsText(rootDir, itemCacheFile)
+                .then(function (result) {
+                    itemCache = angular.fromJson(result);
+                });
+        }
+
+        // delete the item cache
+        function destroyItemCache() {
+            return $cordovaFile.removeFile(rootDir, itemCacheFile)
+                .then(function (success) {
+                    itemCache = {};
+                });
+        }
     
-        layer.getRequest = function (resourceName) {
+        function getRequest(resourceName) {
             var result = {
                 url: api + resourceName,
                 params: {},
@@ -188,7 +204,47 @@ angular.module('literaryHalifax')
                 }
             };
             return result;
+        }
+    
+        // download and cache one item type
+        // such as "geolocations", "landmarks", or "tours"
+        function downloadAndCache(itemType) {
+            return getAllPages(itemType)
+                .then(function (result) {
+                    itemCache[getRequest(itemType).url] = result;
+                    $log.info(angular.toJson(result));
+                }, function (error) {
+                    $log.error(angular.toJson(error));
+                });
+        }
+    
+        // copy the contents of a cached index request
+        // into their own cache entries
+        function expandIndex(itemType) {
+            var index = itemCache[layer.getRequest(itemType).url];
+            $log.info("KEY: " + angular.toJson(itemCache));
+            lodash.times(index.length, function (i) {
+                itemCache[index[i].url] = index[i];
+            });
+        }
+
+        function expandIndices() {
+            expandIndex('landmarks');
+            expandIndex('tours');
+            expandIndex('files');
+            expandIndex('simple_pages');
+            expandIndex('geolocations');
+        }
+    
+        layer.getAll = function (itemType) {
+            return getAllPages(itemType).then(decorate);
         };
+
+        layer.cachingEnabled = function () {
+            return !lodash.isEmpty(itemCache);
+        };
+    
+        layer.getRequest = getRequest;
 
         // access point for http requests. If the request is cached, resolve to the cached result,
         // otherwise make the request and resolve to that result
@@ -196,6 +252,7 @@ angular.module('literaryHalifax')
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
             $log.info("making a request for " + req.url);
+            $log.info(angular.toJson(Object.keys(itemCache)));
             return init.then(function () {
                 var promise,
                     url = req.url,
@@ -279,46 +336,8 @@ angular.module('literaryHalifax')
                 });
         };
 
-        // download and cache one item type
-        // such as "geolocations", "landmarks", or "tours"
-        function downloadAndCache(itemType) {
-            return getAllPages(itemType)
-                .then(function (result) {
-                    itemCache[layer.getRequest(itemType).url] = result;
-                    $log.info(angular.toJson(result));
-                }, function (error) {
-                    $log.error(angular.toJson(error));
-                });
-        }
 
 
-        // Dump the item cache to a file
-        // Only the results of index requests are needed
-        // to recreate the entire cache
-        //
-        // This will still work if results from individual requests
-        // are stored in the item cache, but it's a waste of space.
-        function saveItemCache() {
-            var data = angular.toJson(itemCache);
-            $log.info("Item Cache: " + data);
-            return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
-        }
-
-        // Read index results out of the file and store them in the item cache.
-        function recoverItemCache() {
-            return $cordovaFile.readAsText(rootDir, itemCacheFile)
-                .then(function (result) {
-                    itemCache = angular.fromJson(result);
-                });
-        }
-
-        // delete the item cache
-        function destroyItemCache() {
-            return $cordovaFile.removeFile(rootDir, itemCacheFile)
-                .then(function (success) {
-                    itemCache = {};
-                });
-        }
 
         // delete every cached file, then delete the item cache
         layer.destroyCache = function () {
@@ -373,24 +392,6 @@ angular.module('literaryHalifax')
             return promise.then(decorate);
         };
 
-        // copy the contents of a cached index request
-        // into their own cache entries
-        function expandIndex(itemType) {
-            var index = itemCache[layer.getRequest(itemType).url];
-            $log.info("KEY: " + angular.toJson(itemCache));
-            lodash.times(index.length, function (i) {
-                itemCache[index[i].url] = index[i];
-            });
-            
-        }
-
-        function expandIndices() {
-            expandIndex('landmarks');
-            expandIndex('tours');
-            expandIndex('files');
-            expandIndex('simple_pages');
-            expandIndex('geolocations');
-        }
 
         layer.cacheMetadata = function () {
             return $q.all(

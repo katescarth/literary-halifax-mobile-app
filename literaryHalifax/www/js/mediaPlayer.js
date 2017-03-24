@@ -29,11 +29,10 @@ angular.module('literaryHalifax')
             }
         }
 
-
         //plays the currently selected track
         function play() {
             if (media) {
-                media.play();//TODO add  iOS options
+                media.play();//TODO add iOS options
             }
         }
         //pauses the currently playing track (which can be resumed using play())

@@ -75,7 +75,9 @@ angular.module('literaryHalifax')
                 $log.error('bad lat/lng format');
                 return -1;
             }
-            var squarekms = Math.pow((from.lat - to.lat) * 111.1, 2) + Math.pow((from.lng - to.lng) * 79.3, 2);
+            
+            var scale = Math.cos((180 / Math.PI) * (from.lat + to.lat) / 2),
+                squarekms = Math.pow((from.lat - to.lat) * 111.1, 2) + Math.pow((from.lng - to.lng) * 111.1 * scale, 2);
             return Math.sqrt(squarekms);
         };
 

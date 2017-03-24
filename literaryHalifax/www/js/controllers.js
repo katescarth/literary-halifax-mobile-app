@@ -752,15 +752,17 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.refresh = function () {
         $scope.loadingMsg = 'Getting landmark info...';
         $scope.errorMsg = '';
-        server.landmarkInfo($stateParams.landmarkID).then(function (landmark) {
-            $scope.landmark = landmark;
-        }).catch(function (error) {
-            $scope.errorMsg = error;
-        }).finally(function () {
-            updateMarker();
-                //UX: On failure go back to previous page, plus an error toast?
-            $scope.loadingMsg = '';
-        });
+        server.landmarkInfo($stateParams.landmarkID)
+            .then(function (landmark) {
+                $scope.landmark = landmark;
+            }, function (error) {
+                $scope.errorMsg = error;
+                $scope.loadingMsg = '';
+            }).finally(function () {
+                updateMarker();
+                    //UX: On failure go back to previous page, plus an error toast?
+                $scope.loadingMsg = '';
+            });
     };
     $scope.refresh();
     $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);

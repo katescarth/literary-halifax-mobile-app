@@ -1,4 +1,4 @@
-/*Ionic switches this off for some reason*/
+/*Ionic switches these off for some reason*/
 
 em,
 i {
@@ -15,7 +15,8 @@ a {
     text-decoration: none;
     /* no underline */
 }
-
+/* Infinite scrolls are invisible. They should be represented
+   with pther loading indicators*/
 ion-infinite-scroll {
     display:none;
 }
@@ -28,7 +29,8 @@ ion-infinite-scroll {
     overflow: hidden;
     float: right;
 }
-
+/* make the select invisible, but put it on the top layer.
+   That way, we can display an icon underneath it.*/
 .select-style select {
     opacity: 0;
     width: 22px;
@@ -183,7 +185,7 @@ overscroll-pane {
  *
  * Text in list items must also sometimes be truncated using dotdotdot, which must
  * be an attribute. However, since dotdotdot relies on knowing the size of its 
- * target, it must be applied when the element appears. While it can wwatch the
+ * target, it must be applied when the element appears. While it can watch the
  * size of the element, this causes flickering. Instead, we apply the dotdotdot
  * attr only when the element becomes visible, using ng-attr-dotdotdot. In order
  * for these to synchronize correctly, shown-list-item-div must also be an attr.

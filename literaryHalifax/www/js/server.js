@@ -319,8 +319,7 @@ angular.module('literaryHalifax')
             }
         }
 
-        server = {
-            
+        return {
             getAll: function (itemType) {
                 var result = [];
                 return cacheLayer.getAll(itemType).then(function (records) {
@@ -360,11 +359,13 @@ angular.module('literaryHalifax')
                         });
                     });
             },
+            
             landmarkInfo : function (id) {
                 var req = cacheLayer.getRequest('landmarks').setId(id);
                 return cacheLayer.request(req)
                     .then(convertLandmark);
             },
+            
             getLandmarks : function (nearPoint, pageNum, perPage) {
                 var req = cacheLayer.getRequest('landmarks'),
                     landmarks = [];
@@ -417,7 +418,6 @@ angular.module('literaryHalifax')
                             return tours;
                         });
                     });
-
             },
 
             tourInfo : function (id) {
@@ -426,6 +426,4 @@ angular.module('literaryHalifax')
                     .then(convertTour);
             }
         };
-
-        return server;
     });
