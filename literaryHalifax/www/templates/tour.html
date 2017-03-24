@@ -15,8 +15,7 @@
                         <div class="list-item-title">
                             {{tour.landmarks[currentLandmark].name}}
                         </div>
-                        <div class="list-item-subtitle">
-                            {{tour.landmarks[currentLandmark].subtitle}}
+                        <div class="list-item-subtitle" ng-bind-html="tour.landmarks[currentLandmark].subtitle">
                         </div>
                     </div>
                 </div>
