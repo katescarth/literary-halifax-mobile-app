@@ -450,6 +450,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 } else {
                     $scope.hasNextPage = false;
                 }
+                $scope.applyFilter();
             }).finally(function () {
                 $scope.loadingMsg = undefined;
                 $scope.$broadcast('scroll.infiniteScrollComplete');

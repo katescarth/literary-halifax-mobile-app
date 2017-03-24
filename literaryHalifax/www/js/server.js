@@ -210,7 +210,7 @@ angular.module('literaryHalifax')
                         });
                         return $q.all(filePromises);
                     }, function (error) {
-                        $log.error(error);
+                        $log.error("error retrieving files: " + angular.toJson(error));
                     })
             );
             promises.push(

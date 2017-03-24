@@ -170,7 +170,6 @@ angular.module('literaryHalifax')
         // are stored in the item cache, but it's a waste of space.
         function saveItemCache() {
             var data = angular.toJson(itemCache);
-            $log.info("Item Cache: " + data);
             return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
         }
 
@@ -212,9 +211,8 @@ angular.module('literaryHalifax')
             return getAllPages(itemType)
                 .then(function (result) {
                     itemCache[getRequest(itemType).url] = result;
-                    $log.info(angular.toJson(result));
                 }, function (error) {
-                    $log.error(angular.toJson(error));
+                    $log.error("Error caching " + itemType + "index: " + angular.toJson(error));
                 });
         }
     
@@ -222,7 +220,6 @@ angular.module('literaryHalifax')
         // into their own cache entries
         function expandIndex(itemType) {
             var index = itemCache[layer.getRequest(itemType).url];
-            $log.info("KEY: " + angular.toJson(itemCache));
             lodash.times(index.length, function (i) {
                 itemCache[index[i].url] = index[i];
             });
@@ -252,7 +249,6 @@ angular.module('literaryHalifax')
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
             $log.info("making a request for " + req.url);
-            $log.info(angular.toJson(Object.keys(itemCache)));
             return init.then(function () {
                 var promise,
                     url = req.url,
@@ -264,11 +260,11 @@ angular.module('literaryHalifax')
                     promise = $http.get(url, {params: params})
                         .then(function (result) {
                             if (!result.data) {
-                                $log.info("We got nothing back from " + url);
+                                $log.warn("Http request to " + url + "returned no data");
                             }
                             return result.data;
                         }, function (error) {
-                            $log.error("http request failed: " + angular.toJson(error));
+                            $log.error("http request to " + url + " failed: " + angular.toJson(error));
                             return $q.reject('Couldn\'t complete the request');
                         });
 //                    if (cacheIncoming) {
@@ -286,7 +282,7 @@ angular.module('literaryHalifax')
         };
 
         // download the given resource and cache it
-        layer.cacheUrl = function (url, force) {
+        layer.cacheUrl = function (url) {
             if (!url) {
                 $log.warn('Tried to cache a non-existent url');
                 return $q.when(url);
