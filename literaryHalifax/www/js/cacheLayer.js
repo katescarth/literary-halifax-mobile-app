@@ -29,7 +29,7 @@ angular.module('literaryHalifax')
 
 
         $ionicPlatform.ready(function () {
-            if (!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
+            if (typeof cordova === 'undefined') {
                 // David's ionic serve address
                 // Copy pasted from server.js
                 // Gods of development forgive me
@@ -405,8 +405,10 @@ angular.module('literaryHalifax')
             rootDir = "cordova.file.dataDirectory";
             itemCacheFile = 'itemCache';
 
-            if ((ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
+            if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
+            } else {
+                $log.error("Cordova is not defined. Are you on a mobile device?");
             }
 
             $cordovaFile.checkFile(rootDir, itemCacheFile)
@@ -416,7 +418,7 @@ angular.module('literaryHalifax')
                     // no cache, that's fine
                     return $q.when();
                 }).then(function () {
-                    if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
+                    if (0&&!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
                         $ionicPopup.alert({
                             title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',

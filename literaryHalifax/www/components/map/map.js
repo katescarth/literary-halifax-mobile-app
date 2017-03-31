@@ -16,7 +16,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
         },
         templateUrl : 'components/map/map.html'
     };
-}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork, $log) {
+}).controller('mapCtrl', function ($scope, $ionicScrollDelegate, $ionicPlatform, utils, $q, $timeout, $cordovaNetwork, $log, mapCache) {
     "use strict";
 //    must wait for all markers to be available before passing them in
     $scope.userLocationMarker = {
@@ -72,8 +72,8 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     $scope.tiles = {
         url: function (arg) {
             return $ionicPlatform.ready().then(function () {
-                if ($cordovaNetwork.isOnline()) {
-                    return 'https://cartodb-basemaps-' + arg.subdomain + '.global.ssl.fastly.net/light_all/' + arg.zoom + '/' + arg.tile.column + '/' + arg.tile.row + '.png';
+                if (1||$cordovaNetwork.isOnline()) {
+                    return mapCache.urlFor(arg.tile.column, arg.tile.row, arg.zoom, arg.subdomain);
                 } else {
                     return 'img/offline-map-tile.png';
                 }
