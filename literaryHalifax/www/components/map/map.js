@@ -72,7 +72,7 @@ angular.module('literaryHalifax').directive('markerMap', function () {
     $scope.tiles = {
         url: function (arg) {
             return $ionicPlatform.ready().then(function () {
-                if (1||$cordovaNetwork.isOnline()) {
+                if ($cordovaNetwork.isOnline()) {
                     return mapCache.urlFor(arg.tile.column, arg.tile.row, arg.zoom, arg.subdomain);
                 } else {
                     return 'img/offline-map-tile.png';

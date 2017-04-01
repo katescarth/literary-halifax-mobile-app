@@ -287,7 +287,7 @@ angular.module('literaryHalifax')
                 $log.warn('Tried to cache a non-existent url');
                 return $q.when(url);
             }
-            if (!force && isCachedUrl(url)) {
+            if (isCachedUrl(url)) {
                 return $q.when(url);
             }
             var filename = rootDir + "/" + hash(url);
@@ -418,7 +418,7 @@ angular.module('literaryHalifax')
                     // no cache, that's fine
                     return $q.when();
                 }).then(function () {
-                    if (0&&!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
+                    if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
                         $ionicPopup.alert({
                             title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',
