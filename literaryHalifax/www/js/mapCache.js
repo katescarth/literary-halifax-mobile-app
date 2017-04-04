@@ -11,6 +11,8 @@ angular.module('literaryHalifax')
             filename = "mapCache",
             // Directory where all files are stored
             rootDir,
+            // fileType of map tiles
+            terminator = '.png',
             // resolves once the cache has been initialized
             initDeferred = $q.defer(),
             init = initDeferred.promise,
@@ -39,11 +41,12 @@ angular.module('literaryHalifax')
         });
     
         function hash(x, y, zoom) {
-            return x + '/' + y + '/' + zoom;
+            return x + '-' + y + '-' + zoom + terminator;
         }
     
         function cacheTile(x, y, zoom) {
-            var subdomain;
+            var subdomain,
+                url;
             
             if ((x + y) % 3 === 0) {
                 subdomain = 'a';
@@ -53,8 +56,19 @@ angular.module('literaryHalifax')
                 subdomain = 'c';
             }
             
+            url = 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + terminator;
+            
+            $cordovaFileTransfer.download(
+                url,
+                rootDir + '/' + hash(x, y, zoom),
+                {
+                    Referer: "http://206.167.183.207"
+                }
+            ).then(function () {
+                cache[hash(x, y, zoom)] = url;
+            });
+            
             //cordovaFileTransfer the remote to the local, then
-            cache[hash(x, y, zoom)] = 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + '.png';
         }
         // Convert a {lat,lng} object into tile coordinates at zoom level 0.
         // Tile coordinates originate in the NorthWest as 0,0. For each zoom level above 0,
@@ -182,7 +196,9 @@ angular.module('literaryHalifax')
                 left = [], right = [],
                 // The first and last indices of segments which intersec a row from left and right, respectively
                 // N, S, E, Westernmost points
-                EMP, WMP, SMP, NMP;
+                EMP, WMP, SMP, NMP,
+                // the promises for each layer of zoom
+                zoomPromises = [];
             
             
 //          parse locations into a convex hull, then split the hull into its left and right sides
@@ -231,7 +247,9 @@ angular.module('literaryHalifax')
                     // whether the currently scanned tile intersects the right side of the hull
                     intersectR,
                     // the scale factor for this zoom level
-                    scale = Math.pow(2, zoom);
+                    scale = Math.pow(2, zoom),
+                    // the promises of tile downloads for this zoom level
+                    promises = [];
                 
                 Y1 = Math.floor(scale * NMP.y);
                 Y2 = Math.floor(scale * SMP.y) + 1;
@@ -269,16 +287,20 @@ angular.module('literaryHalifax')
 
                         if (reachedL) {
                             // add this to a promise list
-                            cacheTile(x, y, zoom);
+                            promises.push(cacheTile(x, y, zoom));
                         }
                     }
                 }
+                layerPromises.push($q.all(promises));
             });
+            
+            //TODO: do these sequentially?
+            return $q.all(layerPromises);
         }
         // For debugging. Initialize the cache immediately. TAKE THIS OUT BEFORE IMPLEMENTING DOWNLOADS
-        server.getAll('geolocations').then(cacheAll).then(function () {
-            $log.info("I cached " + Object.keys(cache).length + " tiles");
-        });
+//        server.getAll('geolocations').then(cacheAll).then(function () {
+//            $log.info("I cached " + Object.keys(cache).length + " tiles");
+//        });
         return {
             urlFor: function (x, y, zoom, subdomain) {
                 return init
