@@ -253,12 +253,13 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $ionicPlatform.ready(function () {
         $scope.refresh();
     });
-}).controller('cacheCtrl', function ($scope, server, cacheLayer, $timeout, $q, $ionicPopup, lodash, $log) {
+}).controller('cacheCtrl', function ($scope, server, cacheLayer, mapCache, $timeout, $q, $ionicPopup, lodash, $log) {
     "use strict";
     $scope.settings = {
         cachingEnabled: false,
         showTours: false,
-        showLandmarks: false
+        showLandmarks: false,
+        mapCached: false
     };
     $scope.expandedTours = [];
     $scope.$on('$ionicView.enter', function () {
@@ -267,7 +268,28 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if ($scope.settings.cachingEnabled) {
             $scope.refresh();
         }
+        
+        $scope.settings.mapCached = mapCache.cacheEnabled();
+        
     });
+    
+    $scope.mapRowTap = function () {
+        var promise;
+        $scope.settings.mapCached = mapCache.cacheEnabled();
+        
+        if ($scope.settings.mapCached){
+            promise = mapCache.destroyCache();
+        } else {
+            promise = mapCache.createCache();
+        }
+        
+        promise.then(function () {
+            $scope.settings.mapCached = mapCache.cacheEnabled();
+        });
+    }
+    
+    $scope.mapCached = mapCache.cacheEnabled;
+    
     //fires when the toggle is touched.
     $scope.cachingToggled = function () {
         if ($scope.settings.cachingEnabled) {

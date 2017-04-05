@@ -18,6 +18,27 @@ angular.module('literaryHalifax')
             init = initDeferred.promise,
             // table of the filenames of cached files. hash(x,y,zoom) -> fileName
             cache = {};
+    
+        // write the cache to the file for later recovery
+        function writeCache() {
+            return $cordovaFile.writeFile(rootDir,
+                                   filename,
+                                   angular.toJson(cache),
+                                   true);
+            
+        }
+        // recover the cache from the file
+        function readCache() {
+            return $cordovaFile.readAsText(rootDir, filename)
+                .then(function (result) {
+                    cache = angular.fromJson(result);
+                });
+        }
+    
+        function deleteCache() {
+            return $cordovaFile.removeFile(rootDir, filename);
+        }
+    
         $ionicPlatform.ready(function () {
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
@@ -26,24 +47,17 @@ angular.module('literaryHalifax')
             }
             // recover the cache if it exists
             $cordovaFile.checkFile(rootDir, filename)
-                .then(function () {
-                    return $cordovaFile.readAsText(rootDir, filename)
-                        .then(function (json) {
-                            cache = angular.fromJson(json);
-                            initDeferred.resolve();
-                        });
-                }).then(undefined, function (error) {
-                    // The file doesn't exist
-                    initDeferred.resolve();
-                });
-            
-            
+                // if the file doesn't exist, just resolve
+                .then(readCache, $q.when)
+                .then(initDeferred.resolve);
         });
     
+        // create an unambiguous string reference to a tile
         function hash(x, y, zoom) {
-            return x + '-' + y + '-' + zoom + terminator;
+            return zoom + '-' + x + '-' + y + terminator;
         }
     
+        // download a tile, save it to a file, and add it to the cache object
         function cacheTile(x, y, zoom) {
             var subdomain,
                 url;
@@ -58,19 +72,19 @@ angular.module('literaryHalifax')
             
             url = 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + terminator;
             
-            $cordovaFileTransfer.download(
+            return $cordovaFileTransfer.download(
                 url,
                 rootDir + '/' + hash(x, y, zoom),
                 {
                     Referer: "http://206.167.183.207"
                 }
             ).then(function () {
-                cache[hash(x, y, zoom)] = url;
+                cache[hash(x, y, zoom)] = rootDir + '/' + hash(x, y, zoom);
             });
             
-            //cordovaFileTransfer the remote to the local, then
         }
-        // Convert a {lat,lng} object into tile coordinates at zoom level 0.
+
+        // Convert a {lat,lng} object into tile coordinates at zoom level 0 (basic == zoom 0).
         // Tile coordinates originate in the NorthWest as 0,0. For each zoom level above 0,
         // x and y double. We use basic points because the same point may be needed at many zoom
         // levels, and it is faster to calculate powers of two than to do trig, float division...
@@ -101,6 +115,7 @@ angular.module('literaryHalifax')
                 // we convert the segment into a parametric form:
                 // x=start.x + t * xTick
                 // y=start.y + t * yTick
+                // 0 <= t <= 1
                 t,
                 xTick = segment.end.x - segment.start.x,
                 yTick = segment.end.y - segment.start.y;
@@ -111,6 +126,11 @@ angular.module('literaryHalifax')
                 return true;
             }
             
+            //need to check floor and ceiiling for the case where the point is on the high edge
+            if (Math.ceil((segment.start.x)) === x && Math.ceil((segment.start.y)) === y) {
+                return true;
+            }
+            
             // Since the edges are either vertical or horizontal, determining intersection is simple.
             // We find the t-value at which the unchanging coordinate
             //      (y for horizontal edges, x for vertical)
@@ -118,10 +138,12 @@ angular.module('literaryHalifax')
             // the other coordinate's value. If the t-value is between 0 and 1 and the second
             // coordinate is between the beginning and end of the edge, they intersect
             
+            // We alternate ceiling and floor to ensure that all four corners are checked
+            
             //left edge
             t = (x - segment.start.x) / xTick;
             if (0 <= t && t <= 1) {
-                if (Math.floor(segment.start.y + (t * yTick)) === y) {
+                if (Math.ceil(segment.start.y + (t * yTick)) === y + 1) {
                     return true;
                 }
             }
@@ -142,7 +164,7 @@ angular.module('literaryHalifax')
             //bottom edge
             t = (y + 1 - segment.start.y) / yTick;
             if (0 <= t && t <= 1) {
-                if (Math.floor(segment.start.x + (t * xTick)) === x) {
+                if (Math.ceil(segment.start.x + (t * xTick)) === x + 1) {
                     return true;
                 }
             }
@@ -160,14 +182,31 @@ angular.module('literaryHalifax')
                 left = lodash.minBy(locations, 'x'),
                 result = [],
                 complete = false;
-            locations = lodash.sortBy(locations, function (loc) {
-                if (loc === left) {
-                    return -Infinity;
+            
+            // order the points according to the bearing of the line from the EMP to that point
+            // Most negative/nearest to north bearinng first, 
+            // Special case: the EMP is first.
+            locations = lodash.sortBy(
+                locations,
+                function (loc) {
+                    if (loc.x === left.x) {
+                        if (loc.y > left.y) {
+                            return Infinity;
+                        }
+                        return -Infinity;
+                    }
+                    // this somehow worked when it read loc.x / left.x ?
+                    return (loc.y - left.y) / (loc.x - left.x);
+                },
+                //tiebreaker: if it's left, it has to be first. Otherwise, it doesn't matter 
+                function (loc) {
+                    if (loc === left) {
+                        return -Infinity;
+                    }
+                    return 0;
                 }
-                // TODO: this might fail if the two points have the same x-coordinate
-                //       also this somehow worked when it read loc.x / left.x ?
-                return (loc.y - left.y) / (loc.x - left.x);
-            });
+            
+            );
             lodash.forEach(locations, function (loc) {
                 result.push(loc);
                 // cross product - remove second-to-last elements as long as they form 
@@ -187,6 +226,8 @@ angular.module('literaryHalifax')
             return result;
         }
     
+        // cache all the tiles required to cover the area contained withing the given set of locations
+    
         function cacheAll(locations) {
             var // Indices
                 x, y,
@@ -198,7 +239,9 @@ angular.module('literaryHalifax')
                 // N, S, E, Westernmost points
                 EMP, WMP, SMP, NMP,
                 // the promises for each layer of zoom
-                zoomPromises = [];
+                layerPromises = [],
+                // the highest zoom level to be cached
+                maxZoom = 16;
             
             
 //          parse locations into a convex hull, then split the hull into its left and right sides
@@ -233,11 +276,9 @@ angular.module('literaryHalifax')
                 return point.start.y;
             });
             
-            //15=max zoom
-            
             // for each zoom level, find a rectangular area which encompasses the entire hull
             // scan throught this area, and determine which tiles to cache.
-            lodash.times(16, function (zoom) {
+            lodash.forEach(lodash.range(1 + maxZoom), function (zoom) {
                     // Bounds of the rectangle we might be caching
                 var X1, X2, Y1, Y2,
                     // indices in the left and right sides of the hull
@@ -294,13 +335,13 @@ angular.module('literaryHalifax')
                 layerPromises.push($q.all(promises));
             });
             
-            //TODO: do these sequentially?
-            return $q.all(layerPromises);
+            //TODO: do the layers sequentially?
+            return $q.all(layerPromises)
+                .then(writeCache, function (errors) {
+                    $log.error(angular.toJson(errors));
+                });
         }
-        // For debugging. Initialize the cache immediately. TAKE THIS OUT BEFORE IMPLEMENTING DOWNLOADS
-//        server.getAll('geolocations').then(cacheAll).then(function () {
-//            $log.info("I cached " + Object.keys(cache).length + " tiles");
-//        });
+
         return {
             urlFor: function (x, y, zoom, subdomain) {
                 return init
@@ -315,10 +356,27 @@ angular.module('literaryHalifax')
                     });
             },
             createCache: function () {
-                
+                return server.getAll('geolocations')
+                    .then(cacheAll);
             },
             destroyCache: function () {
-                
+                // file deletion promises
+                var promises = [];
+                lodash.forOwn(cache, function (key, value) {
+                    promises.push(
+                        $cordovaFile.removeFile(rootDir, value)
+                            .then(function () {
+                                delete cache[key];
+                            })
+                    );
+                });
+                return $q.all(promises).then(function () {
+                    cache = {};
+                });
+        
+            },
+            cacheEnabled: function () {
+                return !lodash.isEmpty(cache);
             }
         };
     });

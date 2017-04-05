@@ -3,12 +3,21 @@
         <div class="display-card">
             <div class="list" style="font-family:sans-serif;">
                 <div class="list-item-div" shown-list-item-div>
+                    
+                    <label class="toggle toggle-balanced disable-user-behavior" style="float:right;">
+                        <input ng-model="settings.mapCached" ng-change="mapRowTap()" type="checkbox">
+                        <div class="track">
+                            <div class="handle"> </div>
+                        </div>
+                    </label>Preload map tiles to make them accessible when offline.
+                </div>
+                <div class="list-item-div" shown-list-item-div>
                     <label class="toggle toggle-balanced disable-user-behavior" style="float:right;">
                         <input ng-model="settings.cachingEnabled" ng-change="cachingToggled()" type="checkbox">
                         <div class="track">
                             <div class="handle"> </div>
                         </div>
-                    </label> Preload content to make it accessible when offline. </div>
+                    </label>Preload content to make it accessible when offline. </div>
                 <div class="list-item-div" shown-list-item-div ng-class="settings.cachingEnabled?'':'greyout'">
                     <div ng-click="settings.showLandmarks=settings.cachingEnabled && !settings.showLandmarks">
                         <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i> Landmarks 
