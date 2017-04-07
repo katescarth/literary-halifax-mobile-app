@@ -17,7 +17,12 @@ angular.module('literaryHalifax')
             initDeferred = $q.defer(),
             init = initDeferred.promise,
             // table of the filenames of cached files. hash(x,y,zoom) -> fileName
-            cache = {};
+            cache = {},
+            // 
+            status = {
+                working: false,
+                cacheEnabled: false
+            };
     
         // write the cache to the file for later recovery
         function writeCache() {
@@ -32,11 +37,30 @@ angular.module('literaryHalifax')
             return $cordovaFile.readAsText(rootDir, filename)
                 .then(function (result) {
                     cache = angular.fromJson(result);
+                    status.cacheEnabled = true;
                 });
         }
     
         function deleteCache() {
-            return $cordovaFile.removeFile(rootDir, filename);
+            
+            var promises = [];
+            status.working = true;
+            lodash.forOwn(cache, function (key, value) {
+                promises.push(
+                    $cordovaFile.removeFile(rootDir, value)
+                        .then(function () {
+                            delete cache[key];
+                        })
+                );
+            });
+            return $q.all(promises).then(function () {
+                cache = {};
+                status.cacheEnabled = false;
+                return $cordovaFile.removeFile(rootDir, filename);
+            }).finally(function () {
+                status.working = false;
+            });
+            
         }
     
         $ionicPlatform.ready(function () {
@@ -45,11 +69,15 @@ angular.module('literaryHalifax')
             } else {
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
+            status.working = true;
             // recover the cache if it exists
             $cordovaFile.checkFile(rootDir, filename)
                 // if the file doesn't exist, just resolve
-                .then(readCache, $q.when)
-                .then(initDeferred.resolve);
+                .then(readCache)
+                .finally(function () {
+                    initDeferred.resolve();
+                    status.working = false;
+                });
         });
     
         // create an unambiguous string reference to a tile
@@ -60,7 +88,8 @@ angular.module('literaryHalifax')
         // download a tile, save it to a file, and add it to the cache object
         function cacheTile(x, y, zoom) {
             var subdomain,
-                url;
+                url,
+                key = hash(x, y, zoom);
             
             if ((x + y) % 3 === 0) {
                 subdomain = 'a';
@@ -72,15 +101,17 @@ angular.module('literaryHalifax')
             
             url = 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + terminator;
             
-            return $cordovaFileTransfer.download(
-                url,
-                rootDir + '/' + hash(x, y, zoom),
-                {
-                    Referer: "http://206.167.183.207"
-                }
-            ).then(function () {
-                cache[hash(x, y, zoom)] = rootDir + '/' + hash(x, y, zoom);
-            });
+            // run this in a web worker
+            
+            return $cordovaFileTransfer
+                .download(url, rootDir + '/' + key,
+                    {
+                        Referer: "http://206.167.183.207"
+                    }
+                )
+                .then(function () {
+                    cache[key] = rootDir + '/' + key;
+                });
             
         }
 
@@ -242,8 +273,6 @@ angular.module('literaryHalifax')
                 layerPromises = [],
                 // the highest zoom level to be cached
                 maxZoom = 16;
-            
-            
 //          parse locations into a convex hull, then split the hull into its left and right sides
 //          All segments  point from the top down.
             
@@ -337,8 +366,17 @@ angular.module('literaryHalifax')
             
             //TODO: do the layers sequentially?
             return $q.all(layerPromises)
-                .then(writeCache, function (errors) {
-                    $log.error(angular.toJson(errors));
+                .then(
+                    function () {
+                        status.cacheEnabled = true;
+                        return writeCache();
+                    },
+                    function (errors) {
+                        $log.error(angular.toJson(errors));
+                    }
+                )
+                .finally(function () {
+                    status.working = false;
                 });
         }
 
@@ -356,27 +394,14 @@ angular.module('literaryHalifax')
                     });
             },
             createCache: function () {
-                return server.getAll('geolocations')
-                    .then(cacheAll);
+                status.working = true;
+                return server.getAll('geolocations');
             },
             destroyCache: function () {
                 // file deletion promises
-                var promises = [];
-                lodash.forOwn(cache, function (key, value) {
-                    promises.push(
-                        $cordovaFile.removeFile(rootDir, value)
-                            .then(function () {
-                                delete cache[key];
-                            })
-                    );
-                });
-                return $q.all(promises).then(function () {
-                    cache = {};
-                });
+                return deleteCache();
         
             },
-            cacheEnabled: function () {
-                return !lodash.isEmpty(cache);
-            }
+            status: status
         };
     });

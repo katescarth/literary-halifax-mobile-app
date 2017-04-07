@@ -3,13 +3,8 @@
         <div class="display-card">
             <div class="list" style="font-family:sans-serif;">
                 <div class="list-item-div" shown-list-item-div>
-                    
-                    <label class="toggle toggle-balanced disable-user-behavior" style="float:right;">
-                        <input ng-model="settings.mapCached" ng-change="mapRowTap()" type="checkbox">
-                        <div class="track">
-                            <div class="handle"> </div>
-                        </div>
-                    </label>Preload map tiles to make them accessible when offline.
+                    <async-toggle style="float:right" changing="mapCacheStatus.working" active="mapCacheStatus.cacheEnabled" switch-on="mapCacheOn" switch-off="mapCacheOff"></async-toggle> 
+                    Preload map tiles to make them accessible when offline.
                 </div>
                 <div class="list-item-div" shown-list-item-div>
                     <label class="toggle toggle-balanced disable-user-behavior" style="float:right;">

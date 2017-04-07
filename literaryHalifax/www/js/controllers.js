@@ -261,6 +261,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         showLandmarks: false,
         mapCached: false
     };
+    
+    $scope.mapCacheOn = mapCache.createCache;
+    $scope.mapCacheOff = mapCache.destroyCache;
+    $scope.mapCacheStatus = mapCache.status;
     $scope.expandedTours = [];
     $scope.$on('$ionicView.enter', function () {
         $scope.settings.cachingEnabled = cacheLayer.cachingEnabled();
@@ -268,25 +272,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if ($scope.settings.cachingEnabled) {
             $scope.refresh();
         }
-        
-        $scope.settings.mapCached = mapCache.cacheEnabled();
-        
     });
-    
-    $scope.mapRowTap = function () {
-        var promise;
-        $scope.settings.mapCached = mapCache.cacheEnabled();
-        
-        if ($scope.settings.mapCached){
-            promise = mapCache.destroyCache();
-        } else {
-            promise = mapCache.createCache();
-        }
-        
-        promise.then(function () {
-            $scope.settings.mapCached = mapCache.cacheEnabled();
-        });
-    }
     
     $scope.mapCached = mapCache.cacheEnabled;
     
