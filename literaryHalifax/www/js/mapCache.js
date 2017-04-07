@@ -395,7 +395,7 @@ angular.module('literaryHalifax')
             },
             createCache: function () {
                 status.working = true;
-                return server.getAll('geolocations');
+                return server.getAll('geolocations').then(cacheAll);
             },
             destroyCache: function () {
                 // file deletion promises

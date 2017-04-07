@@ -425,9 +425,8 @@ async-toggle {
 }
 
 .async-toggle-working .track {
-    animation-name: pulse-grey-balanced;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+    border-color: #8ddaa3;
+    background-color: #99e6af;
 }
 
 /* Fix to avoid background color bleeding */
