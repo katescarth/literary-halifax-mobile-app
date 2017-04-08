@@ -276,10 +276,6 @@ angular.module('literaryHalifax')
         layer.getAll = function (itemType) {
             return getAllPages(itemType).then(decorate);
         };
-
-        layer.cachingEnabled = function () {
-            return !lodash.isEmpty(itemCache);
-        };
     
         layer.getRequest = getRequest;
     
@@ -430,7 +426,7 @@ angular.module('literaryHalifax')
                     // no cache, that's fine
                     return $q.when();
                 }).then(function () {
-                    if (!($cordovaNetwork.isOnline() || layer.cachingEnabled())) {
+                    if (!($cordovaNetwork.isOnline() || status.cacheEnabled)) {
                         $ionicPopup.alert({
                             title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',

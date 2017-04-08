@@ -256,10 +256,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, mapCache, $timeout, $q, $ionicPopup, lodash, $log) {
     "use strict";
     $scope.settings = {
-        cachingEnabled: false,
         showTours: false,
-        showLandmarks: false,
-        mapCached: false
+        showLandmarks: false
     };
     
     $scope.mapCacheOn = mapCache.createCache;
@@ -293,53 +291,13 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.cacheStatus = cacheLayer.status;
     $scope.expandedTours = [];
     $scope.$on('$ionicView.enter', function () {
-        $scope.settings.cachingEnabled = cacheLayer.cachingEnabled();
         $scope.expandedTours = [];
-        if ($scope.settings.cachingEnabled) {
+        if ($scope.cacheStatus.cacheEnabled) {
             $scope.refresh();
         }
     });
     
     $scope.mapCached = mapCache.cacheEnabled;
-    
-    //fires when the toggle is touched.
-    $scope.cachingToggled = function () {
-        if ($scope.settings.cachingEnabled) {
-            // initialize the cache
-            cacheLayer.cacheMetadata().then($scope.refresh, function (error) {
-                $log.error('error turning on caching: ' + angular.toJson(error));
-                // TODO toast
-                $scope.settings.showLandmarks = false;
-                $scope.settings.showTours = false;
-                $scope.settings.cachingEnabled = false;
-            }).finally(function () {
-                $scope.expandedTours = [];
-            });
-        } else {
-            // delay the update while we show a confirmation popup
-            // turning off caching deletes the cache, so we need to make 
-            $scope.settings.cachingEnabled = true;
-            $ionicPopup.confirm({
-                title: "Turn caching off?",
-                template: "This will delete all of your cached data. You will have to download it again to use it.",
-                okType: 'button-balanced'
-            }).then(function (shouldDelete) {
-                if (shouldDelete) {
-                    //caching is being switched off, so collapse the menus
-                    $scope.settings.showLandmarks = false;
-                    $scope.settings.showTours = false;
-                    $scope.settings.cachingEnabled = false;
-                    return cacheLayer.destroyCache().then(function () {
-                        $scope.landmarks = [];
-                        $scope.tours = [];
-                        $scope.expandedTours = [];
-                    });
-                } else {
-                    $scope.settings.cachingEnabled = true;
-                }
-            });
-        }
-    };
     // This is really a misnomer. landmarkIsCached checks if all the files
     // in a landmark are cached
     $scope.landmarkCached = cacheLayer.landmarkIsCached;
