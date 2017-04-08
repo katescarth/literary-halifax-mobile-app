@@ -15,8 +15,7 @@ a {
     text-decoration: none;
     /* no underline */
 }
-/* Infinite scrolls are invisible. They should be represented
-   with pther loading indicators*/
+/* Infinite scrolls are invisible. They should be mirrored by other loading indicators*/
 ion-infinite-scroll {
     display:none;
 }
@@ -110,39 +109,6 @@ ion-nav-view {
     font-size: 30px !important;
 }
 
-.media-content {
-    padding-left: 7px;
-    padding-right: 7px;
-}
-
-.popover {
-    height: auto !important;
-    width: 70% !important;
-}
-
-.popover ion-header-bar {
-    position: relative;
-}
-
-.popover ion-content {
-    top: 0;
-    position: relative;
-}
-
-overscroll-pane {
-    background-color: transparent !important;
-    height: 100%;
-}
-
-.transparent {
-    background: transparent !important;
-}
-
-.bumpdown {
-    padding-top: 30%;
-    margin-bottom: 0%;
-}
-
 .display-card {
     border-radius: 2px;
     margin-left: 10px;
@@ -219,11 +185,6 @@ overscroll-pane {
     text-align: center;
 }
 
-.error-icon {
-    color: firebrick;
-    font-size: 32px;
-}
-
 .filter-area {}
 
 .filter-icon {
@@ -254,10 +215,6 @@ overscroll-pane {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-}
-
-.loader-subtitle {
-    font-family: sans-serif;
 }
 
 .list-item-distance {
@@ -299,50 +256,6 @@ overscroll-pane {
     margin-left: 7px;
 }
 
-.zoom-scroll {
-    height: 100%;
-}
-
-.zoom-scroll .scroll {
-    min-height: 100% !important;
-    align-items: center;
-    background-color: transparent;
-}
-
-.image-modal {
-    height: 100%;
-}
-
-.modal-close {
-    position: absolute;
-    right: 0;
-    /*Make this clickable*/
-    z-index: 30;
-    color: darkgray;
-    font-size: 32px;
-}
-
-.fullscreen-image {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-}
-
-.image-modal-text {
-    color: darkgray;
-    position: absolute;
-    bottom: 0;
-}
-
-.image-modal-text .image-title {
-    font-size: 14px;
-}
-
-.image-modal-text .image-description {
-    font-size: 10px;
-    line-height: 13px;
-}
 
 .landmark-text-card-title {
     font-variant: small-caps;

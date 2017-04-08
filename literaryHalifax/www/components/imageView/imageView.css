@@ -1,0 +1,44 @@
+.image-modal {
+    height: 100%;
+}
+
+.modal-close {
+    position: absolute;
+    right: 0;
+    /*Make this clickable*/
+    z-index: 30;
+    color: darkgray;
+    font-size: 32px;
+}
+
+.fullscreen-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+.image-modal-text {
+    color: darkgray;
+    position: absolute;
+    bottom: 0;
+}
+
+.image-modal-text .image-title {
+    font-size: 14px;
+}
+
+.image-modal-text .image-description {
+    font-size: 10px;
+    line-height: 13px;
+}
+
+.zoom-scroll {
+    height: 100%;
+}
+
+.zoom-scroll .scroll {
+    min-height: 100% !important;
+    align-items: center;
+    background-color: transparent;
+}
