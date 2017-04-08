@@ -265,6 +265,32 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.mapCacheOn = mapCache.createCache;
     $scope.mapCacheOff = mapCache.destroyCache;
     $scope.mapCacheStatus = mapCache.status;
+    $scope.cacheOn = function () {
+        cacheLayer.cacheMetadata()
+            .then($scope.refresh)
+            .finally(function () {
+                $scope.expandedTours = [];
+            });
+    };
+    $scope.cacheOff = function () {
+        $ionicPopup.confirm({
+                title: "Turn caching off?",
+                template: "This will delete all of your cached data. You will have to download it again to use it.",
+                okType: 'button-balanced'
+            }).then(function (shouldDelete) {
+                if (shouldDelete) {
+                    //caching is being switched off, so collapse the menus
+                    $scope.settings.showLandmarks = false;
+                    $scope.settings.showTours = false;
+                    return cacheLayer.destroyCache().then(function () {
+                        $scope.landmarks = [];
+                        $scope.tours = [];
+                        $scope.expandedTours = [];
+                    });
+                }
+            });
+    };
+    $scope.cacheStatus = cacheLayer.status;
     $scope.expandedTours = [];
     $scope.$on('$ionicView.enter', function () {
         $scope.settings.cachingEnabled = cacheLayer.cachingEnabled();

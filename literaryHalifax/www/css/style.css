@@ -400,23 +400,10 @@ async-toggle {
     pointer-events: none;
 }
 
+/* Fix to avoid background color bleeding */
+/* (occurred on (at least) Android 4.2, Asus MeMO Pad HD7 ME173X) */
 .platform-android4_2 .async-toggle .track {
     -webkit-background-clip: padding-box;
-}
-
-@keyframes pulse-grey-balanced {
-    0% {
-        border-color: #e6e6e6;
-        background-color: #fff;
-    }
-    50% {
-        border-color: #33cd5f;
-        background-color: #33cd5f;
-    }
-    100% {
-        border-color: #e6e6e6;
-        background-color: #fff;
-    }
 }
 
 .async-toggle-on .track {
@@ -429,8 +416,6 @@ async-toggle {
     background-color: #99e6af;
 }
 
-/* Fix to avoid background color bleeding */
-/* (occurred on (at least) Android 4.2, Asus MeMO Pad HD7 ME173X) */
 
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
