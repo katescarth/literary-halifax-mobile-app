@@ -27,7 +27,7 @@
                             {{landmark.name}}
                         </div>
                     </div>
-                    <div class="list-item-subtitle" ng-attr-dotdotdot="{{showLandmark(landmark)}}" ng-bind-html="landmark.description"> </div>
+                    <div class="list-item-description" ng-attr-dotdotdot="{{showLandmark(landmark)}}" ng-bind-html="landmark.description"> </div>
                 </div>
                 <list-loader loading-msg="loadingMsg" error-msg="errorMessage" refresh="refresh"></list-loader>
                 <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="30%" immediate-check="false">

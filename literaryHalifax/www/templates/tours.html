@@ -11,13 +11,9 @@
                         <div class="list-item-distance" ng-if="displayDistance(tour)">
                             {{displayDistance(tour)}}km
                         </div>
-                        <div>
-                            {{tour.name}}
-                        </div>
+                        <div ng-bind-html="tour.name"></div>
                     </div>
-                    <div class="list-item-subtitle">
-                        {{tour.description}}
-                    </div>
+                    <div class="list-item-subtitle" ng-bind-html="tour.description"></div>
                 </div>
                 <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
                 <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="30%" immediate-check="false">

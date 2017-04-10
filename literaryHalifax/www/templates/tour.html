@@ -35,9 +35,7 @@
                     <div class="list-item-title">
                         {{$index + 1}}. {{landmark.name}}
                     </div>
-                    <div class="list-item-subtitle">
-                        {{landmark.description}}
-                    </div>
+                    <div class="list-item-subtitle" ng-bind-html="landmark.description"></div>
                 </div>
             </div>
         </div>

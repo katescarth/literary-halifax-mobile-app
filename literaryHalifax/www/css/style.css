@@ -77,34 +77,6 @@ ion-nav-view {
     background-color: transparent;
 }
 
-.leaflet-popup-content {
-    margin-left: 11px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    /* needs to be big enough to accomodate the X button*/
-    margin-right: 18px;
-    max-width: 215px;
-}
-
-.info-window {
-    max-width: 205px !important;
-    max-height: 100px;
-    align-content: center;
-    overflow: hidden;
-}
-
-.info-window h6 {
-    margin: 2px !important;
-}
-
-.info-window p {
-    margin: 2px !important;
-}
-
-.info-window-spinner {
-    align-self: center !important;
-}
-
 .media-button {
     font-size: 30px !important;
 }
@@ -206,10 +178,21 @@ ion-nav-view {
     white-space: nowrap;
 }
 
-.list-item-subtitle {
+.list-item-description {
     font-size: 10px;
     line-height: 13px;
     max-height: 44px;
+    margin-top: 3px;
+    color: #626262;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.list-item-subtitle {
+    font-size: 10px;
+    line-height: 13px;
+    max-height: 13px;
     margin-top: 3px;
     color: #626262;
     text-overflow: ellipsis;
