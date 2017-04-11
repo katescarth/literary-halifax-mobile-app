@@ -248,7 +248,7 @@ angular.module('literaryHalifax')
         function request(req) {
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
-            $log.info("making a request for " + req.url);
+            $log.info("making a request: " + angular.toJson(req.url));
             return init.then(function () {
                 var promise,
                     url = req.url,
