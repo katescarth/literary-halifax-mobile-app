@@ -176,7 +176,7 @@ angular.module('literaryHalifax')
         // This will still work if results from individual requests
         // are stored in the item cache, but it's a waste of space.
         function saveItemCache() {
-            var data = angular.toJson(itemCache);
+            var data = angular.toJson(itemCache);            
             status.cacheEnabled = true;
             return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
         }
@@ -230,6 +230,7 @@ angular.module('literaryHalifax')
         // into their own cache entries
         function expandIndex(itemType) {
             var index = itemCache[getRequest(itemType).url];
+            $log.info(getRequest(itemType).url);
             lodash.times(index.length, function (i) {
                 itemCache[index[i].url] = index[i];
             });
@@ -248,7 +249,7 @@ angular.module('literaryHalifax')
         function request(req) {
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
-            $log.info("making a request: " + angular.toJson(req.url));
+            $log.info("making a request: " + angular.toJson(req));
             return init.then(function () {
                 var promise,
                     url = req.url,
@@ -424,6 +425,8 @@ angular.module('literaryHalifax')
                     return recoverItemCache().then(expandIndices);
                 }, function (error) {
                     // no cache, that's fine
+//                    itemCache = fixtureCache;
+//                    status.cacheEnabled = true;
                     return $q.when();
                 }).then(function () {
                     if (!($cordovaNetwork.isOnline() || status.cacheEnabled)) {

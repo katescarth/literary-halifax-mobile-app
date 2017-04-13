@@ -3,7 +3,6 @@
 /*global ionic */
 angular.module('literaryHalifax')
     .factory('mapCache', function ($log, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPlatform, $q, lodash, server) {
-
         "use strict";
             // If true, do not display any tiles which aren't in the cache
         var strictMode = false,

@@ -9,8 +9,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // tracks the menu's location. CHANGING THIS VARIABLE DOES NOT
         // MOVE THE MENU
         menuPosition = -menuWidth,
-        // 60 fps
-        frameLength = 1000 / 60.0,
+        // 25 fps
+        frameLength = 1000 / 25.0,
         // a full open or close takes 250 seconds
         maxFrames = (250 / frameLength),
         // the interval promise which is currently animating the side menu
@@ -542,7 +542,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 marker.focus = false;
             }
         });
-        $scope.$root.$emit('truncate');
     };
     $scope.clearFilter = function () {
         $scope.filter.text = '';

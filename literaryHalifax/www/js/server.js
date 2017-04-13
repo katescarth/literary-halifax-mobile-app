@@ -268,7 +268,7 @@ angular.module('literaryHalifax')
 
             return $q.all(promises)
                 .then(function () {
-                    return $q.when(landmark);
+                    return landmark;
                 });
 
         }

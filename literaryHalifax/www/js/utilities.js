@@ -32,7 +32,7 @@ angular.module('literaryHalifax')
 
         // cordova diagnostics aren't working, so this is how we request location permissions.
         // concurrent requests are an issue, so wait until this one resolves before requesting
-        // actual permissions.
+        // actual locations.
         $ionicPlatform.ready(function () {
             navigator.geolocation.getCurrentPosition(
                 function (currentPosition) {
