@@ -8,7 +8,7 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
             // for form inputs)
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 /*global cordova */
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
                 cordova.plugins.Keyboard.disableScroll(true);
             }
             if (window.StatusBar) {

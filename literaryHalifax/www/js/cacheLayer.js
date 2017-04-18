@@ -419,7 +419,7 @@ angular.module('literaryHalifax')
             } else {
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
-
+            
             $cordovaFile.checkFile(rootDir, itemCacheFile)
                 .then(function (success) {
                     return recoverItemCache().then(expandIndices);
