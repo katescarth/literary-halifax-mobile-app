@@ -1,9 +1,11 @@
 <ion-view view-title="Tours">
     <ion-content>
         <div class="display-card">
-            <div class="item item-input filter-bar">
-                <input type="search" placeholder="Filter by title..." ng-model="filter.text">
-                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'" ng-click="filter.text=''"></i>
+            <div class="filter-area">
+                <div class="item item-input filter-bar">
+                    <input type="search" placeholder="Filter by title..." ng-model="filter.text">
+                    <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'" ng-click="filter.text=''"></i>
+                </div>
             </div>
             <div class="list">
                 <div class="list-item-div" ng-repeat="tour in tours" ng-click="go(tour)" ng-attr-shown-list-item-div="{{showTour(tour)||undefined}}">

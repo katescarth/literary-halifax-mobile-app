@@ -7,10 +7,14 @@ angular.module('literaryHalifax')
     .factory('localization', function () {
         "use strict";
         var strings = {
+                // If changing state names, you must change them in app.js as well.
                 stateNameLandmarks: "Landmarks",
                 stateNameTours: "Tours",
                 stateNameCacheControl: "Offline Options",
                 tagNameShowAll: "Show All",
+                tabNameDescription: "Description",
+                tabNameImages: "Images",
+                tabNameMap: "Map",
                 filterPromptLandmarks: "Filter by title...",
                 filterPromptTours: "Filter by title...",
                 explanationMapCache: "Preload map tiles to make them accessible while offline",
@@ -19,17 +23,21 @@ angular.module('literaryHalifax')
                 deleteWarningBodyItemCache: "This will delete all of your cached data. You will have to download it again to use it.",
                 warningPromptExitApp: "Leave App?",
                 loadMessageGettingLocation: "Getting your location...",
-                loadMessageGettingLandarks: "Getting landmarks...",
-                loadMessageGettingMoreLandarks: "Getting more landmarks...",
-                errorMessageGettingLandarks: "Something went wrong getting landmarks...",
+                loadMessageGettingLandmarks: "Getting landmarks...",
+                loadMessageGettingMoreLandmarks: "Getting more landmarks...",
+                errorMessageGettingLandmarks: "Something went wrong getting landmarks...",
                 loadMessageGettingTours: "Getting tours...",
                 loadMessageGettingMoreTours: "Getting more tours...",
-                errorMessageGettingTours: "Something went wrong getting tours...",
-                errorMessageGenericRequest: "Couldn't complete the request."
+                errorMessageGettingTours: "Something went wrong getting tours",
+                errorMessageGenericRequest: "Couldn't complete the request.",
+                errorMessageUnkownType: "Unknown item type",
+                errorMessageTimeout: "Timed out",
+                errorMessageNoNavigator: "No navigator",
                 distanceUnitAbbreviation: "km"
             },
             numbers = {
-                distancePerLatitudeLine: 111.1
+                distancePerLatitudeLine: 111.1,
+                maxZoom: 16
             },
             resources = {
                 serverAddress: "http://206.167.183.207/",
@@ -47,4 +55,10 @@ angular.module('literaryHalifax')
                 contactInfoInstagram: "https://www.instagram.com/halifaxliterarylandmarks/"
             };
         
+        return {
+            strings: strings,
+            numbers: numbers,
+            resources: resources
+        };
+    
     });

@@ -5,7 +5,7 @@
             <img ng-src="{{landmark.images[0].full}}" width="100%" />
         </ion-content>
         <ion-tabs class="tabs-balanced tabs-icon-top" delegate-handle="landmark-tabs-delegate">
-            <ion-tab title="Description" icon="ion-android-list" disabled="loadingMsg">
+            <ion-tab title="{{strings.tabNameDescription}}" icon="ion-android-list" disabled="loadingMsg">
                 <overscroll-pane>
                     <!--              This is the default tab, so we put the loading message here.-->
                     <div class="display-card" ng-if="loadingMsg||errorMsg">
@@ -29,7 +29,7 @@
                     </div>
                 </overscroll-pane>
             </ion-tab>
-            <ion-tab title="Images" icon="ion-android-image" disabled="loadingMsg||errorMsg">
+            <ion-tab title="{{strings.tabNameImages}}" icon="ion-android-image" disabled="loadingMsg||errorMsg">
                 <overscroll-pane>
                     <div class="display-card" ng-show="!loadingMsg">
                         <div class="row" ng-repeat="image in landmark.images" ng-if="$index % 3 === 0">

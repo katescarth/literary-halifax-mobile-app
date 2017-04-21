@@ -6,7 +6,7 @@ angular.module('literaryHalifax')
  *
  *
  */
-    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup, $log, utils) {
+    .factory('cacheLayer', function ($q, $http, lodash, $ionicPlatform, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPopup, $log, utils, localization) {
         "use strict";
         // when this promise resolves, the cache layer is ready to handle requests
         var initDeferred = $q.defer(),
@@ -22,8 +22,8 @@ angular.module('literaryHalifax')
             // filename of the JSON dump of the item cache
             itemCacheFile = '',
         // remote locations of files and items
-            api = "http://206.167.183.207/api/",
-            files = "http://206.167.183.207/files/",
+            api = localization.resources.serverAddress + "api/",
+            files = localization.resources.serverAddress + "files/",
         // Expose functionality by adding it to this object
             status = {
                     // is the cache currently working
@@ -385,7 +385,7 @@ angular.module('literaryHalifax')
                     .then(function (result) {
                         return result;
                     }, function (error) {
-                        return $q.reject('Couldn\'t complete the request');
+                        return $q.reject(localization.strings.errorMessageGenericRequest);
                     });
             }
             return promise.then(decorate);

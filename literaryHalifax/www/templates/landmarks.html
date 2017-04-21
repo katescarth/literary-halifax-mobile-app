@@ -18,7 +18,7 @@
                             <select ng-model="filter.tag" ng-change="applyFilter()">
                                 <option ng-repeat="tag in tags">{{tag}}</option>
                             </select>
-                            <i class="icon ion-pricetag" ng-class="(filter.tag==='Show all')?'disabled-grey':'enabled-black'"></i>
+                            <i class="icon ion-pricetag" ng-class="(filter.tag===strings.tagNameShowAll)?'disabled-grey':'enabled-black'"></i>
                         </div>
                     </td>    
                 </tr></table>
@@ -28,7 +28,7 @@
                     <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
                     <div>
                         <div class="list-item-distance" ng-if="displayDistance(landmark)">
-                            {{displayDistance(landmark)}}km
+                            {{displayDistance(landmark) + strings.distanceUnitAbbreviation}}
                         </div>
                         <div class="list-item-title">
                             {{landmark.name}}

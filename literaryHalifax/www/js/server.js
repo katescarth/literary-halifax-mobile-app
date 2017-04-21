@@ -131,7 +131,7 @@ angular.module('literaryHalifax')
  * getTours(): resolves to a list of all tours on the server
  * tourInfo(id): resolves to an object representing the tour with the given id
  */
-    .factory('server', function ($timeout, $q, $log, cacheLayer, utils, lodash, $ionicPlatform) {
+    .factory('server', function ($timeout, $q, $log, cacheLayer, utils, lodash, $ionicPlatform, localization) {
         "use strict";
         var SMALL_DELAY = 400,
             LARGE_DELAY = 2000,
@@ -315,7 +315,7 @@ angular.module('literaryHalifax')
             } else if (itemType === 'files') {
                 return convertFile(serverRecord);
             } else {
-                return $q.reject("unknown item type: " + itemType);
+                return $q.reject(localization.strings.errorMessageUnkownType + ": " + itemType);
             }
         }
 

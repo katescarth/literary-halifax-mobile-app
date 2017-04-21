@@ -4,7 +4,7 @@ angular.module('literaryHalifax')
     /*
      * This file is a dumping ground for reused code.
      */
-    .factory('utils', function ($q, $ionicPlatform, $timeout, $log) {
+    .factory('utils', function ($q, $ionicPlatform, $timeout, $log, localization) {
 
         "use strict";
         var utils = {},
@@ -24,7 +24,7 @@ angular.module('literaryHalifax')
                 }
             );
             $timeout(millis).then(function () {
-                deferred.reject('timed out!');
+                deferred.reject(localization.strings.errorMessageTimeout);
             });
             return deferred.promise;
         }
@@ -106,7 +106,7 @@ angular.module('literaryHalifax')
                             deferred.reject(error);
                         });
             } else {
-                deferred.reject("No navigator!");
+                deferred.reject(localization.strings.errorMessageNoNavigator);
             }
             return deferred.promise;
         };

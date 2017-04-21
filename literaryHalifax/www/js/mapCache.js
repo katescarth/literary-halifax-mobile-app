@@ -2,7 +2,7 @@
 /*global cordova */
 /*global ionic */
 angular.module('literaryHalifax')
-    .factory('mapCache', function ($log, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPlatform, $q, lodash, server) {
+    .factory('mapCache', function ($log, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPlatform, $q, lodash, server, localization) {
         "use strict";
             // If true, do not display any tiles which aren't in the cache
         var strictMode = false,
@@ -98,14 +98,15 @@ angular.module('literaryHalifax')
                 subdomain = 'c';
             }
             
-            url = 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + terminator;
+            url = localization.resources.urlForTile
+            (x, y, zoom, subdomain);
             
             // run this in a web worker
             
             return $cordovaFileTransfer
                 .download(url, rootDir + '/' + key,
                     {
-                        Referer: "http://206.167.183.207"
+                        Referer: localization.resources.serverAddress
                     }
                 )
                 .then(function () {
@@ -271,7 +272,7 @@ angular.module('literaryHalifax')
                 // the promises for each layer of zoom
                 layerPromises = [],
                 // the highest zoom level to be cached
-                maxZoom = 16;
+                maxZoom = localization.numbers.maxZoom;
 //          parse locations into a convex hull, then split the hull into its left and right sides
 //          All segments  point from the top down.
             
@@ -388,7 +389,7 @@ angular.module('literaryHalifax')
                         } else if (strictMode || !$cordovaNetwork.isOnline()) {
                             return "img/offline-map-tile.png";
                         } else {
-                            return 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + '.png';
+                            return localization.resources.urlForTile(x, y, zoom, subdomain);
                         }
                     });
             },

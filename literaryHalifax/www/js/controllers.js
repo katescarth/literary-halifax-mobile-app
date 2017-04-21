@@ -1,6 +1,6 @@
 /*global angular */
 /*global ionic */
-angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, leafletData, server, lodash) {
+angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, leafletData, server, lodash, localization) {
     // items for the side menu
     "use strict";
     var menuWidth = 275,
@@ -29,17 +29,17 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         mediaController,
         staticItems = [
             {
-                displayName: 'Landmarks',
+                displayName: localization.strings.stateNameLandmarks,
                 onClick: function () {
                     $state.go('app.landmarks');
                 }
             }, {
-                displayName: 'Tours',
+                displayName:localization.strings.stateNameTours,
                 onClick: function () {
                     $state.go('app.tours');
                 }
             }, {
-                displayName: 'Offline Options',
+                displayName: localization.strings.stateNameCacheControl,
                 onClick: function () {
                     $state.go('app.cacheControl');
                 }
@@ -109,19 +109,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     
     $scope.facebook = function () {
-        window.open("https://www.facebook.com/halifaxliterarylandmarks");
+        window.open(localization.resources.contactInfoFacebook);
     };
     
     $scope.twitter = function () {
-        window.open("https://twitter.com/halifaxliterary");
+        window.open(localization.resources.contactInfoTwitter);
     };
     
     $scope.instagram = function () {
-        window.open("https://www.instagram.com/halifaxliterarylandmarks/");
+        window.open(localization.resources.contactInfoInstagram);
     };
     
     $scope.mail = function () {
-        window.open("mailto:halifaxliterarylandmarks@gmail.com");
+        window.open("mailto:" + localization.resources.contactInfoEmail);
     };
     
     // handle a gesture (the user dragging the menu to the left or right)
@@ -187,7 +187,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //default state, there's no statechange to
     //the first state. Hacky
     $scope.menuMode = true;
-    $scope.navBarTitle = "Landmarks";
+    $scope.navBarTitle = localization.strings.stateNameLandmarks;
         // take control of the PHYSICAL back button on android
         // when it tries to navigate back
         // (not when it closes popups, etc.)
@@ -196,7 +196,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             closeMenu();
         } else if ($scope.menuMode) {
             $ionicPopup.confirm({
-                title: 'Leave app?',
+                title: localization.strings.warningPromptExitApp,
                 template: '',
                 okType: 'button-balanced'
             }).then(function (shouldLeave) {
@@ -253,13 +253,13 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $ionicPlatform.ready(function () {
         $scope.refresh();
     });
-}).controller('cacheCtrl', function ($scope, server, cacheLayer, mapCache, $timeout, $q, $ionicPopup, lodash, $log) {
+}).controller('cacheCtrl', function ($scope, server, cacheLayer, mapCache, $timeout, $q, $ionicPopup, lodash, $log, localization) {
     "use strict";
     $scope.settings = {
         showTours: false,
         showLandmarks: false
     };
-    
+    $scope.strings = localization.strings;
     $scope.mapCacheOn = mapCache.createCache;
     $scope.mapCacheOff = mapCache.destroyCache;
     $scope.mapCacheStatus = mapCache.status;
@@ -272,8 +272,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.cacheOff = function () {
         $ionicPopup.confirm({
-                title: "Turn caching off?",
-                template: "This will delete all of your cached data. You will have to download it again to use it.",
+                title: localization.strings.deleteWarningTitleItemCache,
+                template: localization.strings.deleteWarningBodyItemCache,
                 okType: 'button-balanced'
             }).then(function (shouldDelete) {
                 if (shouldDelete) {
@@ -371,16 +371,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
-}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams, $log) {
+}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams, $log, localization) {
     // number of items to show in the list. Increased as user scrolls down
     "use strict";
     // the map. Needed this so we can invalidate its size if it gets in a bad state.
     var map,
         // the user's location
         location,
-        ALL_TAGS = 'Show all',
+        ALL_TAGS = localization.strings.tagNameShowAll,
         pageSize,
         currentPage;
+    
+    $scope.strings = localization.strings;
+    
     leafletData.getMap().then(function (result) {
         map = result;
     }, function (error) {
@@ -430,7 +433,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     $scope.getNextPage = function () {
         
-        $scope.loadingMsg = "Getting more Landmarks...";
+        $scope.loadingMsg = localization.strings.loadMessageGettingLandmarks;
         server.getLandmarks(location, currentPage + 1, pageSize)
             .then(function (newLandmarks) {
                 if (newLandmarks.length) {
@@ -464,7 +467,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.landmarks = [];
         $scope.markers = [];
         $scope.errorMessage = '';
-        $scope.loadingMsg = 'Getting your location...';
+        $scope.loadingMsg = localization.strings.loadMessageGettingLocation;
         $scope.hasNextPage = true;
         currentPage = 0;
         pageSize = 0;
@@ -475,12 +478,12 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             timeout: 5000,
             enableHighAccuracy: true
         }).then(function (result) {
-            $scope.loadingMsg = 'Getting Landmarks...';
+            $scope.loadingMsg = localization.strings.loadMessageGettingLandmarks;
             location = result;
             return server.getLandmarks(location);
         }, function (error) {
             //if we can't get the position, just carry on without it.
-            $scope.loadingMsg = 'Getting Landmarks...';
+            $scope.loadingMsg =  localization.strings.loadMessageGettingLandmarks;
             return server.getLandmarks();
         }).then(function (result) {
             $scope.landmarks = result;
@@ -501,11 +504,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
         //     What will they want to see? Where they are, or where the landmarks are?
-    $scope.mapInfo = {
-        lat: 44.6474,
-        lng: -63.5806,
-        zoom: 15
-    };
+    $scope.mapInfo = localization.resources.defaultLocation;
     
     // list of tags which can be selected from
     $scope.tags = [ALL_TAGS];
@@ -553,7 +552,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             landmarkID: landmark.id
         });
     };
-}).controller('toursCtrl', function ($scope, $state, $q, $log, server, utils, lodash) {
+}).controller('toursCtrl', function ($scope, $state, $q, $log, server, utils, lodash, localization) {
     "use strict";
     var location,
         pageSize,
@@ -569,7 +568,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         } else {
             promise = server.getTours(currentPage + 1, pageSize);
         }
-        $scope.loadingMsg = "Getting more Tours...";
+        $scope.loadingMsg = localization.strings.loadMessageGettingMoreTours;
         promise.then(function (newTours) {
             if (newTours.length) {
                 lodash.forEach(newTours, function (newTour) {
@@ -592,7 +591,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.refresh = function () {
         location = undefined;
         $scope.tours = [];
-        $scope.loadingMsg = 'getting your location...';
+        $scope.loadingMsg = localization.strings.loadMessageGettingLocation;
         $scope.errorMsg = '';
         currentPage = 0;
         pageSize = 0;
@@ -603,11 +602,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             enableHighAccuracy: true
         }).then(function (result) {
             location = result;
-            $scope.loadingMsg = 'getting tours...';
+            $scope.loadingMsg = localization.strings.loadMessageGettingTours;
             return server.getTours(location);
         }, function (error) {
             $log.warn("getPosition failed - retrieving tours anyway");
-            $scope.loadingMsg = 'getting tours...';
+            $scope.loadingMsg =  localization.strings.loadMessageGettingTours;
             return server.getTours();
         }).then(function (result) {
             
@@ -648,9 +647,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if (!$scope.filter.text) {
             return true;
         }
+        $log.info($scope.filter.text);
+        $log.info(tour.name.toLowerCase());
         return tour.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
     };
-}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate) {
+}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization) {
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
     "use strict";
@@ -658,6 +659,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         marker = {};
     // description tab
     // expose the track name to the view
+    $scope.strings = localization.strings;
     $scope.media = mediaPlayer;
     $scope.playAudio = function () {
         mediaPlayer.setTrack($scope.landmark.audio, $scope.landmark.name);
@@ -713,11 +715,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     // Map tab
     $scope.markers = [marker];
-    $scope.mapInfo = {
-        lat: 0,
-        lng: 0,
-        zoom: 13
-    };
+    $scope.mapInfo = localization.resources.defaultLocation;
     function updateMarker() {
         if (!marker.lat) {
             // we are generating the marker for the first time
@@ -742,7 +740,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $scope.mapInfo.lng = marker.lng;
     }
     $scope.refresh = function () {
-        $scope.loadingMsg = 'Getting landmark info...';
+        $scope.loadingMsg = localization.strings.loadMessageGettingLandmarks;
         $scope.errorMsg = '';
         server.landmarkInfo($stateParams.landmarkID)
             .then(function (landmark) {
@@ -758,7 +756,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.refresh();
     $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
-}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash) {
+}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization) {
     "use strict";
     function iconFor(index) {
         var icon = {
@@ -779,11 +777,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         angular.extend($scope.markers[index].icon, iconFor(index));
     }
     $scope.markers = [];
-    $scope.mapInfo = {
-        lat: 44.6474,
-        lng: -63.5806,
-        zoom: 15
-    };
+    $scope.mapInfo = localization.resources.defaultLocation;
     // index of the current landmark (the one user will visit next)
     $scope.currentLandmark = 0;
     // utility method for going to a landmark and moving the position in 
@@ -827,7 +821,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         server.tourInfo($stateParams.tourID).then(function (tour) {
             //TODO pan to the start of the tour
             $scope.tour = tour;
-            $scope.loadingMsg = 'Getting landmarks';
+            $scope.loadingMsg = localization.strings.loadMessageGettingLandmarks;
             $scope.errorMsg = '';
             var promises = [];
             lodash.times($scope.tour.landmarks.length, function (index) {
