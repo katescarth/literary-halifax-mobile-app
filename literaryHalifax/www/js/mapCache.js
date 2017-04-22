@@ -1,6 +1,7 @@
 /*global angular */
 /*global cordova */
 /*global ionic */
+/*global window */
 angular.module('literaryHalifax')
     .factory('mapCache', function ($log, $cordovaFileTransfer, $cordovaFile, $cordovaNetwork, $ionicPlatform, $q, lodash, server, localization) {
         "use strict";
@@ -69,6 +70,11 @@ angular.module('literaryHalifax')
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
             status.working = true;
+            if (!rootDir) {
+                initDeferred.resolve();
+                status.working = false;
+                return;
+            }
             // recover the cache if it exists
             $cordovaFile.checkFile(rootDir, filename)
                 // if the file doesn't exist, just resolve

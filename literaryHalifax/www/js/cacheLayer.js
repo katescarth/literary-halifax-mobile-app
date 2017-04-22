@@ -119,20 +119,23 @@ angular.module('literaryHalifax')
                 lodash.forOwn(raw.file_urls, function (value, key) {
                     if (value) {
                         var newUrl = hash(value);
-                        promises.push(
-                            // check if the file is cached
-                            $cordovaFile.checkFile(rootDir, newUrl)
-                                .then(function () {
-                                    // if it is cached, replace the url
-                                    raw.file_urls[key] = rootDir + '/' + newUrl;
-                                    return rootDir + '/' + newUrl;
-                                }).catch(function () {
-                                    // otherwise, use the real url
-                                    // TODO: if we implement airplane mode, replace it with
-                                    // a placeholder image instead
-                                    return value;
-                                })
-                        );
+                        // if rootDir is undefined, there is no possibility of a cached file
+                        if (rootDir) {
+                            promises.push(
+                                // check if the file is cached
+                                $cordovaFile.checkFile(rootDir, newUrl)
+                                    .then(function () {
+                                        // if it is cached, replace the url
+                                        raw.file_urls[key] = rootDir + '/' + newUrl;
+                                        return rootDir + '/' + newUrl;
+                                    }).catch(function () {
+                                        // otherwise, use the real url
+                                        // TODO: if we implement airplane mode, replace it with
+                                        // a placeholder image instead
+                                        return value;
+                                    })
+                            );
+                        }
                     }
                 });
                 
@@ -418,6 +421,14 @@ angular.module('literaryHalifax')
                 rootDir = cordova.file.dataDirectory;
             } else {
                 $log.error("Cordova is not defined. Are you on a mobile device?");
+            }
+            
+            
+            
+            if(!rootDir){
+                initDeferred.resolve();
+                status.working = false;
+                return;
             }
             
             $cordovaFile.checkFile(rootDir, itemCacheFile)

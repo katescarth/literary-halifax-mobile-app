@@ -159,7 +159,7 @@ ion-nav-view {
 }
 
 .filter-area {
-    display: grid;
+    display:flex;
 }
 
 .filter-area td {
