@@ -1,5 +1,11 @@
+var MEDIA_NONE = 0,
+    MEDIA_STARTING = 1,
+    MEDIA_RUNNING = 2,
+    MEDIA_PAUSED = 3,
+    MEDIA_STOPPED = 4;
+
 /*global angular */
-/*global Media */
+/*global ionic */
 angular.module('literaryHalifax')
 
     /*
@@ -8,31 +14,40 @@ angular.module('literaryHalifax')
      * the player exposes the variables isPlaying, hasTrack, progress, and title for fast binding
      *
      */
-    .factory('mediaPlayer', function ($timeout, $interval) {
+    .factory('mediaPlayer', function ($timeout, $interval, $cordovaMedia, $ionicPlatform, $log, $q) {
         "use strict";
         var player,
             media,
             track;
 
-        function statusManager(status) {
-            if (status === Media.MEDIA_RUNNING) {
+        function statusManager(statusObj) {
+            if (statusObj.status === MEDIA_RUNNING) {
                 player.isPlaying = true;
                 player.hasTrack = true;
 
-            } else if (status === Media.MEDIA_PAUSED) {
+            } else if (statusObj.status === MEDIA_PAUSED) {
                 player.isPlaying = false;
                 player.hasTrack = true;
 
-            } else if (status === Media.MEDIA_STOPPED) {
+            } else if (statusObj.status === MEDIA_STOPPED) {
                 player.isPlaying = false;
                 player.hasTrack = false;
-            }
+            } 
         }
 
         //plays the currently selected track
         function play() {
+            var promise;
             if (media) {
-                media.play();//TODO add iOS options
+                if (ionic.Platform.isIOS()) {
+                    promise = media.play({
+                        numberOfLoops: 1,
+                        playAudioWhenScreenIsLocked : true
+                    });
+                } else {
+                    promise = media.play();
+                }
+                promise.then(null, null, statusManager);
             }
         }
         //pauses the currently playing track (which can be resumed using play())
@@ -59,20 +74,24 @@ angular.module('literaryHalifax')
             player.title = title;
             track = src;
             player.hasTrack = true;
-            media = new Media(src, function () {}, function () {}, statusManager);
+            media = $cordovaMedia.newMedia(src);
         }
         //scans to a particular location (between 0 and 1)
         function scan(position) {
+            $log.info("position: " + position);
             if (position === 0) {
                 if (player.isPlaying) {
-                    player.setTrack(track, player.title);
-                    player.play();
+                    setTrack(track, player.title);
+                    // need to timeout so that the play status registers after the pause/stop
+                    $timeout(play);
                 } else {
-                    player.setTrack(track, player.title);
+                    setTrack(track, player.title);
                 }
             } else {
                 if (media) {
-                    media.seekTo(media.getDuration() * position * 1000);
+                    media.getDuration().then(function (duration) {
+                        media.seekTo(duration * position * 1000);
+                    });
                 }
             }
             player.progress = position;
@@ -93,8 +112,13 @@ angular.module('literaryHalifax')
         // keep the progress variable updated
         $interval(function () {
             if (media) {
-                media.getCurrentPosition(function (pos) {
-                    player.progress = pos / media.getDuration();
+                $q.all([
+                    media.getDuration(),
+                    media.currentTime()
+                ]).then(function (result) {
+                    player.progress = result[1] / result[0];
+                }, function (error) {
+                    $log.info(angular.toJson(error));
                 });
             }
         }, 300);
