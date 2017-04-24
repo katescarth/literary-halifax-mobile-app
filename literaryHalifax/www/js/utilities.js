@@ -77,8 +77,9 @@ angular.module('literaryHalifax')
             }
             
             var scale = Math.cos((180 / Math.PI) * (from.lat + to.lat) / 2),
-                squarekms = Math.pow((from.lat - to.lat) * 111.1, 2) + Math.pow((from.lng - to.lng) * 111.1 * scale, 2);
-            return Math.sqrt(squarekms);
+                dXSquared = Math.pow((from.lat - to.lat) * localization.numbers.distancePerLatitudeLine, 2),
+                dYSquared = Math.pow((from.lng - to.lng) * localization.numbers.distancePerLatitudeLine * scale, 2);
+            return Math.sqrt(dXSquared + dYSquared);
         };
 
         // returns a promise which resolves to a lat/lng object

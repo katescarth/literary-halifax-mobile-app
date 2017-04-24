@@ -43,10 +43,11 @@ async-toggle {
 }
 
 .async-toggle-on .track {
-    border-color: #33cd5f;
-    background-color: #33cd5f;
+    border-color: var(--app-colour);
+    background-color: var(--app-colour);
 }
 
+/*Halfway points between on and off colours. Can't find a way to calculate this in css*/
 .async-toggle-working .track {
     border-color: #8ddaa3;
     background-color: #99e6af;

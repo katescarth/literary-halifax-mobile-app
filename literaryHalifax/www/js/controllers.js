@@ -198,7 +198,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $ionicPopup.confirm({
                 title: localization.strings.warningPromptExitApp,
                 template: '',
-                okType: 'button-balanced'
+                okType: 'button-app-colour'
             }).then(function (shouldLeave) {
                 if (shouldLeave) {
                     ionic.Platform.exitApp();
@@ -274,7 +274,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $ionicPopup.confirm({
                 title: localization.strings.deleteWarningTitleItemCache,
                 template: localization.strings.deleteWarningBodyItemCache,
-                okType: 'button-balanced'
+                okType: 'button-app-colour'
             }).then(function (shouldDelete) {
                 if (shouldDelete) {
                     //caching is being switched off, so collapse the menus
@@ -433,7 +433,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     $scope.getNextPage = function () {
         
-        $scope.loadingMsg = localization.strings.loadMessageGettingLandmarks;
+        $scope.loadingMsg = localization.strings.loadMessageGettingMoreLandmarks;
         server.getLandmarks(location, currentPage + 1, pageSize)
             .then(function (newLandmarks) {
                 if (newLandmarks.length) {

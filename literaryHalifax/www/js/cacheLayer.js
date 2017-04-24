@@ -444,7 +444,7 @@ angular.module('literaryHalifax')
                         $ionicPopup.alert({
                             title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',
-                            okType : 'button-balanced'
+                            okType : 'button-app-colour'
                         }).finally(function () {
                             initDeferred.resolve();
                         });

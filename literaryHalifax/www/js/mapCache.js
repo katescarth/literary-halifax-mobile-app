@@ -104,8 +104,7 @@ angular.module('literaryHalifax')
                 subdomain = 'c';
             }
             
-            url = localization.resources.urlForTile
-            (x, y, zoom, subdomain);
+            url = localization.resources.urlForTile(x, y, zoom, subdomain);
             
             // run this in a web worker
             

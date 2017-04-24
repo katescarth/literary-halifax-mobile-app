@@ -4,7 +4,7 @@
         <ion-content class="has-header has-tabs-top">
             <img ng-src="{{landmark.images[0].full}}" width="100%" />
         </ion-content>
-        <ion-tabs class="tabs-balanced tabs-icon-top" delegate-handle="landmark-tabs-delegate">
+        <ion-tabs class="tabs-app-colour tabs-icon-top" delegate-handle="landmark-tabs-delegate">
             <ion-tab title="{{strings.tabNameDescription}}" icon="ion-android-list" disabled="loadingMsg">
                 <overscroll-pane>
                     <!--              This is the default tab, so we put the loading message here.-->
@@ -46,7 +46,7 @@
                     </div>
                 </overscroll-pane>
             </ion-tab>
-            <ion-tab title="Map" icon="ion-android-pin" disabled="loadingMsg||errorMsg">
+            <ion-tab title="{{strings.tabNameMap}}" icon="ion-android-pin" disabled="loadingMsg||errorMsg">
                 <overscroll-pane>
                     <div class="display-card" ng-show="!loadingMsg">
                         <marker-map map-info="mapInfo" map-markers="markers"> </marker-map>
