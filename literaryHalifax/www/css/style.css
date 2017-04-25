@@ -270,19 +270,14 @@ ion-nav-view {
     line-height: 250%;
 }
 
-:root {
-    --app-colour: #33cd5f;
-    --app-colour-secondary: #28a54c;
-}
-
 
 .button.button-app-colour {
     border-color: transparent;
-    background-color: var(--app-colour);
-    color: #fff;
+    background-color: var(--app-colour-primary);
+    color: var(--app-colour-text-contrast);
 }
 .button.button-app-colour:hover {
-      color: #fff;
+      color: var(--app-colour-text-contrast);
       text-decoration: none;
 }
 .button.button-app-colour.active, .button.button-app-colour.activated {
@@ -293,64 +288,65 @@ ion-nav-view {
       border-color: transparent;
       background: none;
       box-shadow: none;
-      color: var(--app-colour);
+      color: var(--app-colour-primary);
 }
 .button.button-app-colour.button-icon {
       border-color: transparent;
       background: none;
 }
 .button.button-app-colour.button-outline {
-      border-color: var(--app-colour);
+      border-color: var(--app-colour-primary);
       background: transparent;
-      color: var(--app-colour);
+      color: var(--app-colour-primary);
 }
 .button.button-app-colour.button-outline.active, .button.button-app-colour.button-outline.activated {
-    background-color: var(--app-colour);
+    background-color: var(--app-colour-primary);
     box-shadow: none;
-    color: #fff;
+    color: var(--app-colour-text-contrast);
 }
 
 .tabs-app-colour > .tabs, .tabs.tabs-app-colour {
     border-color: var(--app-colour-secondary);
-    background-color: var(--app-colour);
+    background-color: var(--app-colour-primary);
     background-image: linear-gradient(0deg, var(--app-colour-secondary), var(--app-colour-secondary) 50%, transparent 50%);
-    color: #fff;
+    color: var(--app-colour-text-contrast);
 }
 .tabs-app-colour > .tabs .tab-item .badge, .tabs.tabs-app-colour .tab-item .badge {
-    background-color: #fff;
-    color: var(--app-colour);
+    background-color: var(--app-colour-text-contrast);
+    color: var(--app-colour-secondary);
 }
 .tabs-striped.tabs-app-colour .tab-item {
-    color: rgba(255, 255, 255, 0.4);
-    opacity: 1;
+    color: var(--app-color-text-contrast);
+    opacity: 0.8;
 }
 .tabs-striped.tabs-app-colour .tab-item .badge {
-    opacity: 0.4;
+    opacity: 0.8;
 }
 .tabs-striped.tabs-app-colour .tab-item.tab-item-active, .tabs-striped.tabs-app-colour .tab-item.active, .tabs-striped.tabs-app-colour .tab-item.activated {
     margin-top: -2px;
-    color: #fff;
+    color: var(--app-colour-text-contrast);
     border-style: solid;
     border-width: 2px 0 0 0;
     border-color: #fff;
+    opacity: 1;
 }
 
 
   .spinner.spinner-app-colour {
-    stroke: var(--app-colour);
-    fill: var(--app-colour);
+    stroke: var(--app-colour-primary);
+    fill: var(--app-colour-primary);
 }
 
 .spinner-spiral.spinner-app-colour .stop2 {
-    stop-color: var(--app-colour);
+    stop-color: var(--app-colour-primary);
 }
 
 .bar-app-colour .button {
   border-color: var(--app-colour-secondary);
-  background-color: var(--app-colour);
-  color: #fff; }
+  background-color: var(--app-colour-primary);
+  color: var(--app-colour-text-contrast); }
   .bar-app-colour .button:hover {
-    color: #fff;
+    color: var(--app-colour-text-contrast);
     text-decoration: none; }
   .bar-app-colour .button.active, .bar-app-colour .button.activated {
     border-color: var(--app-colour-secondary);
@@ -359,7 +355,7 @@ ion-nav-view {
     border-color: transparent;
     background: none;
     box-shadow: none;
-    color: #fff;
+    color: var(--app-colour-text-contrast);
     font-size: 17px; }
   .bar-app-colour .button.button-icon {
     border-color: transparent;
@@ -370,9 +366,9 @@ ion-nav-view {
 
   .bar.bar-app-colour {
     border-color: var(--app-colour-secondary);
-    background-color: var(--app-colour);
+    background-color: var(--app-colour-primary);
     background-image: linear-gradient(0deg, var(--app-colour-secondary), var(--app-colour-secondary) 50%, transparent 50%);
-    color: #fff; }
+    color: var(--app-colour-text-contrast); }
 
     .bar.bar-app-colour .title {
-      color: #fff; }
+      color: var(--app-colour-text-contrast); }

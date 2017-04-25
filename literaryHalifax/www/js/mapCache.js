@@ -391,7 +391,7 @@ angular.module('literaryHalifax')
                     .then(function () {
                         if (cache[hash(x, y, zoom)]) {
                             return cache[hash(x, y, zoom)];
-                        } else if (strictMode || !$cordovaNetwork.isOnline()) {
+                        } else if (strictMode || (navigator.connection && !$cordovaNetwork.isOnline())) {
                             return "img/offline-map-tile.png";
                         } else {
                             return localization.resources.urlForTile(x, y, zoom, subdomain);

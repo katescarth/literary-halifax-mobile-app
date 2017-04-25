@@ -13,7 +13,7 @@
 }
 
 .green-bar {
-    background-color: #28a54c !important;
+    background-color: var(--app-colour-secondary) !important;
 }
 
 .side-menu {
@@ -44,7 +44,7 @@
     /*    I don't know why 40px works. Maybe a margin thing?*/
     bottom: 40px;
     width: 100%;
-    background-color: #28a54c;
+    background-color: var(--app-colour-secondary);
 }
 
 .platform-ios .side-menu-footer {
@@ -56,24 +56,24 @@
     height: 100%;
     width: 25%;
     text-align: center;
-    color: white;
+    color: var(--app-colour-text-contrast);
     float: left;
 }
 
 .tab-item {
     border-width: 0 !important;
-    background-color: #45b667 !important;
+    background-color: var(--app-colour-primary) !important;
     opacity: 1;
 }
 
 .tabs-striped.tabs-app-colour .tabs {
     border-width: 0 !important;
-    background-color: #45b667 !important;
+    background-color: var(--app-colour-primary) !important;
 }
 
 .tab-item.tab-item-active {
     margin-top: 0 !important;
-    background-color: #28a54c !important;
+    background-color: var(--app-colour-secondary) !important;
 }
 
 .tabs-loading {

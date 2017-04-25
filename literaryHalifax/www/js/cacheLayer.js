@@ -35,16 +35,6 @@ angular.module('literaryHalifax')
             };
 
 
-        $ionicPlatform.ready(function () {
-            if (typeof cordova === 'undefined') {
-                // David's ionic serve address
-                // Copy pasted from server.js
-                // Gods of development forgive me
-                api = "http://192.168.2.12:8100/api/";
-                files = "http://192.168.2.12:8100/files/";
-            }
-        });
-
         // convert a url into a filename
         function hash(url) {
             var urlParts = url.split("/"),
@@ -287,6 +277,9 @@ angular.module('literaryHalifax')
 
         // download the given resource and cache it
         layer.cacheUrl = function (url) {
+            if(!rootDir) {
+                return $q.reject("cordova file plugin unavailable.");
+            }
             if (!url) {
                 $log.warn('Tried to cache a non-existent url');
                 return $q.when(url);
@@ -335,9 +328,6 @@ angular.module('literaryHalifax')
                         isCachedUrl(imageObj.thumb);
                 });
         };
-
-
-
 
         // delete every cached file, then delete the item cache
         layer.destroyCache = function () {
@@ -396,6 +386,9 @@ angular.module('literaryHalifax')
 
 
         layer.cacheMetadata = function () {
+            if(!rootDir) {
+                return $q.reject("cordova file plugin unavailable.");
+            }
             status.working = true;
             return $q.all(
                 [
@@ -419,12 +412,14 @@ angular.module('literaryHalifax')
 
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
+                
             } else {
+                api = "http://192.168.2.12:8100/api/";
+                files = "http://192.168.2.12:8100/files/";
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
             
-            
-            
+            //we are in ionic view, so there is cordova but no cordova file            
             if(!rootDir){
                 initDeferred.resolve();
                 status.working = false;
@@ -436,11 +431,10 @@ angular.module('literaryHalifax')
                     return recoverItemCache().then(expandIndices);
                 }, function (error) {
                     // no cache, that's fine
-//                    itemCache = fixtureCache;
-//                    status.cacheEnabled = true;
                     return $q.when();
-                }).then(function () {
-                    if (!($cordovaNetwork.isOnline() || status.cacheEnabled)) {
+                })
+                .then(function () {
+                    if (navigator.connection && !($cordovaNetwork.isOnline() || status.cacheEnabled)) {
                         $ionicPopup.alert({
                             title : 'No connection',
                             template : 'Until you connect to the internet, no content will be available.',

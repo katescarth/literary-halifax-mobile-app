@@ -558,7 +558,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         pageSize,
         currentPage;
     
-    
+    $scope.strings = localization.strings;
     
     
     $scope.getNextPage = function () {
