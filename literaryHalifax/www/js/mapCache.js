@@ -67,6 +67,7 @@ angular.module('literaryHalifax')
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
             } else {
+                rootDir = undefined;
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
             status.working = true;
@@ -399,8 +400,12 @@ angular.module('literaryHalifax')
                     });
             },
             createCache: function () {
-                status.working = true;
-                return server.getAll('geolocations').then(cacheAll);
+                if (rootDir) {
+                    status.working = true;
+                    return server.getAll('geolocations').then(cacheAll);
+                }
+                $log.error("caching is disabled because either cordova or cordova.file is unavailable");
+                return $q.reject();
             },
             destroyCache: function () {
                 // file deletion promises

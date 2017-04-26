@@ -1,10 +1,16 @@
 
 
 :root {
-    --app-colour-primary: #33cd5f;
-    --app-colour-primary-grey: #99e6af;
-    --app-colour-secondary: #28a54c;
+/*    The colour of large UI elements like the navigation bar*/
+    --app-colour-primary: #28a54c;
+/*    The color of small UI elements like buttons and spinners*/
+    --app-colour-secondary: #33cd5f;
+/*    The midpoint between secondary and grey*/
+    --app-colour-secondary-grey: #99e6af;
+/*    Not actually in use?*/
     --app-colour-tertiary: #4cd964;
-    
+/*    A colour, likely white or black, which is readable on primary-colour background*/
     --app-colour-text-contrast: #fff;
 }
+
+

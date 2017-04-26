@@ -12,10 +12,6 @@
     margin-left: 20px !important;
 }
 
-.green-bar {
-    background-color: var(--app-colour-secondary) !important;
-}
-
 .side-menu {
     /*Below nav bar(9), but above tabs(5)*/
     z-index: 8;
@@ -44,7 +40,7 @@
     /*    I don't know why 40px works. Maybe a margin thing?*/
     bottom: 40px;
     width: 100%;
-    background-color: var(--app-colour-secondary);
+    background-color: var(--app-colour-primary);
 }
 
 .platform-ios .side-menu-footer {
@@ -62,18 +58,18 @@
 
 .tab-item {
     border-width: 0 !important;
-    background-color: var(--app-colour-primary) !important;
+    background-color: var(--app-colour-secondary) !important;
     opacity: 1;
 }
 
 .tabs-striped.tabs-app-colour .tabs {
     border-width: 0 !important;
-    background-color: var(--app-colour-primary) !important;
+    background-color: var(--app-colour-secondary) !important;
 }
 
 .tab-item.tab-item-active {
     margin-top: 0 !important;
-    background-color: var(--app-colour-secondary) !important;
+    background-color: var(--app-colour-primary) !important;
 }
 
 .tabs-loading {

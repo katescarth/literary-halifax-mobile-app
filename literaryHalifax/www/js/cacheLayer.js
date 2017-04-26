@@ -387,7 +387,8 @@ angular.module('literaryHalifax')
 
         layer.cacheMetadata = function () {
             if(!rootDir) {
-                return $q.reject("cordova file plugin unavailable.");
+                $log.error("caching is disabled because either cordova or cordova.file is unavailable");
+                return $q.reject();
             }
             status.working = true;
             return $q.all(
@@ -411,11 +412,11 @@ angular.module('literaryHalifax')
             itemCacheFile = 'itemCache';
 
             if (typeof cordova !== 'undefined') {
-                rootDir = cordova.file.dataDirectory;
-                
+                rootDir = cordova.file.dataDirectory;                
             } else {
                 api = "http://192.168.2.12:8100/api/";
                 files = "http://192.168.2.12:8100/files/";
+                rootDir = undefined;
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
             
