@@ -1,6 +1,6 @@
 /*global angular */
 /*global ionic */
-angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, leafletData, server, lodash, localization) {
+angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, server, lodash, localization) {
     // items for the side menu
     "use strict";
     var menuWidth = 275,
@@ -34,7 +34,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                     $state.go('app.landmarks');
                 }
             }, {
-                displayName:localization.strings.stateNameTours,
+                displayName: localization.strings.stateNameTours,
                 onClick: function () {
                     $state.go('app.tours');
                 }
@@ -272,21 +272,21 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.cacheOff = function () {
         $ionicPopup.confirm({
-                title: localization.strings.deleteWarningTitleItemCache,
-                template: localization.strings.deleteWarningBodyItemCache,
-                okType: 'button-app-colour'
-            }).then(function (shouldDelete) {
-                if (shouldDelete) {
-                    //caching is being switched off, so collapse the menus
-                    $scope.settings.showLandmarks = false;
-                    $scope.settings.showTours = false;
-                    return cacheLayer.destroyCache().then(function () {
-                        $scope.landmarks = [];
-                        $scope.tours = [];
-                        $scope.expandedTours = [];
-                    });
-                }
-            });
+            title: localization.strings.deleteWarningTitleItemCache,
+            template: localization.strings.deleteWarningBodyItemCache,
+            okType: 'button-app-colour'
+        }).then(function (shouldDelete) {
+            if (shouldDelete) {
+                //caching is being switched off, so collapse the menus
+                $scope.settings.showLandmarks = false;
+                $scope.settings.showTours = false;
+                return cacheLayer.destroyCache().then(function () {
+                    $scope.landmarks = [];
+                    $scope.tours = [];
+                    $scope.expandedTours = [];
+                });
+            }
+        });
     };
     $scope.cacheStatus = cacheLayer.status;
     $scope.expandedTours = [];
@@ -371,29 +371,17 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
 }).controller('pageCtrl', function ($scope, $stateParams) {
     "use strict";
     $scope.page = $stateParams.page;
-}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, leafletData, $stateParams, $log, localization) {
+}).controller('landmarksCtrl', function ($scope, $state, server, $q, utils, lodash, $stateParams, $log, localization, redrawMap) {
     // number of items to show in the list. Increased as user scrolls down
     "use strict";
-    // the map. Needed this so we can invalidate its size if it gets in a bad state.
-    var map,
-        // the user's location
-        location,
+    // the user's location
+    var location,
         ALL_TAGS = localization.strings.tagNameShowAll,
         pageSize,
         currentPage;
     
     $scope.strings = localization.strings;
-    
-    leafletData.getMap().then(function (result) {
-        map = result;
-    }, function (error) {
-        $log.error("Couldn't locate map: " + angular.toJson(error));
-    });
-    function inval() {
-        if (map) {
-            map.invalidateSize();
-        }
-    }
+    redrawMap($scope);
     
     function markerForIndex(index) {
         var landmark = $scope.landmarks[index];
@@ -414,13 +402,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         };
     }
     
-    //  When navigating back to a map, the tiles will sometimes
-    //  only render in the top left corner. Making the map resize
-    //  itself fixes the issue
-    $scope.$on('$ionicView.afterEnter', function () {
-        inval();
-    });
-    
     $scope.$on('$ionicView.enter', function () {
         // constraints on which landmarks to show
         $scope.filter = {
@@ -432,7 +413,10 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     
     $scope.getNextPage = function () {
-        
+        if (!currentPage) {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+            return;
+        }
         $scope.loadingMsg = localization.strings.loadMessageGettingMoreLandmarks;
         server.getLandmarks(location, currentPage + 1, pageSize)
             .then(function (newLandmarks) {
@@ -560,13 +544,16 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     $scope.strings = localization.strings;
     
-    
     $scope.getNextPage = function () {
         var promise;
+        if (!currentPage) {
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+            return;
+        }
         if (location) {
             promise = server.getTours(location, currentPage + 1, pageSize);
         } else {
-            promise = server.getTours(currentPage + 1, pageSize);
+            promise = server.getTours(null, currentPage + 1, pageSize);
         }
         $scope.loadingMsg = localization.strings.loadMessageGettingMoreTours;
         promise.then(function (newTours) {
@@ -651,7 +638,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $log.info(tour.name.toLowerCase());
         return tour.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
     };
-}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization) {
+}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization, redrawMap) {
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
     "use strict";
@@ -714,6 +701,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     // Map tab
+    redrawMap($scope);
     $scope.markers = [marker];
     $scope.mapInfo = localization.resources.defaultLocation;
     function updateMarker() {
@@ -756,7 +744,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.refresh();
     $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
-}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization) {
+}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization, redrawMap) {
     "use strict";
     function iconFor(index) {
         var icon = {
@@ -776,6 +764,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     function updateIcon(index) {
         angular.extend($scope.markers[index].icon, iconFor(index));
     }
+    redrawMap($scope);
     $scope.markers = [];
     $scope.mapInfo = localization.resources.defaultLocation;
     // index of the current landmark (the one user will visit next)

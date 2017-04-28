@@ -23,7 +23,6 @@ angular.module('literaryHalifax', ['ionic', 'ngLodash', 'nemLogging', 'ui-leafle
         "use strict";
         //push all tab bars to the top (not platform specific)
         $ionicConfigProvider.tabs.position('top');
-
         /*
          * Note that some states have a 'title' attribute. This is the text displayed
          * in the header bar. If a state has a tite, the menu button will appear in

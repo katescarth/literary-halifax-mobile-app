@@ -46,7 +46,7 @@
                     </div>
                 </overscroll-pane>
             </ion-tab>
-            <ion-tab title="{{strings.tabNameMap}}" icon="ion-android-pin" disabled="loadingMsg||errorMsg">
+            <ion-tab title="{{strings.tabNameMap}}" icon="ion-android-pin" disabled="loadingMsg||errorMsg" on-select="manualRedraw()">
                 <overscroll-pane>
                     <div class="display-card" ng-show="!loadingMsg">
                         <marker-map map-info="mapInfo" map-markers="markers"> </marker-map>
