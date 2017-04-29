@@ -16,6 +16,16 @@ a {
     /* no underline */
 }
 
+/*Makes sure content floats correctly*/
+.clearfix:after {
+    content: " ";
+    /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
 /* Infinite scrolls are invisible. They should be mirrored by other loading indicators*/
 ion-infinite-scroll {
     display:none;
@@ -94,18 +104,6 @@ ion-nav-view {
     font-family: serif;
 }
 
-
-/*Makes sure content floats correctly*/
-
-.clearfix:after {
-    content: " ";
-    /* Older browser do not support empty content */
-    visibility: hidden;
-    display: block;
-    height: 0;
-    clear: both;
-}
-
 .list-item-div {
     padding-left: 5px;
     padding-right: 5px;
@@ -144,10 +142,6 @@ ion-nav-view {
 .list-item-indent {
     margin-left: 12px;
     padding-right: 0px !important;
-}
-
-.greyout {
-    color: silver;
 }
 
 .italic {
@@ -229,18 +223,6 @@ ion-nav-view {
     width: 80px;
     max-height: 60px;
     margin: 4px 4px 4px 4px;
-}
-
-.up-next-button-row {
-    font-size: 12px;
-    color: #626262;
-    padding-top: 4px;
-}
-
-.pin-image {
-    padding-right: 6px;
-    padding-top: 4px;
-    height: 32px;
 }
 
 .audio-button {

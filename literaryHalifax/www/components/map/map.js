@@ -82,6 +82,7 @@ angular.module('literaryHalifax')
     }).factory("redrawMap", function ($log, $timeout, lodash) {
         "use strict";
         // passing a scope to this function adds an "afterEnter" listener that invalidates the map
+        // the map can also be redrawn directly using $scope.manualRedraw()
         return function (foreignScope) {
             function redraw() {
                 foreignScope.$broadcast("invalidateSize");

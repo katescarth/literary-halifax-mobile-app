@@ -1,13 +1,3 @@
-.bar-header {
-    border-width: 0;
-}
-
-.bar {
-    background-image: none;
-    background-position: none;
-    background-size: 0;
-}
-
 .bar .title {
     margin-left: 20px !important;
 }

@@ -15,7 +15,7 @@
                 </div>
                 
                 
-                <div class="list-item-div" shown-list-item-div ng-class="cacheStatus.cacheEnabled?'':'greyout'">
+                <div class="list-item-div" shown-list-item-div ng-class="cacheStatus.cacheEnabled?'':'disabled-grey'">
                     <div ng-click="settings.showLandmarks=cacheStatus.cacheEnabled && !settings.showLandmarks">
                         <i class="icon" ng-class="settings.showLandmarks?'ion-arrow-down-b':'ion-arrow-right-b'"></i> {{strings.stateNameLandmarks}} 
                     </div>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-item-div" shown-list-item-div ng-class="cacheStatus.cacheEnabled?'':'greyout'">
+                <div class="list-item-div" shown-list-item-div ng-class="cacheStatus.cacheEnabled?'':'disabled-grey'">
                     <div ng-click="settings.showTours=cacheStatus.cacheEnabled && !settings.showTours">
                         <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i> {{strings.stateNameTours}}
                     </div>
