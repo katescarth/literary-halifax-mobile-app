@@ -23,6 +23,7 @@ angular.module('literaryHalifax')
                 deleteWarningBodyItemCache: "This will delete all of your cached data. You will have to download it again to use it.",
                 warningPromptExitApp: "Leave App?",
                 loadMessageGettingLocation: "Getting your location...",
+                loadMessageGettingLandmark: "Getting landmark...",
                 loadMessageGettingLandmarks: "Getting landmarks...",
                 loadMessageGettingMoreLandmarks: "Getting more landmarks...",
                 errorMessageGettingLandmarks: "Something went wrong getting landmarks...",

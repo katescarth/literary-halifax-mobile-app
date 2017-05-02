@@ -249,7 +249,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $log.error('error getting pages: ' + angular.toJson(error));
         });
     };
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', function () {
+        if ($scope.menuItems.length === staticItems.length) {
+            $scope.refresh();
+        }
+    });
     $ionicPlatform.ready(function () {
         $scope.refresh();
     });
@@ -483,7 +487,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', function () {
+        if (!$scope.landmarks.length || $scope.errorMessage) {
+            $scope.refresh();
+        }
+    });
 
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
@@ -607,7 +615,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
     };
     $scope.refresh();
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', function () {
+        if (!$scope.tours.length || $scope.errorMsg) {
+            $scope.refresh();
+        }
+    });
     // Number of kilometers to display, rounded to two decimal points.
     // If this cannot be calculated (e.g. one of the locations is missing)
     // return undefined
@@ -638,7 +650,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         $log.info(tour.name.toLowerCase());
         return tour.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
     };
-}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization, redrawMap) {
+}).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization, redrawMap, lodash) {
     // UX: The screen is pretty empty when this opens. Could pass the image 
     //     in to display background immediately?
     "use strict";
@@ -743,7 +755,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             });
     };
     $scope.refresh();
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', function () {
+        if (!$scope.landmark || $scope.errorMsg) {
+            $scope.refresh();
+        }
+    });
 }).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization, redrawMap) {
     "use strict";
     function iconFor(index) {
@@ -839,7 +855,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.loadingMsg = '';
         });
     };
-    // TODO should be in an onEnter callback
+    
     $scope.refresh();
-    $scope.$root.$on('$cordovaNetwork:online', $scope.refresh);
+    $scope.$root.$on('$cordovaNetwork:online', function () {
+        if (!$scope.tour || $scope.errorMsg) {
+            $scope.refresh();
+        }
+    });
 });
