@@ -265,7 +265,18 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     };
     $scope.strings = localization.strings;
     $scope.mapCacheOn = mapCache.createCache;
-    $scope.mapCacheOff = mapCache.destroyCache;
+    $scope.mapCacheOff = function () {
+        $ionicPopup.confirm({
+            title: localization.strings.deleteWarningTitleMapCache,
+            template: localization.strings.deleteWarningBodyMapCache,
+            okType: 'button-app-colour'
+        }).then(function (shouldDelete) {
+            if (shouldDelete) {
+                mapCache.destroyCache();
+            }
+        });
+    };
+    
     $scope.mapCacheStatus = mapCache.status;
     $scope.cacheOn = function () {
         cacheLayer.cacheMetadata()

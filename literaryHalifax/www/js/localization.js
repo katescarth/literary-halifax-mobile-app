@@ -21,6 +21,8 @@ angular.module('literaryHalifax')
                 explanationItemCache: "Preload content to make it accessible while offline",
                 deleteWarningTitleItemCache: "Turn Caching Off?",
                 deleteWarningBodyItemCache: "This will delete all of your cached data. You will have to download it again to use it.",
+                deleteWarningTitleMapCache: "Delete cached maps?",
+                deleteWarningBodyMapCache: "This will delete the map cache. Using the map will require an internet connection.",
                 warningPromptExitApp: "Leave App?",
                 loadMessageGettingLocation: "Getting your location...",
                 loadMessageGettingLandmark: "Getting landmark...",
