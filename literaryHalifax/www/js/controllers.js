@@ -488,7 +488,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // display the map centered on citadel hill.
         // UX: The map is the first thing people see when opening the app.
         //     What will they want to see? Where they are, or where the landmarks are?
-    $scope.mapInfo = localization.resources.defaultLocation;
+    $scope.mapInfo = lodash.cloneDeep(localization.resources.defaultLocation);
     
     // list of tags which can be selected from
     $scope.tags = [ALL_TAGS];
@@ -703,7 +703,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     // Map tab
     redrawMap($scope);
     $scope.markers = [marker];
-    $scope.mapInfo = localization.resources.defaultLocation;
+    $scope.mapInfo = lodash.cloneDeep(localization.resources.defaultLocation);
     function updateMarker() {
         if (!marker.lat) {
             // we are generating the marker for the first time
@@ -766,7 +766,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     }
     redrawMap($scope);
     $scope.markers = [];
-    $scope.mapInfo = localization.resources.defaultLocation;
+    $scope.mapInfo = lodash.cloneDeep(localization.resources.defaultLocation);
     // index of the current landmark (the one user will visit next)
     $scope.currentLandmark = 0;
     // utility method for going to a landmark and moving the position in 
