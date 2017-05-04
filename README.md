@@ -7,21 +7,25 @@ Clone this repository
 
 npm install -g cordova ionic
 
+npm install -g bower
+
 navigate to the 'literaryHalifax' folder
 
 bower install
 
+modify www/lib/ngCordova/dist/ng-cordova.js according to issue #13
+
 # To run in a browser:
 
-in www/js/server.js, change '192.168.2.14' to your localhost IP address
+in www/js/cacheLayer.js, change '192.168.2.14' to your localhost IP address
 
 ionic serve
 
-This will launch the app in a browser, but some parts of the app (specifically audio) won't work.
+This will launch the app in a browser, but some parts of the app (specifically audio and caching) won't work.
 
 # Running in android
 
-Download and install [Android SDK Command Line Tools](https://developer.android.com/studio/index.html#downloads) 
+Download and install [Android SDK Command Line Tools](https://developer.android.com/studio/index.html#downloads) (but see issue #15: you may need an old version)
 
 Launch the SDK manager and install build tools and platform for android 23
 
