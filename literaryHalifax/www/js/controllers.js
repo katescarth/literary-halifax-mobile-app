@@ -657,8 +657,6 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if (!$scope.filter.text) {
             return true;
         }
-        $log.info($scope.filter.text);
-        $log.info(tour.name.toLowerCase());
         return tour.name.toLowerCase().indexOf($scope.filter.text.toLowerCase()) >= 0;
     };
 }).controller('landmarkCtrl', function ($scope, $state, $stateParams, server, $ionicTabsDelegate, $timeout, $ionicModal, mediaPlayer, $ionicScrollDelegate, localization, redrawMap, lodash) {

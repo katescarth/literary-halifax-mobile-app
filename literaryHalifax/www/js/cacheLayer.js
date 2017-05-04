@@ -215,7 +215,7 @@ angular.module('literaryHalifax')
                 .then(function (result) {
                     itemCache[getRequest(itemType).url] = result;
                 }, function (error) {
-                    $log.error("Error caching " + itemType + "index: " + angular.toJson(error));
+                    $log.error("Error caching index of " + itemType + ": " + angular.toJson(error));
                 });
         }
     
@@ -223,7 +223,6 @@ angular.module('literaryHalifax')
         // into their own cache entries
         function expandIndex(itemType) {
             var index = itemCache[getRequest(itemType).url];
-            $log.info(getRequest(itemType).url);
             lodash.times(index.length, function (i) {
                 itemCache[index[i].url] = index[i];
             });
@@ -240,9 +239,9 @@ angular.module('literaryHalifax')
         // access point for http requests. If the request is cached, resolve to the cached result,
         // otherwise make the request and resolve to that result
         function request(req) {
+            $log.info("making a request: " + angular.toJson(req));
             // always avoid making a request if possible. Nothing needs to
             // be refreshed in this app
-            $log.info("making a request: " + angular.toJson(req));
             return init.then(function () {
                 var promise,
                     url = req.url,
@@ -281,7 +280,7 @@ angular.module('literaryHalifax')
                 return $q.reject("cordova file plugin unavailable.");
             }
             if (!url) {
-                $log.warn('Tried to cache a non-existent url');
+                $log.warn('Tried to cache a null url');
                 return $q.when(url);
             }
             if (isCachedUrl(url)) {

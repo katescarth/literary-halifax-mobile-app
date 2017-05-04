@@ -78,7 +78,6 @@ angular.module('literaryHalifax')
         }
         //scans to a particular location (between 0 and 1)
         function scan(position) {
-            $log.info("position: " + position);
             if (position === 0) {
                 if (player.isPlaying) {
                     setTrack(track, player.title);
