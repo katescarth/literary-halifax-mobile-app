@@ -315,7 +315,7 @@ angular.module('literaryHalifax')
             } else if (itemType === 'files') {
                 return convertFile(serverRecord);
             } else {
-                return $q.reject(localization.strings.errorMessageUnkownType + ": " + itemType);
+                return $q.reject(localization.strings.errorMessageUnknownType + ": " + itemType);
             }
         }
 
