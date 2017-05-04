@@ -378,7 +378,7 @@ angular.module('literaryHalifax')
                         return writeCache();
                     },
                     function (errors) {
-                        $log.error(angular.toJson(errors));
+                        $log.error("errors caching map tiles: " + angular.toJson(errors));
                     }
                 )
                 .finally(function () {
