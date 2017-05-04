@@ -13,7 +13,7 @@ navigate to the 'literaryHalifax' folder
 
 bower install
 
-modify www/lib/ngCordova/dist/ng-cordova.js according to issue #13
+modify www/lib/ngCordova/dist/ng-cordova.js according to [issue #13](https://github.com/katescarth/literary-halifax-mobile-app/issues/13)
 
 # To run in a browser:
 
@@ -25,7 +25,7 @@ This will launch the app in a browser, but some parts of the app (specifically a
 
 # Running in android
 
-Download and install [Android SDK Command Line Tools](https://developer.android.com/studio/index.html#downloads) (but see issue #15: you may need an old version)
+Download and install [Android SDK Command Line Tools](https://developer.android.com/studio/index.html#downloads) (but see [issue #15](https://github.com/katescarth/literary-halifax-mobile-app/issues/15): you may need an old version)
 
 Launch the SDK manager and install build tools and platform for android 23
 
