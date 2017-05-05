@@ -1,4 +1,9 @@
-    
+// This file creates an object that can be used to create an item cache. useful for testing in the case where no connection is available
+// Only used for testing reasons.
+ 
+
+
+
 /*global angular */
 /*global cordova */
 /*global ionic */
@@ -1144,7 +1149,7 @@ angular.module('literaryHalifax')
                                 "name": "Date",
                                 "resource": "elements"
                             }
-                        }, 
+                        },
                         {
                             "text": "public",
                             "element_set": {
@@ -1177,7 +1182,7 @@ angular.module('literaryHalifax')
                         }
                     ],
                     "extended_resources": []
-                }, 
+                },
                 {
                     "id": 23,
                     "url": "http:\/\/206.167.183.207\/api\/files\/23",
@@ -1323,6 +1328,5 @@ angular.module('literaryHalifax')
                     "extended_resources": []
                 }
             ]
-            }
-        }
-    )
+        };
+    });
