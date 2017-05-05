@@ -21,15 +21,16 @@ angular.module('literaryHalifax')
             rootDir = '',
             // filename of the JSON dump of the item cache
             itemCacheFile = '',
-        // remote locations of files and items
+            // remote locations of files and items
             api = localization.resources.serverAddress + "api/",
             files = localization.resources.serverAddress + "files/",
-        // Expose functionality by adding it to this object
             status = {
-                    // is the cache currently working
-                    working: false,
-                    cacheEnabled: false
-                },
+                // is the cache currently working on something
+                working: false,
+                // is the cache currently functioning
+                cacheEnabled: false
+            },
+            // Expose functionality by adding it to this object
             layer = {
                 status: status
             };
@@ -135,6 +136,23 @@ angular.module('literaryHalifax')
             });
         }
     
+        function getRequest(resourceName) {
+            var result = {
+                url: api + resourceName,
+                params: {},
+                setId: function (id) {
+                    result.url = result.url + '/' + id;
+                    return result;
+                },
+                addParam : function (param, value) {
+                    result.params[param] = value;
+                    return result;
+                }
+            };
+            return result;
+        }
+    
+    
         function getAllPages(itemType) {
             var result,
                 addPage = function (page) {
@@ -169,7 +187,7 @@ angular.module('literaryHalifax')
         // This will still work if results from individual requests
         // are stored in the item cache, but it's a waste of space.
         function saveItemCache() {
-            var data = angular.toJson(itemCache);            
+            var data = angular.toJson(itemCache);
             status.cacheEnabled = true;
             return $cordovaFile.writeFile(rootDir, itemCacheFile, data, true);
         }
@@ -188,24 +206,8 @@ angular.module('literaryHalifax')
             return $cordovaFile.removeFile(rootDir, itemCacheFile)
                 .then(function (success) {
                     itemCache = {};
-                status.cacheEnabled = false;
+                    status.cacheEnabled = false;
                 });
-        }
-    
-        function getRequest(resourceName) {
-            var result = {
-                url: api + resourceName,
-                params: {},
-                setId: function (id) {
-                    result.url = result.url + '/' + id;
-                    return result;
-                },
-                addParam : function (param, value) {
-                    result.params[param] = value;
-                    return result;
-                }
-            };
-            return result;
         }
     
         // download and cache one item type
@@ -264,7 +266,7 @@ angular.module('literaryHalifax')
 
                 return promise.then(decorate);
             });
-        };
+        }
     
         layer.getAll = function (itemType) {
             return getAllPages(itemType).then(decorate);
@@ -276,7 +278,7 @@ angular.module('literaryHalifax')
 
         // download the given resource and cache it
         layer.cacheUrl = function (url) {
-            if(!rootDir) {
+            if (!rootDir) {
                 return $q.reject("cordova file plugin unavailable.");
             }
             if (!url) {
@@ -385,7 +387,7 @@ angular.module('literaryHalifax')
 
 
         layer.cacheMetadata = function () {
-            if(!rootDir) {
+            if (!rootDir) {
                 $log.error("caching is disabled because either cordova or cordova.file is unavailable");
                 return $q.reject();
             }
@@ -399,9 +401,9 @@ angular.module('literaryHalifax')
                     downloadAndCache('geolocations')
                 ]
             ).then(saveItemCache).then(expandIndices)
-            .finally(function () {
-                status.working = false;
-            });
+                .finally(function () {
+                    status.working = false;
+                });
         };
     
         layer.status = status;
@@ -411,16 +413,16 @@ angular.module('literaryHalifax')
             itemCacheFile = 'itemCache';
 
             if (typeof cordova !== 'undefined') {
-                rootDir = cordova.file.dataDirectory;                
+                rootDir = cordova.file.dataDirectory;
             } else {
-                api = "http://192.168.2.12:8100/api/";
-                files = "http://192.168.2.12:8100/files/";
+                api = "http://134.190.179.115:8100/api/";
+                files = "http://134.190.179.115:8100/files/";
                 rootDir = undefined;
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
             
             //we are in ionic view, so there is cordova but no cordova file            
-            if(!rootDir){
+            if (!rootDir) {
                 initDeferred.resolve();
                 status.working = false;
                 return;
