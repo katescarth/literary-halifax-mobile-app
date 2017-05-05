@@ -712,8 +712,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.closeModal = function () {
         $scope.imageAnimation = "fade-disappear";
         $scope.backgroundAnimation = "frost-disappear";
-            // It takes 1 second to fade out
-        $timeout(1000).then(function () {
+            // It takes half a second to fade out
+        $timeout(500).then(function () {
             modal.hide();
             $scope.imageSrc = undefined;
             $scope.imageTitle = undefined;

@@ -48,25 +48,25 @@
 
 .frost-appear {
     animation-name: fade-in-frost;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     background: rgba(0, 0, 0, 0.9);
 }
 
 .fade-appear {
     animation-name: fade-in-complete;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     opacity: 1;
 }
 
 .frost-disappear {
     animation-name: fade-out-frost;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     background: rgba(0, 0, 0, 0);
 }
 
 .fade-disappear {
     animation-name: fade-out-complete;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     opacity: 0;
 }
 
