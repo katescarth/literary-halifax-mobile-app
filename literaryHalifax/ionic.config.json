@@ -4,11 +4,11 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "http://206.167.183.207/api"
+      "proxyUrl": "https://halifaxliterarylandmarks.ca/api"
     },
     {
       "path": "/files",
-      "proxyUrl": "http://206.167.183.207/files"
+      "proxyUrl": "https://halifaxliterarylandmarks.ca/files"
     }
   ]
 }

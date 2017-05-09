@@ -415,8 +415,8 @@ angular.module('literaryHalifax')
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
             } else {
-                api = "http://134.190.179.115:8100/api/";
-                files = "http://134.190.179.115:8100/files/";
+                api = "http://192.168.2.19:8100/api/";
+                files = "http://192.168.2.19:8100/files/";
                 rootDir = undefined;
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }
