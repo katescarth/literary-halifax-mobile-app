@@ -252,6 +252,10 @@ ion-nav-view {
     line-height: 250%;
 }
 
+.serif-title {
+    font-family: serif;
+}
+
 
 .button.button-app-colour {
     border-color: transparent;
