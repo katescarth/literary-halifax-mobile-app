@@ -21,6 +21,7 @@ angular.module('literaryHalifax')
             track;
 
         function statusManager(statusObj) {
+            $log.info("status change: " + angular.toJson(statusObj));
             if (statusObj.status === MEDIA_RUNNING) {
                 player.isPlaying = true;
                 player.hasTrack = true;
@@ -32,6 +33,11 @@ angular.module('literaryHalifax')
             } else if (statusObj.status === MEDIA_STOPPED) {
                 player.isPlaying = false;
                 player.hasTrack = false;
+                if (media) {
+                    player.title = undefined;
+                    media.release();
+                    media = undefined;
+                }
             } 
         }
 
@@ -58,14 +64,9 @@ angular.module('literaryHalifax')
         }
         // shuts down the media player
         function stop() {
-            player.title = undefined;
-            player.hasTrack = false;
-            player.isPlaying = false;
             if (media) {
                 media.stop();
-                media.release();
             }
-            media = undefined;
         }
 
         // initializes the media player with a src (url) and a title for the track

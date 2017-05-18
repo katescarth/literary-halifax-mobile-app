@@ -223,9 +223,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             mediaController.show('.media-display-target');
         }
     });
-    $scope.closePopover = function () {
-        mediaController.hide();
-    };
+    $scope.$watch('media.hasTrack', function (newVal, oldVal) {
+        if (!newVal && oldVal && mediaController.isShown()) {
+            mediaController.hide();
+        }
+    });
     //expose this to the popover
     $scope.media = mediaPlayer;
     
