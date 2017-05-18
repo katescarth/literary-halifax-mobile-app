@@ -119,7 +119,11 @@ angular.module('literaryHalifax')
  *  id: a unique identifier (str, though it's a representation of an integer.)
  *  name: the name of the tour (str)
  *  description: a description of the tour (str)
- *  landmarks: the landmarks in the tour, in order (array of objects with 'id' attributes)
+ *  landmarks: the landmarks in the tour, in order
+                (array of objects with 'id', 'directions' and 'directionsUrl' attributes.
+                id corresponds to a landmark id.
+                directions is a string which describes how to get to the landmark from the previous one)
+                directionsUrl is the url for an audio file which narrates the directions to the landmark
  *  start: the location of the first landmark in the tour (object with lat, lng attributes)
  
  
@@ -282,9 +286,12 @@ angular.module('literaryHalifax')
             tour.landmarks = lodash.map(serverRecord.items,
                 function (record) {
                     return {
-                        id : record.id
+                        id: record.id,
+                        directions: record.directions,
+                        directionsUrl: record.directions_url
                     };
                 });
+            
             tour.name = serverRecord.title;
             tour.description = serverRecord.description;
             return convertGeolocation(serverRecord.start).then(

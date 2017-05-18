@@ -105,6 +105,9 @@ angular.module('literaryHalifax')
             } else if (raw.constructor === Array) {
                 // raw is a list, decorate each item
                 promises = lodash.map(raw, decorate);
+            } else if (raw.items) {
+                $log.info(angular.toJson(raw.items));
+                promises = [decorate(raw.items)];
             } else if (raw.file_urls) {
                 // we've found the files. Check for cached versions
                 lodash.forOwn(raw.file_urls, function (value, key) {
@@ -130,6 +133,25 @@ angular.module('literaryHalifax')
                     }
                 });
                 
+            } else if(raw.directions_url) {
+                var newUrl = hash(raw.directions_url);
+                        // if rootDir is undefined, there is no possibility of a cached file
+                        if (rootDir) {
+                            promises.push(
+                                // check if the file is cached
+                                $cordovaFile.checkFile(rootDir, newUrl)
+                                    .then(function () {
+                                        // if it is cached, replace the url
+                                        raw.directions_url = rootDir + '/' + newUrl;
+                                        return rootDir + '/' + newUrl;
+                                    }).catch(function () {
+                                        // otherwise, use the real url
+                                        // TODO: if we implement airplane mode, replace it with
+                                        // a placeholder image instead
+                                        return raw.directions_url;
+                                    })
+                            );
+                        }
             }
             return $q.all(promises).then(function () {
                 return raw;
@@ -415,8 +437,8 @@ angular.module('literaryHalifax')
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
             } else {
-                api = "http://192.168.2.19:8100/api/";
-                files = "http://192.168.2.19:8100/files/";
+                api = "http://134.190.179.115:8100/api/";
+                files = "http://134.190.179.115:8100/files/";
                 rootDir = undefined;
                 $log.error("Cordova is not defined. Are you on a mobile device?");
             }

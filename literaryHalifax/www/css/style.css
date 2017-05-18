@@ -256,6 +256,53 @@ ion-nav-view {
     font-family: serif;
 }
 
+.tour-navigation-title {
+    font-variant: small-caps;
+    font-size: 15px;
+}
+
+.tour-directions-audio-button {
+    margin-bottom: -10px;
+}
+
+.tour-item-directions {
+    font-size: 12px;
+    line-height: 13px;
+    margin-top: 3px;
+    color: #626262;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tour-directions-container {
+    line-height: 15px;
+    width:100%;
+    display: inline-block;
+}
+
+.switch-item-button-container {
+    font-size:25px;
+    padding:2px;
+    display: inline;
+    text-align: center;
+    vertical-align: middle;
+    padding-top:0px;
+}
+
+
+.switch-item-button-prev {
+    float:left;
+}
+
+.switch-item-button-next {
+    float:right;
+}
+
+.switch-item-button {
+    position:relative;
+    text-align: center;
+    vertical-align: middle;
+}
 
 .button.button-app-colour {
     border-color: transparent;

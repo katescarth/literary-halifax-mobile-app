@@ -769,7 +769,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.refresh();
         }
     });
-}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization, redrawMap) {
+}).controller('tourCtrl', function ($scope, $stateParams, server, $state, $q, $timeout, lodash, localization, redrawMap, mediaPlayer) {
     "use strict";
     function iconFor(index) {
         var icon = {
@@ -786,10 +786,13 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
         return icon;
     }
+    
+    
     function updateIcon(index) {
         angular.extend($scope.markers[index].icon, iconFor(index));
     }
     redrawMap($scope);
+    
     $scope.markers = [];
     $scope.mapInfo = lodash.cloneDeep(localization.resources.defaultLocation);
     // index of the current landmark (the one user will visit next)
@@ -826,11 +829,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             updateIcon($scope.currentLandmark);
         }
     };
+    
     $scope.go = function (landmark) {
         $state.go('app.landmarkView', {
             landmarkID: landmark.id
         });
     };
+    
+    $scope.media = mediaPlayer;
+    $scope.playAudio = function () {
+        mediaPlayer.setTrack($scope.tour.landmarks[$scope.currentLandmark].directionsUrl, $scope.tour.landmarks[$scope.currentLandmark].name);
+        mediaPlayer.play();
+    };
+    
     $scope.refresh = function () {
         server.tourInfo($stateParams.tourID).then(function (tour) {
             //TODO pan to the start of the tour
