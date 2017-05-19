@@ -345,9 +345,32 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         return $q.all(promises);
     };
     //cache every landmark in the given tour
-    $scope.cacheTour = function (tour) {
-        return lodash.forEach(tour.landmarks, $scope.cacheLandmark);
+    $scope.cacheTourLandmarks = function (tour) {
+        return $q.all(lodash.map(tour.landmarks, $scope.cacheLandmark));
     };
+    
+    $scope.cacheDirections = function (tour) {
+        lodash.forEach(tour.landmarks, function (landmark) {
+            cacheLayer.cacheUrl(landmark.directionsUrl).then(function (newUrl) {
+                landmark.directionsUrl = newUrl;
+            });
+        });
+    }
+    
+    $scope.clearDirections = function (tour) {
+        lodash.forEach(tour.landmarks, function (landmark) {
+            cacheLayer.clearUrl(landmark.directionsUrl).then(function (newUrl) {
+                landmark.directionsUrl = newUrl;
+            });
+        });
+    }
+    
+    $scope.directionsCached = function (tour) {
+        return lodash.every(tour.landmarks, function (landmark) {
+            return cacheLayer.isCachedUrl(landmark.directionsUrl);
+        });
+    }
+    
     $scope.clearLandmark = function (landmark) {
         var promises = [cacheLayer.clearUrl(landmark.audio)];
         lodash.forEach(landmark.images, function (images) {
@@ -377,10 +400,14 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 })
         ]).then(function () {
             lodash.forEach($scope.tours, function (tour) {
-                tour.landmarks = lodash.map(tour.landmarks, function (landmarkA) {
-                    return lodash.find($scope.landmarks, function (landmarkB) {
-                        return landmarkB.id === landmarkA.id;
-                    });
+                
+                lodash.forEach(tour.landmarks, function (tourLandmark) {
+                    
+                    angular.extend(tourLandmark,
+                                   lodash.find($scope.landmarks, function (standardLandmark) {
+                                        return standardLandmark.id === tourLandmark.id;
+                                    })
+                                  );
                 });
             });
         });

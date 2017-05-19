@@ -14,6 +14,8 @@ angular.module('literaryHalifax')
             // cache for the results of GET requests
             // hash url->object
             itemCache = {},
+            // cache which stores fi;enames of images, audio, etc.
+            fileCache = {},
             // whether or not to automatically cache GET requests
             // TODO this should be a persistent setting
             cacheIncoming = false,
@@ -21,6 +23,8 @@ angular.module('literaryHalifax')
             rootDir = '',
             // filename of the JSON dump of the item cache
             itemCacheFile = '',
+            // filename of the JSON dump of the file cache
+            fileCacheFile = '',
             // remote locations of files and items
             api = localization.resources.serverAddress + "api/",
             files = localization.resources.serverAddress + "files/",
@@ -112,46 +116,14 @@ angular.module('literaryHalifax')
                 // we've found the files. Check for cached versions
                 lodash.forOwn(raw.file_urls, function (value, key) {
                     if (value) {
-                        var newUrl = hash(value);
-                        // if rootDir is undefined, there is no possibility of a cached file
-                        if (rootDir) {
-                            promises.push(
-                                // check if the file is cached
-                                $cordovaFile.checkFile(rootDir, newUrl)
-                                    .then(function () {
-                                        // if it is cached, replace the url
-                                        raw.file_urls[key] = rootDir + '/' + newUrl;
-                                        return rootDir + '/' + newUrl;
-                                    }).catch(function () {
-                                        // otherwise, use the real url
-                                        // TODO: if we implement airplane mode, replace it with
-                                        // a placeholder image instead
-                                        return value;
-                                    })
-                            );
-                        }
+                        raw.file_urls[key] = fileCache[value] || raw.file_urls[key];
                     }
                 });
+                promises = [$q.when()];
                 
             } else if(raw.directions_url) {
-                var newUrl = hash(raw.directions_url);
-                        // if rootDir is undefined, there is no possibility of a cached file
-                        if (rootDir) {
-                            promises.push(
-                                // check if the file is cached
-                                $cordovaFile.checkFile(rootDir, newUrl)
-                                    .then(function () {
-                                        // if it is cached, replace the url
-                                        raw.directions_url = rootDir + '/' + newUrl;
-                                        return rootDir + '/' + newUrl;
-                                    }).catch(function () {
-                                        // otherwise, use the real url
-                                        // TODO: if we implement airplane mode, replace it with
-                                        // a placeholder image instead
-                                        return raw.directions_url;
-                                    })
-                            );
-                        }
+                raw.directions_url = fileCache[raw.directions_url] || raw.directions_url;
+                promises = [$q.when()];
             }
             return $q.all(promises).then(function () {
                 return raw;
@@ -199,7 +171,7 @@ angular.module('literaryHalifax')
         // if the url is falsy, return true (null is cached because we don't
         // need to make a request to use it)
         function isCachedUrl(url) {
-            return !url || url.startsWith(rootDir);
+            return !url || url.startsWith(rootDir) || fileCache[url];
         }
     
         // Dump the item cache to a file
@@ -223,6 +195,17 @@ angular.module('literaryHalifax')
                 });
         }
 
+        function recoverFileCache() {
+            return $cordovaFile.readAsText(rootDir, fileCacheFile)
+                .then(function (result) {
+                    fileCache = angular.fromJson(result);
+                });
+        }
+    
+        function saveFileCache() {
+            return $cordovaFile.writeFile(rootDir, fileCacheFile, angular.toJson(fileCache), true);
+        }
+
         // delete the item cache
         function destroyItemCache() {
             return $cordovaFile.removeFile(rootDir, itemCacheFile)
@@ -230,6 +213,13 @@ angular.module('literaryHalifax')
                     itemCache = {};
                     status.cacheEnabled = false;
                 });
+        }
+
+        // delete the file cache
+        function destroyFileCache() {
+            return $cordovaFile.removeFile(rootDir, fileCacheFile).then(function () {
+                fileCache = {};
+            });
         }
     
         // download and cache one item type
@@ -297,6 +287,8 @@ angular.module('literaryHalifax')
         layer.getRequest = getRequest;
     
         layer.request = request;
+    
+        layer.isCachedUrl = isCachedUrl;
 
         // download the given resource and cache it
         layer.cacheUrl = function (url) {
@@ -314,19 +306,23 @@ angular.module('literaryHalifax')
             return $cordovaFileTransfer
                 .download(url, filename)
                 .then(function (success) {
+                    // try to write this change to the file, but if we fail there's not a lot we can do
+                    saveFileCache().catch(function (error) {
+                        $log.error("could not save file cache: " + error);
+                    });
+                    fileCache[url] = filename;
                     return filename;
                 });
         };
 
         // uncache the given path
         layer.clearUrl = function (path) {
-            if (!path) {
-                $log.warn("Tried to clear a null path");
-                return $q.when(path);
-            }
-
-            var filename = path.split("/").pop(),
-                url = unhash(filename);
+            
+            var originalUrl = lodash.findKey(fileCache, function (fileName) {
+                return fileName == path;
+            }),
+                filename = path.split('/').pop();
+            
             return $cordovaFile.checkFile(rootDir, filename)
                 .then(function () {
                     return $cordovaFile.removeFile(rootDir, filename);
@@ -334,9 +330,15 @@ angular.module('literaryHalifax')
                     //the file already does not exist
                     return $q.when();
                 }).then(function (success) {
+                    fileCache[originalUrl] = undefined;
+                    // try to write this change to the file, but if we fail there's not a lot we can do
+                    saveFileCache().catch(function (error) {
+                        $log.error("could not save file cache: " + error);
+                    });
+                
                     // for convenience, resolve with the url that
                     // the cached file came from
-                    return url;
+                    return originalUrl;
                 });
         };
 
@@ -354,27 +356,25 @@ angular.module('literaryHalifax')
 
         // delete every cached file, then delete the item cache
         layer.destroyCache = function () {
-            var filesIndex = itemCache[layer.getRequest('files').url];
+            var filesIndex = itemCache[layer.getRequest('files').url],
+                promises = [];
             status.working = true;
+                
             // decorate the file cache so that remote urls are replaced with their cached versions.
             // Normally modifying the cache like this is bad, but
             // it's going to be deleted anyway
-            return decorate(filesIndex)
-                .then(function () {
-                    var promises = [];
-                    lodash.each(filesIndex, function (file) {
-                        
-                        lodash.forOwn(file.file_urls, function (value, key) {
-                            if (value && isCachedUrl(value)) {
-                                promises.push(layer.clearUrl(value));
-                            }
-                        });
-                    });
-
-                    return $q.all(promises).then(destroyItemCache);
-                }).finally(function () {
-                    status.working = false;
-                });
+            
+            lodash.each(fileCache, function (cachedUrl) {
+                promises.push(layer.clearUrl(cachedUrl));
+            })
+            return $q.all(promises).then(
+                $q.all([
+                    destroyItemCache(),
+                    destroyFileCache()
+                ]
+                )).finally(function () {
+                status.working = false;
+            });
         };
 
         // This is a bit out of place. We retrieve files from the
@@ -433,6 +433,7 @@ angular.module('literaryHalifax')
         $ionicPlatform.ready(function () {
             rootDir = "cordova.file.dataDirectory";
             itemCacheFile = 'itemCache';
+            fileCacheFile = 'fileCache'
 
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
@@ -452,7 +453,7 @@ angular.module('literaryHalifax')
             
             $cordovaFile.checkFile(rootDir, itemCacheFile)
                 .then(function (success) {
-                    return recoverItemCache().then(expandIndices);
+                    return recoverItemCache().then(expandIndices).then(recoverFileCache);
                 }, function (error) {
                     // no cache, that's fine
                     return $q.when();
