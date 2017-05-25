@@ -16,6 +16,7 @@ You will also need to set up an Omeka server which includes the following plugin
 * [Simple Pages](https://github.com/omeka/plugin-SimplePages)
 * [Geolocation](https://github.com/omeka/plugin-Geolocation)
 
+# Setting up for development
 
 install [Node.js](https://nodejs.org/en/)
 
