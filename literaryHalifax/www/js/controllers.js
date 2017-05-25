@@ -319,7 +319,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     // in a landmark are cached
     $scope.landmarkCached = cacheLayer.landmarkIsCached;
     $scope.tourCached = function (tour) {
-        return lodash.every(tour.landmarks, cacheLayer.landmarkIsCached);
+        return $scope.directionsCached(tour) && lodash.every(tour.landmarks, cacheLayer.landmarkIsCached);
     };
     $scope.cachedLandmarkCount = function (tour) {
         return lodash.filter(tour.landmarks, $scope.landmarkCached).length;
@@ -355,6 +355,14 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 landmark.directionsUrl = newUrl;
             });
         });
+    }
+    
+    $scope.cacheTour = function (tour) {
+        return $q.all(
+        [
+            $scope.cacheTourLandmarks(tour),
+            $scope.cacheDirections(tour)
+        ]);
     }
     
     $scope.clearDirections = function (tour) {

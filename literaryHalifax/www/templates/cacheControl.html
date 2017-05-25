@@ -30,7 +30,7 @@
                         <i class="icon" ng-class="settings.showTours?'ion-arrow-down-b':'ion-arrow-right-b'"></i> {{strings.stateNameTours}}
                     </div>
                     <div class="list-item-div list-item-indent" shown-list-item-div ng-if="settings.showTours" ng-repeat="tour in tours track by $index" style="padding-right:0px;">
-                        <i class="icon" style="float:right;" ng-class="tourCached(tour)?'ion-checkmark':'ion-arrow-down-a'" ng-click="tourCached(tour)?undefined:cacheTourLandmarks(tour)"></i>
+                        <i class="icon" style="float:right;" ng-class="tourCached(tour)?'ion-checkmark':'ion-arrow-down-a'" ng-click="tourCached(tour)?undefined:cacheTour(tour)"></i>
                         <div class="list-item-title" ng-click="expandedTours[$index]=!expandedTours[$index]">
                             <i class="icon" ng-class="expandedTours[$index]?'ion-arrow-down-b':'ion-arrow-right-b'"></i> {{tour.name}} 
                             <span class="italic">({{cachedLandmarkCount(tour)}}/{{tour.landmarks.length}})</span> 
@@ -44,7 +44,7 @@
                         
                         <div class="list-item-div list-item-indent" shown-list-item-div ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)">
-                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.name}} 
+                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.title}} 
                             </div>
                         </div>
                     </div>
