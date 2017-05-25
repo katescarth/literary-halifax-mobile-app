@@ -44,7 +44,7 @@
                         
                         <div class="list-item-div list-item-indent" shown-list-item-div ng-repeat="landmark in tour.landmarks track by $index" ng-if="expandedTours[$parent.$index]">
                             <div class="list-item-title" ng-click="landmarkCached(landmark)?clearLandmark(landmark):cacheLandmark(landmark)">
-                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.title}} 
+                                <i class="icon" style="float:right;" ng-class="landmarkCached(landmark)?'ion-trash-b':'ion-arrow-down-a'"></i> {{landmark.name}} 
                             </div>
                         </div>
                     </div>
