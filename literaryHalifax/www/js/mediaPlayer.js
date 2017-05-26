@@ -14,7 +14,7 @@ angular.module('literaryHalifax')
      * the player exposes the variables isPlaying, hasTrack, progress, and title for fast binding
      *
      */
-    .factory('mediaPlayer', function ($timeout, $interval, $cordovaMedia, $ionicPlatform, $log, $q) {
+    .factory('mediaPlayer', function ($timeout, $interval, audioPlayer, $ionicPlatform, $log, $q) {
         "use strict";
         var player,
             media,
@@ -75,7 +75,7 @@ angular.module('literaryHalifax')
             player.title = title;
             track = src;
             player.hasTrack = true;
-            media = $cordovaMedia.newMedia(src);
+            media = audioPlayer.newMedia(src);
         }
         //scans to a particular location (between 0 and 1)
         function scan(position) {

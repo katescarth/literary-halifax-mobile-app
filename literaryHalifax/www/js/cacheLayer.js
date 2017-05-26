@@ -128,11 +128,9 @@ angular.module('literaryHalifax')
                                 $cordovaFile.checkFile(rootDir, newUrl)
                                     .then(function () {
                                         // if it is cached, replace the url
-                                        $log.info("found file " + rootDir + '/' + newUrl);
                                         raw.file_urls[key] = rootDir + '/' + newUrl;
                                         return rootDir + '/' + newUrl;
                                     }).catch(function () {
-                                        $log.info("could not find file " + rootDir + '/' + newUrl);
                                         // otherwise, use the real url
                                         // TODO: if we implement airplane mode, replace it with
                                         // a placeholder image instead

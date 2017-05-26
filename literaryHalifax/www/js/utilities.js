@@ -131,4 +131,170 @@ angular.module('literaryHalifax')
                 });
             }
         };
-    });
+    })
+
+// modified version of the ngCordova implementation of $cordovaMedia
+// names have been changed to avoid confusion from $cordovaMedia to audioPlayer
+// and from NewMedia to Player
+
+//The MIT License (MIT)
+//
+//Copyright (c) 2014 Drifty
+//
+//Permission is hereby granted, free of charge, to any person obtaining a copy
+//of this software and associated documentation files (the "Software"), to deal
+//in the Software without restriction, including without limitation the rights
+//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//copies of the Software, and to permit persons to whom the Software is
+//furnished to do so, subject to the following conditions:
+//
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
+//
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//SOFTWARE.
+
+// install   :      cordova plugin add cordova-plugin-media
+// link      :      https://github.com/apache/cordova-plugin-media
+
+.service('Player', ['$q', '$interval', function ($q, $interval) {
+  var q, q2, q3, mediaStatus = null, mediaPosition = -1, mediaTimer, mediaDuration = -1;
+
+  function setTimer(media) {
+      if (angular.isDefined(mediaTimer)) {
+        return;
+      }
+
+      mediaTimer = $interval(function () {
+          if (mediaDuration < 0) {
+              mediaDuration = media.getDuration();
+              if (q && mediaDuration > 0) {
+                q.notify({duration: mediaDuration});
+              }
+          }
+
+          media.getCurrentPosition(
+            // success callback
+            function (position) {
+                if (position > -1) {
+                    mediaPosition = position;
+                }
+            },
+            // error callback
+            function (e) {
+                console.log('Error getting pos=' + e);
+            });
+
+          if (q) {
+            q.notify({position: mediaPosition});
+          }
+
+      }, 1000);
+  }
+
+  function clearTimer() {
+      if (angular.isDefined(mediaTimer)) {
+          $interval.cancel(mediaTimer);
+          mediaTimer = undefined;
+      }
+  }
+
+  function resetValues() {
+      mediaPosition = -1;
+      mediaDuration = -1;
+  }
+
+  function Player(src) {
+      this.media = new Media(src,
+        function (success) {
+            clearTimer();
+            resetValues();
+            q.resolve(success);
+        }, function (error) {
+            clearTimer();
+            resetValues();
+            q.reject(error);
+        }, function (status) {
+            mediaStatus = status;
+            q.notify({status: mediaStatus});
+        });
+  }
+
+  // iOS quirks :
+  // -  myMedia.play({ numberOfLoops: 2 }) -> looping
+  // -  myMedia.play({ playAudioWhenScreenIsLocked : false })
+  Player.prototype.play = function (options) {
+      q = $q.defer();
+
+      if (typeof options !== 'object') {
+          options = {};
+      }
+
+      this.media.play(options);
+
+      setTimer(this.media);
+
+      return q.promise;
+  };
+
+  Player.prototype.pause = function () {
+      clearTimer();
+      this.media.pause();
+  };
+
+  Player.prototype.stop  = function () {
+      this.media.stop();
+  };
+
+  Player.prototype.release  = function () {
+      this.media.release();
+      this.media = undefined;
+  };
+
+  Player.prototype.seekTo  = function (timing) {
+      this.media.seekTo(timing);
+  };
+
+  Player.prototype.setVolume = function (volume) {
+      this.media.setVolume(volume);
+  };
+
+  Player.prototype.startRecord = function () {
+      this.media.startRecord();
+  };
+
+  Player.prototype.stopRecord  = function () {
+      this.media.stopRecord();
+  };
+
+  Player.prototype.currentTime = function () {
+      q2 = $q.defer();
+      this.media.getCurrentPosition(function (position){
+      q2.resolve(position);
+      });
+      return q2.promise;
+  };
+
+  Player.prototype.getDuration = function () {
+      // this is the change from the original ngCordova implementation. Their version treated media.getDuration as
+      // and async callback function, so the promise never resolved.
+    q3 = $q.defer();
+    q3.resolve(this.media.getDuration());
+    return q3.promise;
+  };
+
+  return Player;
+
+}])
+.factory('audioPlayer', ['Player', function (Player) {
+  return {
+      newMedia: function (src) {
+          return new Player(src);
+      }
+  };
+}]);
