@@ -30,8 +30,6 @@ navigate to the 'literaryHalifax' folder
 
 bower install
 
-modify www/lib/ngCordova/dist/ng-cordova.js according to [issue #13](https://github.com/katescarth/literary-halifax-mobile-app/issues/13)
-
 # To run in a browser:
 
 in www/js/cacheLayer.js, change '192.168.2.14' to your localhost IP address
