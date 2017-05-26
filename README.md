@@ -1,6 +1,23 @@
 # literary-halifax-mobile-app
 Literary Halifax Mobile App
 
+This is a GPL mobile client for omeka. It allows users to see landmarks and tours which are made up of landmarks, It also allows the user to cache content so that when visiting landmarks, they do not need to use data.
+
+The app is built in ionic v1, and is free to use. To customize it for your own project:
+
+* modify the files localization.js and localization.css.
+* Change the background image by replacing BG1.jpg with your image of choice (using the name BG1.jpg). 
+* Change the icon and splash screen by replacing icon.png and splash.png (these files can be found in the resources folder)
+
+You will also need to set up an Omeka server which includes the following plugins:
+
+* [TourBuilder](https://github.com/David-Owen-Walker/TourBuilder)
+* [Landmarks](https://github.com/David-Owen-Walker/Landmarks)
+* [Simple Pages](https://github.com/omeka/plugin-SimplePages)
+* [Geolocation](https://github.com/omeka/plugin-Geolocation)
+
+# Setting up for development
+
 install [Node.js](https://nodejs.org/en/)
 
 Clone this repository
