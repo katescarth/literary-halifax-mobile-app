@@ -14,7 +14,7 @@
                     <div class="display-card landmark-text-card" ng-show="!(loadingMsg||errorMsg)">
                         <h3 class="title">
                             <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-up':'ion-android-volume-off'"
-                                    ng-click="media.title==landmark.name?media.stop():playAudio()" ng-if="landmark.audio">
+                                    ng-click="media.title==landmark.name?media.stop():playAudio()" ng-if="landmark.audio && landmark.audio.url">
                             </button>
                             <div class="landmark-text-card-title">{{landmark.name}}</div>
                         </h3>

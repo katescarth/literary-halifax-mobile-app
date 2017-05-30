@@ -288,7 +288,7 @@ angular.module('literaryHalifax')
                             return result.data;
                         }, function (error) {
                             $log.error("http request to " + url + " failed: " + angular.toJson(error));
-                            return $q.reject('Couldn\'t complete the request');
+                            return $q.reject(localization.strings.errorMessageGenericRequest);
                         });
                 }
 
@@ -353,12 +353,14 @@ angular.module('literaryHalifax')
         // determines whether all files associated with the landmark are cached
         // this must be done quickly, so it is imperfect (we can't actually look for the files)
         layer.landmarkIsCached = function (landmark) {
-            return isCachedUrl(landmark.audio) &&
-                lodash.every(landmark.images, function (imageObj) {
-                    return isCachedUrl(imageObj.full) &&
-                        isCachedUrl(imageObj.squareThumb) &&
-                        isCachedUrl(imageObj.thumb);
-                });
+            if (landmark.audio && !isCachedUrl(landmark.audio.url)){
+                return false;
+            }
+            return lodash.every(landmark.images, function (imageObj) {
+                return isCachedUrl(imageObj.full) &&
+                    isCachedUrl(imageObj.squareThumb) &&
+                    isCachedUrl(imageObj.thumb);
+            });
         };
 
         // delete every cached file, then delete the item cache
@@ -446,6 +448,7 @@ angular.module('literaryHalifax')
             if (typeof cordova !== 'undefined') {
                 rootDir = cordova.file.dataDirectory;
             } else {
+                // localhost ip for ionic serve
                 api = "http://134.190.179.115:8100/api/";
                 files = "http://134.190.179.115:8100/files/";
                 rootDir = undefined;

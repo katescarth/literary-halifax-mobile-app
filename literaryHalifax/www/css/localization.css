@@ -1,4 +1,5 @@
-
+/*Change colors for the app. The only color which can't be modified here is the color of pins, since they are image files.
+To change the color of pins, replace them with your own images using the same file names*/
 
 :root {
 /*    The colour of large UI elements like the navigation bar and tabs*/

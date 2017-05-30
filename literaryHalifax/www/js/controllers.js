@@ -1,21 +1,19 @@
 /*global angular */
 /*global ionic */
 angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ionicHistory, $ionicPopup, $state, $ionicPlatform, mediaPlayer, $ionicPopover, $interval, $log, server, lodash, localization) {
-    // items for the side menu
     "use strict";
+    // the width of the menu, in pixels
     var menuWidth = 275,
         // tracks whether or not the menu is open
         menuOpen = false,
-        // tracks the menu's location. CHANGING THIS VARIABLE DOES NOT
-        // MOVE THE MENU
+        // tracks the menu's location. CHANGING THIS VARIABLE DOES NOT MOVE THE MENU
         menuPosition = -menuWidth,
         // 25 fps
         frameLength = 1000 / 25.0,
-        // a full open or close takes 250 seconds
+        // a full open or close takes 250 frames
         maxFrames = (250 / frameLength),
         // the interval promise which is currently animating the side menu
         animationPromise,
-    
         // the horizontal position where the drag started
         dragBase = 0.0,
         // the last known horizontal position of the drag
@@ -24,9 +22,11 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         // See onDrag for the calculation
         dragVelocity = 0.0,
         decayConstant = 0.5,
+        // the code which represents navigating backwards from a physical back button
         BACK_NAV_CODE = 100,
         // the panel which controls audio that is being played
         mediaController,
+        // items for the side menu
         staticItems = [
             {
                 displayName: localization.strings.stateNameLandmarks,
@@ -47,6 +47,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         ];
     $scope.menuItems = staticItems;
     
+    // Move the side menu to a new horizontal position between 0 (fully visible) and -menuWidth (fully hidden)
+    // This does not animate the transition, it just "snaps" the menu in place.
     function updateMenuPosition(newPosition) {
         // reposition the menu
         menuPosition = newPosition;
@@ -67,7 +69,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         if (animationPromise) {
             $interval.cancel(animationPromise);
         }
-        //  number of frames in this animation. Must be at least 1
+        //  number of frames in this animation. Must be at least 1, or we get divide by zero problems
         var frameCount = Math.max(1, Math.round(maxFrames * Math.abs(from - to) / menuWidth)),
             stepSize = (to - from) / frameCount,
             count = 0;
@@ -77,18 +79,22 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             updateMenuPosition(from + stepSize * count);
         }, frameLength, frameCount);
     }
-    //  convenience funtion. Slide to the given position from the current
+    //  convenience funtion. Slide to the given position from the current one
     function slideTo(position) {
         smoothScroll(menuPosition, position);
     }
+    
+    // put the menu in the open state, and slide it into position
     function openMenu() {
         slideTo(0);
         menuOpen = true;
     }
+    // put the menu in the closed state, and slide it into position
     function closeMenu() {
         slideTo(-menuWidth);
         menuOpen = false;
     }
+    // change the menu's state from open to closed or vice versa
     function toggleMenu() {
         if (menuOpen) {
             closeMenu();
@@ -96,6 +102,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             openMenu();
         }
     }
+    // go back to the previous page or view
     function goBack() {
         $ionicHistory.goBack();
     }
@@ -128,6 +135,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.onDragStart = function (event) {
         dragBase = menuPosition;
     };
+    // called whenever the user drags the menu.
     $scope.onDrag = function (event) {
         var newPosition = dragBase + event.gesture.deltaX;
         dragVelocity *= decayConstant;
@@ -140,15 +148,23 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         }
         updateMenuPosition(newPosition);
     };
+    // when the drag even ends (finger up), resolve the situation by either closing or opening the menu
     $scope.onDragEnd = function (event) {
-        var threshold = 4 * 4;
-            //if the user swiped quickly, send the menu to the diresction they swiped
-        if (dragVelocity * dragVelocity > threshold) {
+        var vThreshold = 4 * 4,
+            pThreshold = 15;
+        // if the user swiped quickly, send the menu to the direction they swiped
+        if (dragVelocity * dragVelocity > vThreshold) {
             if (dragVelocity > 0) {
                 openMenu();
             } else {
                 closeMenu();
             }
+        // if they pulled the menu all the way open, open it
+        } else if (pThreshold + menuPosition > 0) {
+            openMenu();
+        // if pulled the menu all the way closed, close it
+        } else if (menuPosition - pThreshold < -menuWidth) {
+            closeMenu();
         // if they did not, send the menu to where it was before
         } else {
             if (menuOpen) {
@@ -157,6 +173,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                 closeMenu();
             }
         }
+        // clean up
         dragBase = 0.0;
         dragPrev = 0.0;
         dragVelocity = 0.0;
@@ -184,8 +201,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             toggleMenu();
         }
     });
-    //default state, there's no statechange to
-    //the first state. Hacky
+    //default state, there's no statechange to the first state. Hacky
     $scope.menuMode = true;
     $scope.navBarTitle = localization.strings.stateNameLandmarks;
         // take control of the PHYSICAL back button on android
@@ -231,6 +247,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //expose this to the popover
     $scope.media = mediaPlayer;
     
+    
+    // refresh the simple_pages which appear in the sidebar
     $scope.refresh = function () {
         server.getAll("simple_pages").then(function (pages) {
             $scope.menuItems = lodash.unionBy(
@@ -251,6 +269,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $log.error('error getting pages: ' + angular.toJson(error));
         });
     };
+    // if we don't have anything, try again now that the internet is available
     $scope.$root.$on('$cordovaNetwork:online', function () {
         if ($scope.menuItems.length === staticItems.length) {
             $scope.refresh();
@@ -261,6 +280,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     });
 }).controller('cacheCtrl', function ($scope, server, cacheLayer, mapCache, $timeout, $q, $ionicPopup, lodash, $log, localization) {
     "use strict";
+    // whether tours and landmarks are expanded or collapsed 
     $scope.settings = {
         showTours: false,
         showLandmarks: false
@@ -327,8 +347,8 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     //cache every file associated with the given landmark
     $scope.cacheLandmark = function (landmark) {
         var promises = [
-            cacheLayer.cacheUrl(landmark.audio).then(function (newUrl) {
-                landmark.audio = newUrl;
+            cacheLayer.cacheUrl(landmark.audio.url).then(function (newUrl) {
+                landmark.audio.url = newUrl;
             })
         ];
         lodash.forEach(landmark.images, function (images) {
@@ -344,19 +364,19 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
         });
         return $q.all(promises);
     };
-    //cache every landmark in the given tour
+    // cache every landmark in the given tour
     $scope.cacheTourLandmarks = function (tour) {
         return $q.all(lodash.map(tour.landmarks, $scope.cacheLandmark));
     };
-    
+    // cache the audio directions in a tour
     $scope.cacheDirections = function (tour) {
         lodash.forEach(tour.landmarks, function (landmark) {
             cacheLayer.cacheUrl(landmark.directionsUrl).then(function (newUrl) {
                 landmark.directionsUrl = newUrl;
             });
         });
-    }
-    
+    };
+    // fully cache a tour
     $scope.cacheTour = function (tour) {
         return $q.all(
         [
@@ -364,7 +384,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             $scope.cacheDirections(tour)
         ]);
     }
-    
+    // uncache directions from a tour
     $scope.clearDirections = function (tour) {
         lodash.forEach(tour.landmarks, function (landmark) {
             cacheLayer.clearUrl(landmark.directionsUrl).then(function (newUrl) {
@@ -372,15 +392,18 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
             });
         });
     }
-    
+    // check if the directions for a tour are cached
     $scope.directionsCached = function (tour) {
         return lodash.every(tour.landmarks, function (landmark) {
             return cacheLayer.isCachedUrl(landmark.directionsUrl);
         });
     }
-    
+    // uncache the files from a landmark
     $scope.clearLandmark = function (landmark) {
-        var promises = [cacheLayer.clearUrl(landmark.audio)];
+        var promises = [];
+        if (landmark.audio) {
+            promises.push(cacheLayer.clearUrl(landmark.audio.url));
+        }
         lodash.forEach(landmark.images, function (images) {
             promises.push(cacheLayer.clearUrl(images.full).then(function (newUrl) {
                 images.full = newUrl;
@@ -407,10 +430,9 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
                     $scope.tours = tours;
                 })
         ]).then(function () {
+            // replace the landmark in the tour's attrs with those of the original landmark. This ensures that there is really only one copy of each url.
             lodash.forEach($scope.tours, function (tour) {
-                
                 lodash.forEach(tour.landmarks, function (tourLandmark) {
-                    
                     angular.extend(tourLandmark,
                                    lodash.find($scope.landmarks, function (standardLandmark) {
                                         return standardLandmark.id === tourLandmark.id;
@@ -434,7 +456,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     
     $scope.strings = localization.strings;
     redrawMap($scope);
-    
+    // produce a marker for the landmark with given index
     function markerForIndex(index) {
         var landmark = $scope.landmarks[index];
         return {
@@ -707,7 +729,7 @@ angular.module('literaryHalifax').controller('menuCtrl', function ($scope, $ioni
     $scope.strings = localization.strings;
     $scope.media = mediaPlayer;
     $scope.playAudio = function () {
-        mediaPlayer.setTrack($scope.landmark.audio, $scope.landmark.name);
+        mediaPlayer.setTrack($scope.landmark.audio.url, $scope.landmark.name);
         mediaPlayer.play();
     };
     

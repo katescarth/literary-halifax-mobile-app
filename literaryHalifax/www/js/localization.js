@@ -68,7 +68,7 @@ angular.module('literaryHalifax')
             resources = {
                 // http address of the omeka server
                 serverAddress: "https://halifaxliterarylandmarks.ca/",
-                // function which generates urls for map tiles based
+                // function which generates urls for map tiles based on their position, zoom and subdomain
                 urlForTile: function (x, y, zoom, subdomain) {
                     return 'https://cartodb-basemaps-' + subdomain + '.global.ssl.fastly.net/light_all/' + zoom + '/' + x + '/' + y + '.png';
                 },

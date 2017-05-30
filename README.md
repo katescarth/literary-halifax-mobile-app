@@ -32,7 +32,7 @@ bower install
 
 # To run in a browser:
 
-in www/js/cacheLayer.js, change '192.168.2.14' to your localhost IP address
+in www/js/cacheLayer.js, change '134.190.179.115' to your localhost IP address (the easiest way to find this address is to run ionic serve and look at the url for the browser window that opens)
 
 ionic serve
 

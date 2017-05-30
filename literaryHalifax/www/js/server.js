@@ -207,7 +207,9 @@ angular.module('literaryHalifax')
                                 });
                             } else if (file.metadata.mime_type.startsWith('audio')) {
                                 promise.then(function (audio) {
-                                    landmark.audio = audio;
+                                    landmark.audio = {
+                                        url: audio
+                                     };
                                 });
                             }
                             filePromises.push(promise);
