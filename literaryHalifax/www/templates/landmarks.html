@@ -1,0 +1,45 @@
+<ion-view view-title="Landmarks">
+    <ion-content>
+        <div class="display-card">
+            <marker-map map-handle="mapHandle" map-info="mapInfo" map-markers="markers"> </marker-map>
+        </div>
+        <div class="display-card">
+            <div class="filter-area">
+                
+                <table><tr>
+                    <td width="100%">
+                            <div class="item item-input filter-bar">
+                                <input type="text" placeholder="{{strings.filterPromptLandmarks}}" ng-model="filter.text" ng-change="applyFilter()">
+                                <i class="icon ion-close filter-icon" ng-class="filter.text?'':'placeholder-icon'" ng-click="clearFilter()"></i> 
+                            </div>
+                    </td>
+                    <td>
+                        <div class="select-style">
+                            <select ng-model="filter.tag" ng-change="applyFilter()">
+                                <option ng-repeat="tag in tags">{{tag}}</option>
+                            </select>
+                            <i class="icon ion-pricetag" ng-class="(filter.tag===strings.tagNameShowAll)?'disabled-grey':'enabled-black'"></i>
+                        </div>
+                    </td>    
+                </tr></table>
+            </div>
+            <div class="list">
+                <div class="list-item-div clearfix" ng-attr-shown-list-item-div="{{showLandmark(landmark)}}" ng-repeat="landmark in landmarks track by $index" ng-click="go(landmark)" >
+                    <img class="list-item-thumb" ng-src="{{landmark.images[0].thumb}}" align="left">
+                    <div>
+                        <div class="list-item-distance" ng-if="displayDistance(landmark)">
+                            {{displayDistance(landmark) + strings.distanceUnitAbbreviation}}
+                        </div>
+                        <div class="list-item-title">
+                            {{landmark.name}}
+                        </div>
+                    </div>
+                    <div class="list-item-description" ng-attr-dotdotdot="{{showLandmark(landmark)}}" ng-bind-html="landmark.description"> </div>
+                </div>
+                <list-loader loading-msg="loadingMsg" error-msg="errorMessage" refresh="refresh"></list-loader>
+                <ion-infinite-scroll class="infinite-scroll-no-spinner" ng-if="hasNextPage" on-infinite="getNextPage()" distance="30%" immediate-check="false">
+                </ion-infinite-scroll>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

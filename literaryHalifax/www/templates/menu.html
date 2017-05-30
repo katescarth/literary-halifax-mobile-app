@@ -1,0 +1,30 @@
+<ion-header-bar class="bar-app-colour" align-title="left">
+    <button class="button button-icon button-clear menu-button" ng-class="menuMode?'ion-navicon':'ion-chevron-left'" ng-click="navButtonClick()"> </button>
+    <h1 class="title">
+        {{navBarTitle}}
+    </h1>
+    <!-- TODO share button -->
+    <button class="button button-icon button-clear ion-volume-high media-display-target" ng-class="media.hasTrack?(media.isPlaying?'pulse':'pulse-idle'):'cloak'" ng-click="audioButtonClick($event)"> </button>
+</ion-header-bar>
+<ion-nav-view name="mainContent"></ion-nav-view>
+<div on-drag="onDrag($event)" on-drag-start="onDragStart($event)" on-drag-end="onDragEnd($event)" class="side-menu has-header" ng-style="menuStyle">
+    <div class="list side-menu-list" ng-style="listStyle">
+        <ion-item ng-repeat="menuItem in menuItems" ng-click="menuItemClick(menuItem)">
+            {{menuItem.displayName}}
+        </ion-item>
+        <div class="side-menu-footer">
+            <div class="side-menu-footer-item" ng-click="facebook()">
+                <i class="icon ion-social-facebook"></i> 
+            </div>
+            <div class="side-menu-footer-item" ng-click="twitter()">
+                <i class="icon ion-social-twitter"></i> 
+            </div>
+            <div class="side-menu-footer-item" ng-click="instagram()">
+                <i class="icon ion-social-instagram"></i> 
+            </div>
+            <div class="side-menu-footer-item" ng-click="mail()">
+                <i class="icon ion-email"></i> 
+            </div>
+        </div>
+    </div>
+</div>

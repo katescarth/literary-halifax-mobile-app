@@ -1,0 +1,15 @@
+/*Change colors for the app. The only color which can't be modified here is the color of pins, since they are image files.
+To change the color of pins, replace them with your own images using the same file names*/
+
+:root {
+/*    The colour of large UI elements like the navigation bar and tabs*/
+    --app-colour-primary: #28a54c;
+/*    The colour of large UI elements in a disabled state.*/
+    --app-colour-primary-grey: #33cd5f;
+/*    The color of small UI elements like buttons and spinners*/
+    --app-colour-secondary: #33cd5f;
+/*    The midpoint between secondary and grey*/
+    --app-colour-secondary-grey: #99e6af;
+/*    A colour, likely white or black, which is readable on primary-colour background*/
+    --app-colour-text-contrast: #fff;
+}

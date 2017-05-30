@@ -1,0 +1,14 @@
+{
+  "name": "literaryHalifax",
+  "app_id": "0e41e061",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "https://halifaxliterarylandmarks.ca/api"
+    },
+    {
+      "path": "/files",
+      "proxyUrl": "https://halifaxliterarylandmarks.ca/files"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+<!--data-tap-disabled fixes a bug where touching off the map makes the map non responsive-->
+<div data-tap-disabled="true" ng-controller="mapCtrl">
+    <leaflet height="300px" width="100%" on-touch="fingerDown()" on-release="fingerUp()" markers="markers" tiles="tiles" lf-center="mapInfo"></leaflet>
+</div>

@@ -1,0 +1,13 @@
+overscroll-pane {
+    background-color: transparent !important;
+    height: 100%;
+}
+
+.transparent {
+    background: transparent !important;
+}
+
+.bumpdown {
+    padding-top: 30%;
+    margin-bottom: 0%;
+}

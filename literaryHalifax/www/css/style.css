@@ -1,0 +1,349 @@
+/*Ionic switches these off for some reason*/
+
+em,
+i {
+    font-style: italic;
+}
+
+q:before,
+q:after {
+    content: "\"";
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    /* no underline */
+}
+
+/*Makes sure content floats correctly*/
+.clearfix:after {
+    content: " ";
+    /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+/* Infinite scrolls are invisible. They should be mirrored by other loading indicators*/
+ion-infinite-scroll {
+    display:none;
+}
+
+.select-style {
+    padding: 0;
+    margin: 6px 0px 6px 6px;
+    width: 22px;
+    height: 22px;
+    overflow: hidden;
+    display:inline-block;
+}
+/* make the select invisible, but put it on the top layer.
+   That way, we can display an icon underneath it.*/
+.select-style select {
+    opacity: 0;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    z-index: 10;
+}
+
+.select-style i {
+    z-index: 11;
+    font-size: 22px;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+
+.enabled-black {
+    color: #444;
+}
+
+.disabled-grey {
+    color: #aaa;
+}
+
+.cloak {
+    display: none !important;
+    opacity: 0;
+}
+
+
+/*before the background image loads, this is visible*/
+
+ion-nav-view {
+    background-color: white;
+}
+
+
+ion-nav-view {
+    background: url(../img/BG1.jpg);
+}
+
+
+.pane {
+    background-color: transparent;
+}
+
+.media-button {
+    font-size: 30px !important;
+}
+
+.display-card {
+    border-radius: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #EEEEEE;
+    padding: 10px;
+    box-shadow: 0px 2px 10px #111111;
+    font-family: serif;
+}
+
+.list-item-div {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 2.5px;
+    display: none;
+    /*only display if the element has the attribute 'shown-list-item-div'*/
+}
+
+/*
+ * I feel like this one needs some explanation/apology.
+ * List items often need to be filtered out of lists, but it is not performant
+ * to remove them using ng-if, so instead we just hide them. However, since we
+ * draw borders *between* list items, we need to be able to select for displayed
+ * list items which follow other displayed list items (but not hidden ones). 
+ * This means that hidden, not shown, must be the default.
+ *
+ * Text in list items must also sometimes be truncated using dotdotdot, which must
+ * be an attribute. However, since dotdotdot relies on knowing the size of its 
+ * target, it must be applied when the element appears. While it can watch the
+ * size of the element, this causes flickering. Instead, we apply the dotdotdot
+ * attr only when the element becomes visible, using ng-attr-dotdotdot. In order
+ * for these to synchronize correctly, shown-list-item-div must also be an attr.
+ */
+
+[shown-list-item-div] {
+    display: block;
+}
+
+[shown-list-item-div] ~ [shown-list-item-div] {
+    padding-top: 2.5px;
+    border-top-color: silver;
+    border-top-width: 1px;
+    border-style: solid;
+}
+
+.list-item-indent {
+    margin-left: 12px;
+    padding-right: 0px !important;
+}
+
+.italic {
+    font-style: italic !important;
+}
+
+.centered-list-item {
+    text-align: center;
+}
+
+.filter-area {
+    display:flex;
+}
+
+.filter-area td {
+    vertical-align: middle;
+}
+
+.filter-icon {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.filter-bar {
+    margin-bottom: 5px;
+    padding: 0px 0px 0px 5px !important;
+    float:left;
+    box-sizing: border-box; 
+    width: 100%;
+}
+
+.list-item-title {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #222;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.list-item-description {
+    font-size: 10px;
+    line-height: 13px;
+    max-height: 44px;
+    margin-top: 3px;
+    color: #626262;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.list-item-subtitle {
+    font-size: 10px;
+    line-height: 13px;
+    max-height: 13px;
+    margin-top: 3px;
+    color: #626262;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.list-item-distance {
+    font-size: 10px;
+    font-family: sans-serif;
+    color: #626262;
+    float: right;
+}
+
+.list-item-thumb {
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+    margin: 4px 4px 4px 0px;
+}
+
+.gallery-thumb {
+    object-fit: cover;
+    width: 80px;
+    max-height: 60px;
+    margin: 4px 4px 4px 4px;
+}
+
+.audio-button {
+    float: right;
+    margin-right: 7px;
+    margin-left: 7px;
+}
+
+
+.landmark-text-card-title {
+    font-variant: small-caps;
+    font-family: serif;
+    text-align: center;
+}
+
+.landmark-text-card-lede {
+    font-style: italic;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.landmark-text-card-tags {
+    color: darkgray;
+}
+
+.landmark-text-card br {
+    line-height: 250%;
+}
+
+.serif-title {
+    font-family: serif;
+}
+
+.tour-navigation-title {
+    font-variant: small-caps;
+    font-size: 15px;
+}
+
+.tour-directions-audio-button {
+    margin-bottom: -10px;
+}
+
+.tour-item-directions {
+    font-size: 12px;
+    line-height: 13px;
+    margin-top: 3px;
+    color: #626262;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tour-directions-container {
+    line-height: 15px;
+    width:100%;
+    display: inline-block;
+}
+
+.switch-item-button-container {
+    font-size:25px;
+    padding:2px;
+    display: inline;
+    text-align: center;
+    vertical-align: middle;
+    padding-top:0px;
+}
+
+
+.switch-item-button-prev {
+    float:left;
+}
+
+.switch-item-button-next {
+    float:right;
+}
+
+.switch-item-button {
+    position:relative;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.button.button-app-colour {
+    border-color: transparent;
+    background-color: var(--app-colour-secondary);
+    color: var(--app-colour-text-contrast);
+}
+.button.button-app-colour:hover {
+      color: var(--app-colour-text-contrast);
+      text-decoration: none;
+}
+.button.button-app-colour.active, .button.button-app-colour.activated {
+      border-color: #a2a2a2;
+      background-color: var(--app-colour-primary);
+}
+.button.button-app-colour.button-clear {
+      border-color: transparent;
+      background: none;
+      box-shadow: none;
+      color: var(--app-colour-secondary);
+}
+.button.button-app-colour.button-icon {
+      border-color: transparent;
+      background: none;
+}
+.button.button-app-colour.button-outline {
+      border-color: var(--app-colour-secondary);
+      background: transparent;
+      color: var(--app-colour-secondary);
+}
+.button.button-app-colour.button-outline.active, .button.button-app-colour.button-outline.activated {
+    background-color: var(--app-colour-secondary);
+    box-shadow: none;
+    color: var(--app-colour-text-contrast);
+}
+
+
+.spinner.spinner-app-colour {
+    stroke: var(--app-colour-secondary);
+    fill: var(--app-colour-secondary);
+}
+
+.spinner-spiral.spinner-app-colour .stop2 {
+    stop-color: var(--app-colour-secondary);
+}

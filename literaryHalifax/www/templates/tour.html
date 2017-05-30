@@ -1,0 +1,49 @@
+<ion-view view-title="Tour">
+    <ion-content>
+        <div class="display-card">
+            <marker-map map-markers="markers" map-info="mapInfo"> </marker-map>
+            <!--            A row that shows the user's current position in the tour-->
+            <div ng-if="tour.landmarks[currentLandmark]&&!loadingMsg">
+                <div class="list-item-div" shown-list-item-div style="padding-top:5px">
+                    <div>
+                        <div class="switch-item-button-container switch-item-button-next" ng-click="toNext()">
+                            <i class="ion-chevron-right switch-item-button" ng-class="hasNext()?'enabled-black':'disabled-grey'"> </i>
+                        </div>
+                        <div class="switch-item-button-container switch-item-button-prev" ng-click="toPrev()">
+                            <i class="ion-chevron-left switch-item-button" ng-class="hasPrev()?'enabled-black':'disabled-grey'"></i>
+                        </div>
+                        <div ng-click="go(tour.landmarks[currentLandmark])">
+                            <div class="tour-navigation-title"  style="text-align:center;">
+                                {{tour.landmarks[currentLandmark].name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tour-directions-container">
+                        <button class="button button-icon audio-button tour-directions-audio-button" ng-if="tour.landmarks[currentLandmark].directionsUrl" ng-class="media.title==tour.landmarks[currentLandmark].name?'ion-android-volume-up':'ion-android-volume-off'" ng-click="media.title==tour.landmarks[currentLandmark].name?media.stop():playAudio()">
+                        </button>
+                        <span class="tour-item-directions" ng-bind-html="tour.landmarks[currentLandmark].directions?'Directions: ' + tour.landmarks[currentLandmark].directions:tour.landmarks[currentLandmark].subtitle">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="display-card">
+            
+            <h3 class="title serif-title">
+                {{tour.name}}
+            </h3>
+            <p>
+                {{tour.description}}
+            </p>
+            <div class="list">
+                <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
+                <div class="list-item-div" shown-list-item-div ng-if="!loadingMsg" ng-repeat="landmark in tour.landmarks" ng-click="go(landmark)">
+                    <div class="list-item-title">
+                        {{$index + 1}}. {{landmark.name}}
+                    </div>
+                    <div class="list-item-subtitle" ng-bind-html="landmark.description"></div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

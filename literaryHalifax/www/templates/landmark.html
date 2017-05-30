@@ -1,0 +1,58 @@
+<ion-view view-title="Landmark">
+    <ion-pane>
+        <!--      Image displayed behind the tab contents-->
+        <ion-content class="has-header has-tabs-top">
+            <img ng-src="{{landmark.images[0].full}}" width="100%" />
+        </ion-content>
+        <ion-tabs class="tabs-app-colour tabs-icon-top" delegate-handle="landmark-tabs-delegate">
+            <ion-tab title="{{strings.tabNameDescription}}" icon="ion-android-list" disabled="loadingMsg">
+                <overscroll-pane>
+                    <!--              This is the default tab, so we put the loading message here.-->
+                    <div class="display-card" ng-if="loadingMsg||errorMsg">
+                        <list-loader loading-msg="loadingMsg" error-msg="errorMsg" refresh="refresh"></list-loader>
+                    </div>
+                    <div class="display-card landmark-text-card" ng-show="!(loadingMsg||errorMsg)">
+                        <h3 class="title">
+                            <button class="button button-icon audio-button" ng-class="media.title==landmark.name?'ion-android-volume-up':'ion-android-volume-off'"
+                                    ng-click="media.title==landmark.name?media.stop():playAudio()" ng-if="landmark.audio && landmark.audio.url">
+                            </button>
+                            <div class="landmark-text-card-title">{{landmark.name}}</div>
+                        </h3>
+                        <h5 class="title landmark-text-card-title" ng-bind-html="landmark.subtitle"></h5>
+                        <div class="landmark-text-card-lede" ng-bind-html="landmark.lede"></div>
+                        <div class="landmark-text-card-body" ng-bind-html="landmark.description"></div>
+                        <br>
+                        <div class="landmark-text-card-tags">
+                            <i class="icon ion-pricetag"></i>
+                            <span ng-repeat="tag in landmark.tags" ng-click="go(tag)"> {{tag}}{{$last ? '' : ', '}}</span>
+                        </div>
+                    </div>
+                </overscroll-pane>
+            </ion-tab>
+            <ion-tab title="{{strings.tabNameImages}}" icon="ion-android-image" disabled="loadingMsg||errorMsg">
+                <overscroll-pane>
+                    <div class="display-card" ng-show="!loadingMsg">
+                        <div class="row" ng-repeat="image in landmark.images" ng-if="$index % 3 === 0">
+                            <div class="col col-33" ng-if="$index < landmark.images.length">
+                                <img ng-src="{{landmark.images[$index].thumb}}" class="gallery-thumb" ng-click="display(landmark.images[$index])" />
+                            </div>
+                            <div class="col col-33" ng-if="$index + 1 < landmark.images.length">
+                                <img ng-src="{{landmark.images[$index + 1].thumb}}" class="gallery-thumb" ng-click="display(landmark.images[$index +1])" /> 
+                            </div>
+                            <div class="col col-33" ng-if="$index + 2 < landmark.images.length">
+                                <img ng-src="{{landmark.images[$index + 2].thumb}}" class="gallery-thumb" ng-click="display(landmark.images[$index +2])" /> 
+                            </div>
+                        </div>
+                    </div>
+                </overscroll-pane>
+            </ion-tab>
+            <ion-tab title="{{strings.tabNameMap}}" icon="ion-android-pin" disabled="loadingMsg||errorMsg" on-select="manualRedraw()">
+                <overscroll-pane>
+                    <div class="display-card" ng-show="!loadingMsg">
+                        <marker-map map-info="mapInfo" map-markers="markers"> </marker-map>
+                    </div>
+                </overscroll-pane>
+            </ion-tab>
+        </ion-tabs>
+    </ion-pane>
+</ion-view>
